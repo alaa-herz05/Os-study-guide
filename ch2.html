@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Operating Systems – Chapter 2 Study Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#050a14;--panel:#0a1424;--panel2:#0e1d33;--line:#173257;--g:#5ee7ff;--g2:#2bb8e0;--gd:#1b6f93;--am:#ffc857;--txt:#e3f1fb;--mut:#8aa9c4;--bad:#ff6b6b;--ok:#4ade80;
+box-sizing:border-box;color-scheme:dark;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(108px + env(safe-area-inset-top,0px))}
+body{margin:0;background:var(--bg);color:var(--txt);font:16px/1.65 "IBM Plex Sans",system-ui,sans-serif;
+background-image:linear-gradient(rgba(94,231,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(94,231,255,.04) 1px,transparent 1px);background-size:40px 40px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:30}
+#bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.4}
+main,header{position:relative;z-index:1}
+h1,h2,h3,summary{font-family:"JetBrains Mono",ui-monospace,monospace;line-height:1.2;margin:0}
+.wrap{max-width:980px;margin:0 auto;padding:0 18px}
+.cbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:22;height:42px;background:#030710;border-bottom:1px solid var(--gd)}
+.cbar .wrap{display:flex;gap:6px;align-items:center;height:42px;overflow-x:auto;scrollbar-width:none}
+.cbar a{color:var(--mut);text-decoration:none;padding:4px 14px;border-radius:6px;font:600 14px "JetBrains Mono",monospace;white-space:nowrap;border:1px solid transparent}
+.cbar a:hover,.cbar a:focus-visible{color:var(--g);border-color:var(--gd);outline:none}.cbar a.cur{background:var(--g);color:#03101a}
+nav{position:sticky;top:calc(42px + env(safe-area-inset-top,0px));z-index:20;background:rgba(5,10,20,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;gap:6px;overflow-x:auto;padding:10px 18px;scrollbar-width:none;align-items:center}
+nav a{color:var(--mut);text-decoration:none;white-space:nowrap;padding:6px 12px;border-radius:99px;font-size:14px;border:1px solid transparent}
+nav a:hover,nav a:focus-visible{color:var(--g);border-color:var(--gd);outline:none}
+.hero{display:grid;grid-template-columns:1.1fr 1fr;gap:28px;align-items:center;padding:54px 0 40px}
+.hero h1{font-size:clamp(32px,5.6vw,54px);color:var(--g);text-shadow:0 0 28px rgba(94,231,255,.35)}
+.hero p{color:var(--mut);max-width:46ch}
+.btn{display:inline-block;background:var(--g);color:#03101a;border:0;border-radius:8px;padding:11px 20px;cursor:pointer;font:600 15px "IBM Plex Sans",sans-serif;text-decoration:none;margin:4px 8px 4px 0}
+.btn.o{background:transparent;color:var(--g);border:1px solid var(--gd)}
+.btn:hover{box-shadow:0 0 18px rgba(94,231,255,.45)}
+.btn:focus-visible,summary:focus-visible,.opt:focus-visible{outline:2px solid var(--g);outline-offset:2px}
+.term{background:#030710;border:1px solid var(--g2);border-radius:12px;box-shadow:0 0 40px rgba(94,231,255,.25);overflow:hidden;font:13.5px/1.75 "JetBrains Mono",ui-monospace,monospace}
+.term .tb{background:#0a1a30;padding:9px 12px;display:flex;gap:6px;align-items:center;color:var(--mut);font-size:12px}
+.term .tb i{width:10px;height:10px;border-radius:50%;background:#ff6b6b}.term .tb i:nth-child(2){background:#ffc857}.term .tb i:nth-child(3){background:#4ade80}
+.term pre{margin:0;padding:14px;min-height:220px;color:var(--g);white-space:pre-wrap;word-break:break-word}
+.term pre::after{content:"▋";color:var(--am);animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+section{padding:44px 0 8px}
+section>.wrap>h2,.arx>h2{font-size:clamp(23px,3.6vw,32px);color:var(--g);margin-bottom:6px}
+.lead{color:var(--mut);margin:0 0 20px}
+.card{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:14px 0}
+.card h3{font-size:17px;color:var(--g);margin-bottom:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.grid .card{margin:0}
+.grid.s .card h3::before{content:attr(data-n);display:inline-block;background:var(--g);color:#03101a;border-radius:5px;padding:0 7px;margin-inline-end:8px;font-size:13px}
+ul{margin:6px 0;padding-left:20px}li{margin:4px 0}
+b,strong{color:var(--g)}
+code{font-family:"JetBrains Mono",monospace;font-size:.9em;background:#030710;border:1px solid var(--line);border-radius:5px;padding:1px 6px;color:var(--am);direction:ltr;unicode-bidi:isolate}
+.tip{border-left:3px solid var(--am);background:rgba(255,200,87,.07);padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:15px}
+.scroll{overflow-x:auto}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;margin:14px 0}
+.flow span{padding:9px 14px;border:1px solid var(--gd);border-radius:8px;background:#08162a;font-size:14px;transition:.3s;text-align:center}
+.flow i{color:var(--gd);font-style:normal}
+.flow span.a{background:var(--g);color:#03101a;box-shadow:0 0 18px var(--g);border-color:var(--g)}
+.steps{list-style:none;padding:0;counter-reset:s}
+.steps li{counter-increment:s;padding:9px 12px 9px 44px;position:relative;border:1px solid var(--line);border-radius:8px;margin:6px 0;color:var(--mut);transition:.3s}
+.steps li::before{content:counter(s);position:absolute;left:10px;top:8px;width:24px;height:24px;border-radius:50%;background:#08162a;border:1px solid var(--gd);text-align:center;line-height:22px;font-size:13px}
+.steps li.a{color:var(--txt);border-color:var(--g);background:rgba(94,231,255,.09);box-shadow:0 0 16px rgba(94,231,255,.2)}
+.steps li.a::before{background:var(--g);color:#03101a}
+details{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:12px;margin:10px 0;overflow:hidden}
+summary{cursor:pointer;padding:14px 18px;font-size:16px;font-weight:700;color:var(--g);list-style:none}
+summary::before{content:"▸ ";color:var(--am)}details[open] summary::before{content:"▾ "}
+details>div{padding:0 20px 16px}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:14.5px}
+th,td{border:1px solid var(--line);padding:8px 12px;text-align:left;vertical-align:top}
+th{background:#0d2440;color:var(--g)}
+#bar{height:8px;background:#08162a;border-radius:9px;overflow:hidden;margin:10px 0}
+#bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--g2),var(--g));transition:width .4s}
+.q{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0}
+.q p{margin:0 0 10px;font-weight:600}.q small{color:var(--mut);font-weight:400}
+.opt{display:block;width:100%;text-align:start;margin:6px 0;padding:10px 14px;border-radius:8px;border:1px solid var(--line);background:#07122a;color:var(--txt);font:inherit;cursor:pointer;transition:.2s}
+.opt:hover:not(:disabled){border-color:var(--g);background:#0b1f3d}
+.opt.ok{background:rgba(74,222,128,.2);border-color:var(--ok);color:#fff}
+.opt.no{background:rgba(255,107,107,.18);border-color:var(--bad);color:#ffd6d6}
+.opt:disabled{cursor:default}
+.fb{display:none;margin-top:8px;padding:10px 14px;border-radius:8px;font-size:15px}
+.fb.show{display:block}.fb.ok{background:rgba(74,222,128,.1);border-left:3px solid var(--ok)}.fb.no{background:rgba(255,107,107,.1);border-left:3px solid var(--bad)}
+#score{font:700 21px "JetBrains Mono",monospace;color:var(--g)}
+footer{padding:40px 18px 60px;text-align:center;color:var(--mut)}
+.arx{direction:rtl;text-align:start}body:not(.ar) .arx{display:none}
+body.ar section:not(#quiz) .wrap>*:not(.arx){display:none}
+body.ar{font-family:"Tajawal","IBM Plex Sans",sans-serif;font-size:17px}body.ar .btn{font-family:"Tajawal",sans-serif}
+body.ar h1,body.ar h2,body.ar h3,body.ar summary,body.ar #score{font-family:"Tajawal",sans-serif}
+.arx ul{padding:0 20px 0 0}.arx .steps{padding:0}.arx .steps li{padding:9px 44px 9px 12px}.arx .steps li::before{left:auto;right:10px}
+.arx .tip{border-left:0;border-right:3px solid var(--am);border-radius:8px 0 0 8px}
+.arx th,.arx td{text-align:start}
+#lang{flex:none;padding:6px 16px;margin:0 8px 0 0;font-size:14px}
+@media(max-width:760px){.hero{grid-template-columns:1fr;padding-top:34px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<canvas id="bg" aria-hidden="true"></canvas>
+<div class="cbar"><div class="wrap"><a href="index.html">⌂ Home</a><a href="ch1.html">Ch 1</a><a href="ch2.html" class="cur">Ch 2</a><a href="ch3.html">Ch 3</a><a href="ch4.html">Ch 4</a><a href="ch5.html">Ch 5</a><a href="ch8.html">Ch 8</a></div></div>
+<nav><div class="wrap">
+<button class="btn" id="lang" type="button">العربية</button><a href="#svc">OS Services</a><a href="#ui">User Interface</a><a href="#sc">System Calls</a><a href="#types">Types of Calls</a><a href="#sys">System Services</a><a href="#ld">Linkers &amp; Loaders</a><a href="#spec">OS-Specific Apps</a><a href="#sum">Summary</a><a href="#quiz">Quiz</a>
+</div></nav>
+
+<header><div class="wrap hero">
+<div>
+<h1>Operating Systems<br>Chapter 2: OS Services</h1>
+<p>A complete, easy-to-follow study guide: services, interfaces, system calls, linkers and loaders explained in plain English, with interactive demos, a summary, and a quiz that tells you instantly if you are right or wrong.</p>
+<a class="btn" href="#svc">Start studying</a><a class="btn o" href="#quiz">Jump to quiz</a>
+</div>
+<div class="term" aria-hidden="true"><div class="tb"><i></i><i></i><i></i>&nbsp;user@os: ~</div><pre id="tp"></pre></div>
+</div></header>
+
+<main>
+<section id="svc"><div class="wrap">
+<h2>1. Operating-System Services</h2>
+<p class="lead">What the OS offers to programs and users.</p>
+<div class="card"><h3>Big idea</h3>Operating systems provide an <b>environment for the execution of programs</b> and <b>services to programs and users</b>. The services fall into two groups: those that help the <b>user</b>, and those that keep the <b>system itself efficient</b>.</div>
+<h3 style="margin:18px 0 4px;color:var(--am)">A. Services that help the user</h3>
+<div class="grid s">
+<div class="card"><h3 data-n="1">User interface</h3>Almost all OSs have a UI. It varies between <b>Command-Line (CLI)</b>, <b>Graphical (GUI)</b>, <b>touch-screen</b>, and <b>Batch</b>.</div>
+<div class="card"><h3 data-n="2">Program execution</h3>The system must <b>load a program into memory</b>, run it, and end execution either <b>normally or abnormally</b> (indicating an error).</div>
+<div class="card"><h3 data-n="3">I/O operations</h3>A running program may need I/O, which may involve <b>a file or an I/O device</b>.</div>
+<div class="card"><h3 data-n="4">File-system manipulation</h3>Programs need to <b>read and write</b> files and directories, <b>create and delete</b> them, <b>search</b> them, list file information, and manage <b>permissions</b>.</div>
+<div class="card"><h3 data-n="5">Communications</h3>Processes exchange information on the same computer or over a network, via <b>shared memory</b> or <b>message passing</b> (packets moved by the OS).</div>
+<div class="card"><h3 data-n="6">Error detection</h3>The OS must constantly watch for errors in the <b>CPU and memory hardware</b>, <b>I/O devices</b>, and <b>user programs</b>, and take the appropriate action for <b>correct and consistent computing</b>. Debugging facilities help users and programmers.</div>
+</div>
+<h3 style="margin:22px 0 4px;color:var(--am)">B. Services for efficient operation (resource sharing)</h3>
+<div class="grid s">
+<div class="card"><h3 data-n="7">Resource allocation</h3>With multiple users or jobs running concurrently, resources must be allocated to each: <b>CPU cycles, main memory, file storage, I/O devices</b>.</div>
+<div class="card"><h3 data-n="8">Logging</h3>Keeps track of <b>which users use how much, and what kinds</b>, of computer resources.</div>
+<div class="card"><h3 data-n="9">Protection &amp; security</h3>Owners of information in multiuser or networked systems may want to control its use; <b>concurrent processes should not interfere with each other</b>.</div>
+</div>
+<div class="card"><h3>Chapter objectives</h3><ul><li>Identify the services provided by an operating system</li><li>Illustrate how <b>system calls</b> provide OS services</li><li>Compare <b>monolithic, layered, microkernel, modular, and hybrid</b> OS designs</li><li>Illustrate the process of <b>booting</b> an OS</li><li>Apply tools for monitoring OS performance</li><li>Design and implement <b>kernel modules</b> for Linux</li></ul>
+<div class="tip">Your uploaded slides cover topics up to “Why Applications are OS-Specific”. Design/structure, booting and debugging are listed in the agenda but are not in the slides.</div></div>
+</div></section>
+
+<section id="ui"><div class="wrap">
+<h2>2. User and OS Interface</h2>
+<p class="lead">Three common ways users talk to the OS. Some systems offer two or all three.</p>
+<div class="grid">
+<div class="card"><h3>Command-line interface (CLI)</h3>Also called the <b>command interpreter</b>. Users <b>type commands</b> directly. Linux, UNIX and Windows treat it as a special program that runs when a process starts or a user logs on.<br><br>When several interpreters exist they are called <b>shells</b>: on UNIX/Linux the <b>C shell, Bourne-Again shell (bash), Korn shell</b>, and others.</div>
+<div class="card"><h3>Graphical user interface (GUI)</h3>A user-friendly <b>desktop metaphor</b>: mouse, keyboard and monitor. <b>Icons</b> represent files, programs and actions; mouse buttons over objects show information, options, run functions, or open a <b>directory (folder)</b>.<br><br>Many systems include both CLI and GUI. <b>Windows</b> is a GUI with a CLI “command” shell (<code>cmd</code>).</div>
+<div class="card"><h3>Touch-screen interface</h3>Touch devices need new interfaces where a <b>mouse is not possible or not desired</b>:<ul><li>Actions and selection based on <b>gestures</b></li><li><b>Virtual keyboard</b> for text entry</li><li><b>Voice commands</b></li></ul></div>
+</div>
+</div></section>
+
+<section id="sc"><div class="wrap">
+<h2>3. System Calls</h2>
+<p class="lead">The doorway from programs into the kernel.</p>
+<div class="card"><h3>What is a system call?</h3>System calls provide an <b>interface to the services made available by an operating system</b>. They are generally available as functions in <b>C and C++</b>; some low-level tasks (direct hardware access) may need <b>assembly language</b>.
+<div class="tip"><b>Example: copy one file to another.</b> The program first needs the file names. In UNIX: <code>cp in.txt out.txt</code>. Or in an interactive program it asks the user, which needs a <b>sequence of system calls</b> (write prompt, read keyboard, open files, read, write, close, exit).</div></div>
+<div class="grid">
+<div class="card"><h3>API</h3>Programmers rarely see system calls (systems execute <b>thousands per second</b>). They code to an <b>Application Programming Interface (API)</b>, which specifies the <b>functions</b> available, their <b>parameters</b>, and the <b>return values</b> expected.<br><br>API functions invoke the real system calls. Example: Windows <code>CreateProcess()</code> calls the kernel’s <code>NTCreateProcess()</code>.</div>
+<div class="card"><h3>Run-time environment (RTE)</h3>Provides the <b>system-call interface</b> linking to the OS’s system calls. Each call has a <b>number</b>, and the interface keeps a <b>table indexed by these numbers</b>. It invokes the call in the kernel and returns the <b>status and return values</b>. The caller only needs to obey the API; details are hidden by the API and managed by the RTE (the <b>run-time support library</b> included with the compiler).</div>
+</div>
+<div class="card" data-st><h3>Interactive: what happens when you call <code>printf()</code></h3>
+<div class="flow"><span>Application</span><i>→</i><span>API / RTE (C library)</span><i>→</i><span>System-call table</span><i>→</i><span>Kernel</span></div>
+<ol class="steps"><li data-b="0">The program calls <code>printf("Hello")</code>, an API / C-library function.</li><li data-b="1">The C library prepares the parameters and the <b>system-call number</b> for <code>write()</code>.</li><li data-b="2">A trap enters kernel mode; the system-call interface <b>looks up the number in its table</b>.</li><li data-b="3">The kernel executes <code>write()</code> and the device does the output.</li><li data-b="0">Status and return values go back, the mode returns to user mode, and the program continues.</li></ol>
+<button class="btn nx">Next step</button><button class="btn o rs">Reset</button></div>
+<div class="card"><h3>System-call parameter passing</h3>Often more than the call’s identity is needed (type and amount vary by OS and call). Three general methods:
+<div class="grid" style="margin-top:10px">
+<div class="card"><h3>1. Registers</h3>The <b>simplest</b> method. Problem: there may be <b>more parameters than registers</b>.<br><code>R1=fd R2=buf R3=n</code></div>
+<div class="card"><h3>2. Block / table</h3>Parameters are stored in a <b>block in memory</b>; its <b>address</b> is passed in a register. Used by <b>Linux and Solaris</b>.<br><code>R1 → [x, y, z]</code></div>
+<div class="card"><h3>3. Stack</h3>Parameters are <b>pushed</b> onto the stack by the program and <b>popped</b> off by the OS.<br><code>push z, y, x</code></div></div>
+<div class="tip">The block and stack methods do <b>not limit</b> the number or length of parameters.</div></div>
+</div></section>
+
+<section id="types"><div class="wrap">
+<h2>4. Types of System Calls</h2>
+<p class="lead">Six major categories. Tap to open each.</p>
+<details open><summary>1. Process control</summary><div><ul><li>create process, terminate process</li><li>end, abort</li><li>load, execute</li><li>get / set process attributes</li><li>wait for time; wait event, signal event</li><li>allocate and free memory</li><li>dump memory if error; debugger (single-step execution)</li><li><b>locks</b> for managing access to shared data</li></ul></div></details>
+<details><summary>2. File management</summary><div><ul><li>create file, delete file</li><li>open, close file</li><li>read, write, reposition</li><li>get and set file attributes</li></ul></div></details>
+<details><summary>3. Device management</summary><div><ul><li>request device, release device</li><li>read, write, reposition</li><li>get / set device attributes</li><li>logically attach or detach devices</li></ul></div></details>
+<details><summary>4. Information maintenance</summary><div><ul><li>get / set time or date</li><li>get / set system data</li><li>get / set process, file, or device attributes</li></ul></div></details>
+<details><summary>5. Communications</summary><div><ul><li>create, delete communication connection</li><li>send, receive messages</li><li>transfer status information</li><li>attach or detach remote devices</li></ul></div></details>
+<details><summary>6. Protection</summary><div><ul><li><b>Control access to resources</b></li><li>get file permissions, set file permissions</li></ul></div></details>
+<div class="card scroll"><h3>Examples: Windows vs UNIX</h3><table><tr><th>Category</th><th>Windows</th><th>UNIX</th></tr>
+<tr><td>Process control</td><td><code>CreateProcess()</code> <code>ExitProcess()</code> <code>WaitForSingleObject()</code></td><td><code>fork()</code> <code>exit()</code> <code>wait()</code></td></tr>
+<tr><td>File management</td><td><code>CreateFile()</code> <code>ReadFile()</code> <code>WriteFile()</code> <code>CloseHandle()</code></td><td><code>open()</code> <code>read()</code> <code>write()</code> <code>close()</code></td></tr>
+<tr><td>Device management</td><td><code>SetConsoleMode()</code> <code>ReadConsole()</code> <code>WriteConsole()</code></td><td><code>ioctl()</code> <code>read()</code> <code>write()</code></td></tr>
+<tr><td>Information maintenance</td><td><code>GetCurrentProcessID()</code> <code>SetTimer()</code> <code>Sleep()</code></td><td><code>getpid()</code> <code>alarm()</code> <code>sleep()</code></td></tr>
+<tr><td>Communications</td><td><code>CreatePipe()</code> <code>CreateFileMapping()</code> <code>MapViewOfFile()</code></td><td><code>pipe()</code> <code>shm_open()</code> <code>mmap()</code></td></tr>
+<tr><td>Protection</td><td><code>SetFileSecurity()</code> <code>InitializeSecurityDescriptor()</code></td><td><code>chmod()</code> <code>umask()</code> <code>chown()</code></td></tr></table></div>
+<div class="card"><h3>Standard C library example</h3>A C program calls the library function <code>printf()</code>, which in turn calls the <code>write()</code> system call. The library acts as the API layer on top of the kernel.</div>
+</div></section>
+
+<section id="sys"><div class="wrap">
+<h2>5. System Services</h2>
+<p class="lead">Programs that come with the OS versus programs users run.</p>
+<div class="grid">
+<div class="card"><h3>Background services</h3><ul><li>Launched at <b>boot time</b>; some run for startup then terminate, others from boot to shutdown</li><li>Provide disk checking, process scheduling, error logging, printing</li><li>Run in <b>user context, not kernel context</b></li><li>Known as <b>services, subsystems, daemons</b></li></ul></div>
+<div class="card"><h3>Application programs</h3><ul><li>Don’t pertain to the system</li><li>Run by users</li><li>Not typically considered part of the OS</li><li>Launched by command line, mouse click, or finger poke</li></ul></div>
+</div>
+</div></section>
+
+<section id="ld"><div class="wrap">
+<h2>6. Linkers and Loaders</h2>
+<p class="lead">How source code becomes a running program.</p>
+<div class="card" data-st><h3>Interactive: from source code to running program</h3>
+<div class="flow"><span>Source code</span><i>→</i><span>Object files</span><i>→</i><span>Linker</span><i>→</i><span>Executable</span><i>→</i><span>Loader → Memory</span></div>
+<ol class="steps"><li data-b="0">The programmer writes the <b>source code</b>.</li><li data-b="1">The compiler/assembler produce <b>relocatable object files</b>, designed to be loaded at <b>any physical memory location</b>.</li><li data-b="2">The <b>linker</b> combines the object files (and brings in libraries) into a <b>single binary executable file</b>.</li><li data-b="3">The executable resides on <b>secondary storage</b>. Standard file formats let the OS know how to load and start it.</li><li data-b="4">The <b>loader</b> brings it into main memory. <b>Relocation</b> assigns final addresses and adjusts code and data to match. Then it runs.</li></ol>
+<button class="btn nx">Next step</button><button class="btn o rs">Reset</button></div>
+<div class="grid">
+<div class="card"><h3>Linker</h3>An important utility that takes the <b>object files</b> (from the assembler and compiler) and other code and <b>joins them into a single executable file</b>. Its main function is to <b>generate executable files</b>.</div>
+<div class="card"><h3>Loader</h3>A vital OS component <b>responsible for loading programs and libraries into main memory</b>. Its <b>input is the executable file</b> produced by the linker. It loads the executable code into memory so it can be executed.</div>
+</div>
+</div></section>
+
+<section id="spec"><div class="wrap">
+<h2>7. Why Applications are OS-Specific</h2>
+<p class="lead">Why a Windows app does not simply run on Linux.</p>
+<div class="card"><h3>The reasons</h3><ul><li>Apps compiled on one system are usually <b>not executable</b> on other operating systems</li><li>Each OS provides its <b>own unique system calls</b></li><li>Each OS has its <b>own file formats</b>, etc.</li></ul></div>
+<div class="card"><h3>How an app can run on multiple OSs</h3><ul><li>Written in an <b>interpreted language</b> (Python, Ruby) with an interpreter available on many OSs</li><li>Written in a language that includes a <b>virtual machine</b> containing the running app (like <b>Java</b>)</li><li>Written in a <b>standard language</b> (like C) and <b>compiled separately</b> on each OS</li></ul></div>
+</div></section>
+
+<section id="sum"><div class="wrap">
+<h2>8. Chapter Summary</h2>
+<p class="lead">Review this right before the exam.</p>
+<div class="card"><ul>
+<li>OS services: <b>user-helpful</b> (UI, program execution, I/O, file system, communications, error detection) and <b>efficiency</b> (resource allocation, logging, protection and security).</li>
+<li>Interfaces: <b>CLI</b> (shells), <b>GUI</b> (desktop metaphor, icons), <b>touch-screen</b> (gestures, virtual keyboard, voice).</li>
+<li><b>System calls</b> are the interface to OS services; programmers use an <b>API</b>, and the <b>RTE</b> maps calls to the kernel using a <b>numbered table</b>.</li>
+<li>Parameters pass via <b>registers</b>, a <b>memory block</b> (Linux, Solaris), or the <b>stack</b>.</li>
+<li>Six call types: <b>process control, file management, device management, information maintenance, communications, protection</b>.</li>
+<li><b>Daemons</b> run in user context; application programs are not part of the OS.</li>
+<li><b>Compiler → object files → linker → executable → loader → memory</b>; relocation assigns final addresses.</li>
+<li>Apps are OS-specific because of unique <b>system calls and file formats</b>; interpreters, VMs, or recompiling make them portable.</li></ul></div>
+<div class="card scroll"><h3>Quick comparisons</h3>
+<table><tr><th>Concept A</th><th>Concept B</th></tr>
+<tr><td><b>API</b>: functions, parameters, return values seen by the programmer</td><td><b>System call</b>: the real request into the kernel</td></tr>
+<tr><td><b>Linker</b>: joins object files into one executable</td><td><b>Loader</b>: puts the executable into main memory</td></tr>
+<tr><td><b>Background services (daemons)</b>: run in user context, part of system startup</td><td><b>Application programs</b>: run by users, not part of the OS</td></tr>
+<tr><td><b>Registers</b>: simplest, limited by register count</td><td><b>Block / stack</b>: no limit on number or length of parameters</td></tr>
+<tr><td><b>CLI</b>: type commands to a shell</td><td><b>GUI</b>: icons, mouse; <b>Touch</b>: gestures and voice</td></tr>
+<tr><td><b>Shared memory</b> communication</td><td><b>Message passing</b> (packets moved by the OS)</td></tr></table></div>
+</div></section>
+
+<section id="quiz"><div class="wrap">
+<h2>9. Interactive Quiz</h2>
+<p class="lead">Tap an answer. Green means correct, red means wrong, and the right answer is always explained.</p>
+<div class="card"><span id="score">Score: 0 / 0</span> <span style="color:var(--mut)" id="prog"></span><div id="bar"><i></i></div>
+<button class="btn" id="shuf">Shuffle &amp; restart</button><button class="btn o" id="rst">Restart</button></div>
+<div id="qs"></div>
+<div class="card" id="final" style="display:none"></div>
+</div></section>
+</main>
+<footer>Based on the slides of Chapter 2: Operating-System Services · Operating Systems (501471)</footer>
+
+<script>
+(function(){
+var $=function(s){return document.querySelector(s)};
+var rm=matchMedia("(prefers-reduced-motion:reduce)").matches;
+/* syscall rain background */
+var cv=$("#bg"),cx=cv.getContext("2d"),W,H,cols=[],words=["open()","read()","write()","fork()","exec()","wait()","close()","exit()","pipe()","mmap()","kill()","stat()","ioctl()","chmod()","brk()"];
+function rw(){return words[Math.floor(Math.random()*words.length)]}
+function rs(){W=cv.width=innerWidth;H=cv.height=innerHeight;cols=[];for(var x=10;x<W;x+=110)cols.push({x:x,y:Math.random()*H,v:.6+Math.random()*1.1,w:rw()});cx.fillStyle="#050a14";cx.fillRect(0,0,W,H)}
+rs();addEventListener("resize",rs);
+function fr(){cx.fillStyle="rgba(5,10,20,.14)";cx.fillRect(0,0,W,H);cx.font="14px monospace";
+cols.forEach(function(c){cx.fillStyle="rgba(94,231,255,.8)";cx.fillText(c.w,c.x,c.y);c.y+=c.v;if(c.y>H+20){c.y=-10;c.w=rw()}});requestAnimationFrame(fr)}
+if(!rm)fr();
+/* hero terminal */
+var L=['$ cp in.txt out.txt','→ open("in.txt")   = fd 3','→ open("out.txt")  = fd 4','→ read(3, buf, 4096)','→ write(4, buf, n)','→ close(3), close(4)','→ exit(0)   [done]'],tp=$("#tp");
+if(rm){tp.textContent=L.join("\n")}else{var li=0,ci=0,out="";
+(function tk(){if(li>=L.length){setTimeout(function(){li=0;ci=0;out="";tp.textContent="";tk()},2600);return}
+var ln=L[li];if(ci<ln.length){out+=ln[ci++];tp.textContent=out;setTimeout(tk,ln[0]=="$"?70:28)}else{out+="\n";tp.textContent=out;li++;ci=0;setTimeout(tk,380)}})()}
+/* steppers */
+function st(card){var lis=card.querySelectorAll(".steps li"),bx=card.querySelectorAll(".flow span"),c=-1;
+function sh(){lis.forEach(function(l,i){l.classList.toggle("a",i==c)});bx.forEach(function(b,i){b.classList.toggle("a",c>=0&&i==+lis[c].dataset.b)})}
+card.querySelector(".nx").onclick=function(){c=(c+1)%lis.length;sh()};card.querySelector(".rs").onclick=function(){c=-1;sh()}}
+/* quiz data */
+var TF=["True","False"];
+var Q=[
+["Operating systems provide…",["An environment for the execution of programs and services to programs and users","Only a text editor","Only hardware drivers","A faster CPU"],0,"That is the core idea of OS services."],
+["Which is NOT a type of user interface?",["Command-line (CLI)","Graphical (GUI)","Touch-screen","Compiler interface"],3,"UI types: CLI, GUI, touch-screen and batch. A compiler is not a user interface."],
+["The program-execution service must…",["Load a program into memory, run it, and end it normally or abnormally","Only print files","Only manage the network","Delete the program after one run"],0,"The system loads, runs and ends the program, reporting errors if it ends abnormally."],
+["Which is a file-system manipulation service?",["Creating and deleting files and directories","Moving the mouse","Sending packets only","Compiling code"],0,"Also: reading/writing, searching, listing file information and permission management."],
+["With message passing, packets of information are moved between processes by the OS.",TF,0,"True. Communications use shared memory or message passing."],
+["Errors that the OS must detect occur only in user programs.",TF,1,"False. Errors can occur in CPU and memory hardware, in I/O devices, and in user programs."],
+["Which is a resource that the OS must allocate?",["CPU cycles, main memory, file storage, I/O devices","Only the keyboard","Only the monitor","Only the compiler"],0,"Resource allocation covers all of these resource types."],
+["What is the purpose of the logging service?",["Keep track of which users use how much and what kinds of resources","Fix hardware errors","Increase memory size","Draw the GUI"],0,"Logging is accounting of resource usage by users."],
+["Protection and security ensure that concurrent processes do not interfere with each other.",TF,0,"True. Owners can also control the use of their information."],
+["Resource allocation, logging and protection mainly exist to…",["Ensure the efficient operation of the system itself","Help users type faster","Replace the user interface","Provide debugging only"],0,"They are the services for efficient operation through resource sharing."],
+["When a system has several command interpreters to choose from, they are known as…",["Shells","Loaders","Linkers","Daemons"],0,"On UNIX/Linux: C shell, Bourne-Again shell, Korn shell and others."],
+["Which of these is a UNIX/Linux shell?",["Bourne-Again shell","Java VM","Linker","Loader"],0,"The Bourne-Again shell (bash) is one of the common shells."],
+["Windows is a GUI that also has a CLI “command” shell called…",["cmd","bash","ksh","fork"],0,"Windows provides the cmd command shell."],
+["In a GUI, icons represent files, programs and actions.",TF,0,"True. This is the desktop metaphor."],
+["Touch-screen interface actions and selections are based on…",["Gestures","Typed shell commands only","Batch files only","Assembly code"],0,"Also virtual keyboards and voice commands."],
+["System calls provide…",["An interface to the services made available by the operating system","A faster hard disk","A way to edit images","A type of compiler"],0,"They are the programmatic doorway to OS services."],
+["System calls are generally available as functions written in…",["C and C++ (assembly for some low-level tasks)","HTML","SQL only","Python only"],0,"Direct hardware tasks may need assembly-language instructions."],
+["An API specifies…",["The functions available to a programmer, their parameters, and expected return values","The color of the GUI","The size of RAM","The brand of the CPU"],0,"Programmers code to an API instead of making raw system calls."],
+["Most programmers directly invoke system calls themselves.",TF,1,"False. Most programmers use an API, and the API invokes the system calls."],
+["The Windows function CreateProcess() actually invokes which system call in the kernel?",["NTCreateProcess()","fork()","write()","exec()"],0,"API function CreateProcess() calls NTCreateProcess() in the Windows kernel."],
+["The system-call interface keeps a table indexed by…",["System-call numbers","File names","User names","Screen coordinates"],0,"Each system call has a number used to index the table."],
+["What is the simplest method of passing parameters to the OS?",["In registers","On the network","In a file","In the GUI"],0,"The problem is there may be more parameters than registers."],
+["Which parameter-passing method do Linux and Solaris use?",["A block/table in memory whose address is passed in a register","Only registers","Only the stack","Voice commands"],0,"Parameters are stored in a block and the block’s address is passed in a register."],
+["Which methods do NOT limit the number or length of parameters?",["Block and stack methods","Register method","None of them","Only the register method"],0,"Registers are limited by how many registers exist."],
+["In the stack method, parameters are pushed onto the stack by the program and popped off by the OS.",TF,0,"True."],
+["Which is NOT one of the six major system-call categories?",["Graphics rendering","Process control","File management","Protection"],0,"The six: process control, file management, device management, information maintenance, communications, protection."],
+["“create process, terminate process, load, execute” belong to which category?",["Process control","Communications","Protection","Information maintenance"],0,"These are process-control calls."],
+["“get file permissions, set file permissions” belong to which category?",["Protection","File management only","Process control","Device management"],0,"Protection controls access to resources."],
+["“get time or date, set time or date” belong to which category?",["Information maintenance","Communications","Protection","Process control"],0,"Information maintenance also includes get/set system data and attributes."],
+["“send, receive messages” and “create communication connection” belong to…",["Communications","Process control","Device management","Protection"],0,"They are communications system calls."],
+["When a C program calls printf(), which system call does the library end up invoking?",["write()","fork()","open()","wait()"],0,"printf() is a library call that calls write()."],
+["Background services (daemons) run in kernel context.",TF,1,"False. They run in user context, not kernel context."],
+["Application programs are…",["Not typically considered part of the OS","The kernel","Daemons","Loaders"],0,"They don’t pertain to the system and are run by users."],
+["A relocatable object file is…",["Produced by the compiler and designed to be loaded into any physical memory location","The final executable","A shell","A GUI icon"],0,"The linker then combines object files into an executable."],
+["What does the linker do?",["Combines object files (and libraries) into a single binary executable file","Loads the program into memory","Detects hardware errors","Allocates the CPU"],0,"The main function of the linker is to generate executable files."],
+["What does the loader do?",["Loads the executable into main memory so it can be executed","Combines object files","Compiles source code","Sends messages"],0,"The loader takes the linker’s executable as input."],
+["Relocation…",["Assigns final addresses to program parts and adjusts code and data to match","Deletes the object file","Starts the shell","Detects errors"],0,"It happens as the program is brought into memory."],
+["Why are applications usually OS-specific?",["Each OS has its own unique system calls and file formats","All OSs are identical","CPUs reject other apps","Apps cannot be compiled"],0,"So an app compiled on one OS usually can’t run on another."],
+["Which approach lets an app run on multiple operating systems?",["Interpreted language (Python/Ruby), VM (Java), or compiling separately on each OS","Copying the .exe file","Renaming the file","Turning off the OS"],0,"These are the three approaches listed in the slides."],
+["Java apps can run on multiple OSs because the language includes a virtual machine containing the running app.",TF,0,"True."]
+];
+var AQ=[
+["أنظمة التشغيل توفّر…","هي بيئة لتنفيذ البرامج وخدمات للبرامج والمستخدمين."],
+["أيٌّ مما يلي ليس نوعاً من واجهات المستخدم؟","الأنواع: CLI وGUI وشاشة اللمس والـ batch. المترجم (compiler) ليس واجهة مستخدم."],
+["خدمة تنفيذ البرامج يجب أن…","يحمّل النظام البرنامج في الذاكرة ويشغّله وينهيه بشكل طبيعي أو غير طبيعي مع الإبلاغ عن الخطأ."],
+["أيٌّ مما يلي خدمة معالجة نظام الملفات؟","وأيضاً: القراءة والكتابة والبحث وعرض معلومات الملف وإدارة الصلاحيات."],
+["في message passing تنقل حزم المعلومات بين العمليات بواسطة نظام التشغيل.","صح. الاتصال إما عبر shared memory أو message passing."],
+["الأخطاء التي يكتشفها النظام تحدث فقط في برامج المستخدم.","غلط. تحدث في عتاد CPU والذاكرة وفي أجهزة I/O وفي برامج المستخدم."],
+["أيٌّ مما يلي مورد يوزعه نظام التشغيل؟","تخصيص الموارد يشمل كل هذه الأنواع."],
+["ما الغرض من خدمة التسجيل (logging)؟","التسجيل يتتبع من يستخدم كم ونوع الموارد."],
+["الحماية والأمان تضمن ألا تتداخل العمليات المتزامنة مع بعضها.","صح. ويستطيع أصحاب المعلومات التحكم في استخدامها."],
+["تخصيص الموارد والتسجيل والحماية تهدف أساساً إلى…","هي خدمات تضمن كفاءة تشغيل النظام نفسه عبر مشاركة الموارد."],
+["عندما يوجد عدة مفسّرات أوامر للاختيار منها تسمى…","في UNIX/Linux: C shell وBourne-Again shell وKorn shell وغيرها."],
+["أيٌّ مما يلي shell في UNIX/Linux؟","الـ Bourne-Again shell (bash) من أشهر الـ shells."],
+["ويندوز واجهة GUI لكنها تضم أيضاً shell أوامر اسمه…","ويندوز يوفّر cmd."],
+["في GUI تمثل الأيقونات الملفات والبرامج والإجراءات.","صح. وهذا هو مفهوم سطح المكتب (desktop metaphor)."],
+["الإجراءات والاختيار في واجهة اللمس تعتمد على…","وأيضاً لوحة مفاتيح افتراضية وأوامر صوتية."],
+["استدعاءات النظام (system calls) توفّر…","هي البوابة البرمجية لخدمات نظام التشغيل."],
+["تتوفر system calls عموماً كدوال مكتوبة بلغة…","المهام منخفضة المستوى (وصول مباشر للعتاد) قد تحتاج لغة assembly."],
+["الـ API يحدد…","المبرمجون يستخدمون API بدلاً من استدعاءات النظام المباشرة."],
+["معظم المبرمجين يستدعون system calls بأنفسهم مباشرة.","غلط. معظمهم يستخدم API والـ API هو الذي يستدعي system calls."],
+["الدالة CreateProcess() في ويندوز تستدعي فعلياً أي system call في النواة؟","الدالة CreateProcess() تستدعي NTCreateProcess() في نواة ويندوز."],
+["واجهة system call تحتفظ بجدول مفهرس حسب…","لكل system call رقم يُستخدم لفهرسة الجدول."],
+["ما أبسط طريقة لتمرير المعاملات (parameters) إلى النظام؟","المشكلة: قد تكون المعاملات أكثر من عدد المسجلات."],
+["أي طريقة تمرير معاملات يستخدمها Linux وSolaris؟","تُخزن المعاملات في block ويُمرَّر عنوانه في مسجل."],
+["أي الطرق لا تحدّ من عدد أو طول المعاملات؟","طريقة المسجلات محدودة بعدد المسجلات."],
+["في طريقة الـ stack يدفع البرنامج المعاملات (push) وينزعها نظام التشغيل (pop).","صح."],
+["أيٌّ مما يلي ليس من فئات system calls الست؟","الست: process control وfile management وdevice management وinformation maintenance وcommunications وprotection."],
+["“create process, terminate process, load, execute” تنتمي لأي فئة؟","هذه استدعاءات process control."],
+["“get file permissions, set file permissions” تنتمي لأي فئة؟","الـ Protection تتحكم في الوصول إلى الموارد."],
+["“get time or date, set time or date” تنتمي لأي فئة؟","تشمل information maintenance أيضاً get/set system data والخصائص."],
+["“send, receive messages” و“create communication connection” تنتمي لـ…","هي استدعاءات communications."],
+["عندما يستدعي برنامج C الدالة printf()، أي system call تنتهي المكتبة باستدعائه؟","printf() دالة مكتبة تستدعي write()."],
+["الخدمات الخلفية (daemons) تعمل في سياق النواة (kernel context).","غلط. تعمل في user context وليس kernel context."],
+["برامج التطبيقات (application programs)…","لا تخص النظام ويشغّلها المستخدمون."],
+["الـ relocatable object file هو…","ثم يجمع الـ linker ملفات object في executable."],
+["ماذا يفعل الـ linker؟","وظيفته الأساسية توليد الملفات التنفيذية."],
+["ماذا يفعل الـ loader؟","الـ loader يأخذ executable الناتج عن الـ linker."],
+["الـ relocation…","تحدث أثناء إدخال البرنامج إلى الذاكرة."],
+["لماذا تكون التطبيقات عادةً خاصة بنظام تشغيل معين؟","لذلك التطبيق المبني لنظام غالباً لا يعمل على غيره."],
+["أي أسلوب يجعل التطبيق يعمل على أكثر من نظام تشغيل؟","هذه الأساليب الثلاثة الواردة في السلايدات."],
+["تطبيقات Java تعمل على عدة أنظمة لأن اللغة تتضمن virtual machine تحتوي التطبيق.","صح."]
+];
+var ar=false,order=[],ok=0,ans=0;
+function sh(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
+function build(s){order=Q.map(function(_,i){return i});if(s)sh(order);ok=0;ans=0;$("#final").style.display="none";var box=$("#qs");box.innerHTML="";
+order.forEach(function(qi,n){var q=Q[qi],d=document.createElement("div");d.className="q";
+var p=document.createElement("p");p.innerHTML="<small>"+(ar?"السؤال "+(n+1)+" من "+Q.length:"Question "+(n+1)+" of "+Q.length)+"</small><br>";p.appendChild(document.createTextNode(ar?AQ[qi][0]:q[0]));d.appendChild(p);
+var ix=q[1].map(function(_,i){return i});if(q[1]!==TF)sh(ix);
+var fb=document.createElement("div");fb.className="fb";var bs=[];
+ix.forEach(function(oi){var b=document.createElement("button");b.className="opt";b.textContent=(ar&&q[1]===TF)?(oi?"غلط":"صح"):q[1][oi];bs.push([b,oi]);
+b.onclick=function(){bs.forEach(function(x){x[0].disabled=true;if(x[1]==q[2])x[0].classList.add("ok")});
+var good=oi==q[2];if(!good)b.classList.add("no");ans++;if(good)ok++;
+fb.className="fb show "+(good?"ok":"no");var ra=(ar&&q[1]===TF)?(q[2]?"غلط":"صح"):q[1][q[2]];
+fb.innerHTML="<b>"+(good?(ar?"صح ✓":"Correct ✓"):(ar?"غلط ✗":"Wrong ✗"))+"</b> "+(good?"":(ar?"الإجابة الصحيحة: “"+ra+"”. ":"The right answer is “"+ra+"”. "));fb.appendChild(document.createTextNode(ar?AQ[qi][1]:q[3]));upd()};
+d.appendChild(b)});d.appendChild(fb);box.appendChild(d)});upd()}
+function upd(){$("#score").textContent=(ar?"النتيجة: ":"Score: ")+ok+" / "+ans;$("#prog").textContent=" · "+ans+(ar?" من "+Q.length+" تمت الإجابة":" of "+Q.length+" answered");$("#bar i").style.width=(ans/Q.length*100)+"%";
+if(ans==Q.length){var f=$("#final"),pc=Math.round(ok/Q.length*100);f.style.display="block";f.dir=ar?"rtl":"ltr";
+f.innerHTML="<h3>"+(ar?"انتهيت! ":"Finished! ")+ok+" / "+Q.length+" ("+pc+"%)</h3>"+(ar?(pc>=85?"عمل ممتاز، أنت جاهز للامتحان.":pc>=60?"جيد. راجع الأقسام التي أخطأت فيها ثم أعد المحاولة.":"أعد قراءة الدليل والملخص ثم اخلط الأسئلة وجرّب مرة أخرى."):(pc>=85?"Excellent work, you are ready for the exam.":pc>=60?"Good job. Review the sections you missed, then try again.":"Re-read the guide and the summary, then shuffle and try again."))}}
+$("#shuf").onclick=function(){build(true);scrollTo({top:$("#quiz").offsetTop})};$("#rst").onclick=function(){build(false);scrollTo({top:$("#quiz").offsetTop})};
+/* Arabic content */
+var AR={
+svc:`<h2>1. خدمات نظام التشغيل (OS Services)</h2><p class="lead">ماذا يقدّم نظام التشغيل للبرامج والمستخدمين.</p>
+<div class="card"><h3>الفكرة الأساسية</h3>يوفّر نظام التشغيل <b>بيئة لتنفيذ البرامج</b> و<b>خدمات للبرامج والمستخدمين</b>. وتنقسم الخدمات إلى مجموعتين: خدمات <b>تساعد المستخدم</b>، وخدمات <b>تضمن كفاءة النظام نفسه</b>.</div>
+<h3 style="margin:18px 0 4px;color:var(--am)">أ. خدمات تساعد المستخدم</h3>
+<div class="grid s">
+<div class="card"><h3 data-n="1">واجهة المستخدم (User interface)</h3>معظم الأنظمة لها واجهة، وتتنوع بين <b>سطر الأوامر (CLI)</b> و<b>الرسومية (GUI)</b> و<b>شاشة اللمس</b> و<b>Batch</b>.</div>
+<div class="card"><h3 data-n="2">تنفيذ البرامج (Program execution)</h3>يجب أن يستطيع النظام <b>تحميل البرنامج في الذاكرة</b> وتشغيله وإنهاءه <b>بشكل طبيعي أو غير طبيعي</b> (مع الإشارة إلى الخطأ).</div>
+<div class="card"><h3 data-n="3">عمليات الإدخال والإخراج (I/O)</h3>قد يحتاج البرنامج الجاري إلى I/O يتعلق <b>بملف أو جهاز</b>.</div>
+<div class="card"><h3 data-n="4">معالجة نظام الملفات</h3>تحتاج البرامج إلى <b>قراءة وكتابة</b> الملفات والمجلدات و<b>إنشائها وحذفها</b> و<b>البحث</b> فيها وعرض معلوماتها وإدارة <b>الصلاحيات</b>.</div>
+<div class="card"><h3 data-n="5">الاتصالات (Communications)</h3>تتبادل العمليات المعلومات على نفس الحاسوب أو عبر الشبكة، إما بـ<b>الذاكرة المشتركة (shared memory)</b> أو <b>تمرير الرسائل (message passing)</b> حيث ينقل النظام الحزم.</div>
+<div class="card"><h3 data-n="6">اكتشاف الأخطاء (Error detection)</h3>يجب أن يراقب النظام الأخطاء باستمرار في <b>عتاد CPU والذاكرة</b> و<b>أجهزة I/O</b> و<b>برامج المستخدم</b>، ويتخذ الإجراء المناسب لضمان <b>حوسبة صحيحة ومتسقة</b>. وأدوات التنقيح (debugging) تساعد المستخدم والمبرمج.</div>
+</div>
+<h3 style="margin:22px 0 4px;color:var(--am)">ب. خدمات لكفاءة التشغيل (مشاركة الموارد)</h3>
+<div class="grid s">
+<div class="card"><h3 data-n="7">تخصيص الموارد (Resource allocation)</h3>عند وجود عدة مستخدمين أو مهام بالتزامن يجب تخصيص الموارد لكل منها: <b>دورات CPU والذاكرة الرئيسية وتخزين الملفات وأجهزة I/O</b>.</div>
+<div class="card"><h3 data-n="8">التسجيل (Logging)</h3>يتتبّع <b>من يستخدم كم ونوع</b> موارد الحاسوب.</div>
+<div class="card"><h3 data-n="9">الحماية والأمان</h3>قد يريد أصحاب المعلومات في الأنظمة متعددة المستخدمين أو الشبكية التحكم في استخدامها؛ و<b>العمليات المتزامنة يجب ألا تتداخل مع بعضها</b>.</div>
+</div>
+<div class="card"><h3>أهداف الشابتر</h3><ul><li>تحديد الخدمات التي يوفرها نظام التشغيل</li><li>توضيح كيف تقدّم <b>system calls</b> خدمات النظام</li><li>مقارنة تصاميم <b>monolithic وlayered وmicrokernel وmodular وhybrid</b></li><li>توضيح عملية <b>إقلاع (booting)</b> النظام</li><li>تطبيق أدوات مراقبة أداء النظام</li><li>تصميم وبناء <b>kernel modules</b> في Linux</li></ul>
+<div class="tip">سلايداتك تغطي حتى موضوع “Why Applications are OS-Specific”. أما التصميم والبنية والإقلاع والتنقيح فمذكورة في الفهرس لكنها غير موجودة في السلايدات.</div></div>`,
+ui:`<h2>2. واجهة المستخدم ونظام التشغيل</h2><p class="lead">ثلاث طرق شائعة للتواصل مع النظام. بعض الأنظمة توفر اثنتين أو الثلاث.</p>
+<div class="grid">
+<div class="card"><h3>واجهة سطر الأوامر (CLI)</h3>تسمى أيضاً <b>مفسّر الأوامر (command interpreter)</b>. يكتب المستخدم <b>الأوامر</b> مباشرة. أنظمة Linux وUNIX وWindows تعاملها كبرنامج خاص يعمل عند بدء عملية أو تسجيل دخول المستخدم.<br><br>عند وجود عدة مفسّرات تسمى <b>shells</b>: في UNIX/Linux مثل <b>C shell وBourne-Again shell (bash) وKorn shell</b> وغيرها.</div>
+<div class="card"><h3>الواجهة الرسومية (GUI)</h3>واجهة سهلة بمفهوم <b>سطح المكتب (desktop metaphor)</b>: فأرة ولوحة مفاتيح وشاشة. <b>الأيقونات</b> تمثل الملفات والبرامج والإجراءات، والضغط على الكائنات يعرض معلومات أو خيارات أو ينفذ وظيفة أو يفتح <b>مجلداً (folder)</b>.<br><br>كثير من الأنظمة تضم CLI وGUI معاً. <b>Windows</b> واجهة GUI مع shell أوامر اسمه <code>cmd</code>.</div>
+<div class="card"><h3>واجهة شاشة اللمس (Touch-screen)</h3>أجهزة اللمس تحتاج واجهات جديدة لأن <b>الفأرة غير ممكنة أو غير مرغوبة</b>:<ul><li>الإجراءات والاختيار تعتمد على <b>الإيماءات (gestures)</b></li><li><b>لوحة مفاتيح افتراضية</b> لإدخال النص</li><li><b>أوامر صوتية</b></li></ul></div>
+</div>`,
+sc:`<h2>3. استدعاءات النظام (System Calls)</h2><p class="lead">البوابة التي تدخل منها البرامج إلى النواة.</p>
+<div class="card"><h3>ما هو الـ system call؟</h3>يوفّر <b>واجهة إلى الخدمات التي يقدمها نظام التشغيل</b>. وهي متاحة عموماً كدوال بلغة <b>C وC++</b>، وبعض المهام منخفضة المستوى (وصول مباشر للعتاد) قد تحتاج <b>لغة assembly</b>.
+<div class="tip"><b>مثال: نسخ ملف إلى آخر.</b> يحتاج البرنامج أولاً أسماء الملفات. في UNIX: <code>cp in.txt out.txt</code>. أو يسأل البرنامج المستخدم، وهذا يتطلب <b>سلسلة من system calls</b> (كتابة رسالة، قراءة الإدخال، فتح الملفات، قراءة، كتابة، إغلاق، إنهاء).</div></div>
+<div class="grid">
+<div class="card"><h3>الـ API</h3>نادراً ما يرى المبرمج system calls (النظام ينفذ <b>آلاف منها كل ثانية</b>). بل يبرمج وفق <b>Application Programming Interface (API)</b> الذي يحدد <b>الدوال</b> المتاحة و<b>معاملاتها</b> و<b>القيم المرجعة</b> المتوقعة.<br><br>دوال الـ API تستدعي system calls الحقيقية. مثال: دالة ويندوز <code>CreateProcess()</code> تستدعي <code>NTCreateProcess()</code> في النواة.</div>
+<div class="card"><h3>بيئة التشغيل (RTE)</h3>توفّر <b>واجهة system calls</b> التي تربط بخدمات النظام. لكل استدعاء <b>رقم</b>، والواجهة تحتفظ <b>بجدول مفهرس بهذه الأرقام</b>، وتستدعي الخدمة في النواة وتعيد <b>الحالة والقيم المرجعة</b>. المستدعي يكفيه الالتزام بالـ API؛ والتفاصيل مخفية بواسطة الـ API وتديرها الـ RTE (<b>مكتبة الدعم وقت التشغيل</b> المرفقة مع المترجم).</div>
+</div>
+<div class="card" data-st><h3>تجربة تفاعلية: ماذا يحدث عند استدعاء <code>printf()</code></h3>
+<div class="flow"><span>Application</span><i>←</i><span>API / RTE</span><i>←</i><span>System-call table</span><i>←</i><span>Kernel</span></div>
+<ol class="steps"><li data-b="0">يستدعي البرنامج <code>printf("Hello")</code> وهي دالة API / مكتبة C.</li><li data-b="1">تجهّز مكتبة C المعاملات و<b>رقم الـ system call</b> للدالة <code>write()</code>.</li><li data-b="2">يحدث trap للدخول إلى kernel mode، وواجهة system call <b>تبحث عن الرقم في جدولها</b>.</li><li data-b="3">تنفذ النواة <code>write()</code> ويقوم الجهاز بالإخراج.</li><li data-b="0">تعود الحالة والقيم المرجعة، ويرجع الوضع إلى user mode، ويتابع البرنامج.</li></ol>
+<button class="btn nx">الخطوة التالية</button><button class="btn o rs">إعادة</button></div>
+<div class="card"><h3>تمرير معاملات system call</h3>غالباً نحتاج أكثر من هوية الاستدعاء (نوع وكمية المعلومات تختلف حسب النظام). ثلاث طرق عامة:
+<div class="grid" style="margin-top:10px">
+<div class="card"><h3>1. المسجلات (Registers)</h3>هي <b>الأبسط</b>. المشكلة: قد تكون <b>المعاملات أكثر من المسجلات</b>.<br><code>R1=fd R2=buf R3=n</code></div>
+<div class="card"><h3>2. Block / table</h3>تُخزَّن المعاملات في <b>block في الذاكرة</b> و<b>يمرَّر عنوانه</b> في مسجل. تستخدمها <b>Linux وSolaris</b>.<br><code>R1 → [x, y, z]</code></div>
+<div class="card"><h3>3. المكدس (Stack)</h3>يدفعها البرنامج <b>(push)</b> إلى المكدس وينزعها النظام <b>(pop)</b>.<br><code>push z, y, x</code></div></div>
+<div class="tip">طريقتا الـ block والـ stack <b>لا تحدّان</b> عدد أو طول المعاملات.</div></div>`,
+types:`<h2>4. أنواع استدعاءات النظام</h2><p class="lead">ست فئات رئيسية. اضغط لفتح كل واحدة.</p>
+<details open><summary>1. التحكم بالعمليات (Process control)</summary><div><ul><li>create process, terminate process</li><li>end, abort</li><li>load, execute</li><li>get / set process attributes</li><li>wait for time؛ wait event, signal event</li><li>allocate and free memory</li><li>dump memory عند الخطأ؛ debugger (تنفيذ خطوة بخطوة)</li><li><b>locks</b> لإدارة الوصول إلى البيانات المشتركة</li></ul></div></details>
+<details><summary>2. إدارة الملفات (File management)</summary><div><ul><li>create file, delete file</li><li>open, close file</li><li>read, write, reposition</li><li>get and set file attributes</li></ul></div></details>
+<details><summary>3. إدارة الأجهزة (Device management)</summary><div><ul><li>request device, release device</li><li>read, write, reposition</li><li>get / set device attributes</li><li>logically attach or detach devices</li></ul></div></details>
+<details><summary>4. صيانة المعلومات (Information maintenance)</summary><div><ul><li>get / set time or date</li><li>get / set system data</li><li>get / set process, file, or device attributes</li></ul></div></details>
+<details><summary>5. الاتصالات (Communications)</summary><div><ul><li>create, delete communication connection</li><li>send, receive messages</li><li>transfer status information</li><li>attach or detach remote devices</li></ul></div></details>
+<details><summary>6. الحماية (Protection)</summary><div><ul><li><b>التحكم في الوصول إلى الموارد</b></li><li>get file permissions, set file permissions</li></ul></div></details>
+<div class="card scroll"><h3>أمثلة: Windows مقابل UNIX</h3><table><tr><th>الفئة</th><th>Windows</th><th>UNIX</th></tr>
+<tr><td>التحكم بالعمليات</td><td><code>CreateProcess()</code> <code>ExitProcess()</code> <code>WaitForSingleObject()</code></td><td><code>fork()</code> <code>exit()</code> <code>wait()</code></td></tr>
+<tr><td>إدارة الملفات</td><td><code>CreateFile()</code> <code>ReadFile()</code> <code>WriteFile()</code> <code>CloseHandle()</code></td><td><code>open()</code> <code>read()</code> <code>write()</code> <code>close()</code></td></tr>
+<tr><td>إدارة الأجهزة</td><td><code>SetConsoleMode()</code> <code>ReadConsole()</code> <code>WriteConsole()</code></td><td><code>ioctl()</code> <code>read()</code> <code>write()</code></td></tr>
+<tr><td>صيانة المعلومات</td><td><code>GetCurrentProcessID()</code> <code>SetTimer()</code> <code>Sleep()</code></td><td><code>getpid()</code> <code>alarm()</code> <code>sleep()</code></td></tr>
+<tr><td>الاتصالات</td><td><code>CreatePipe()</code> <code>CreateFileMapping()</code> <code>MapViewOfFile()</code></td><td><code>pipe()</code> <code>shm_open()</code> <code>mmap()</code></td></tr>
+<tr><td>الحماية</td><td><code>SetFileSecurity()</code> <code>InitializeSecurityDescriptor()</code></td><td><code>chmod()</code> <code>umask()</code> <code>chown()</code></td></tr></table></div>
+<div class="card"><h3>مثال مكتبة C القياسية</h3>برنامج C يستدعي دالة المكتبة <code>printf()</code> التي تستدعي بدورها الـ system call <code>write()</code>. فالمكتبة تعمل كطبقة API فوق النواة.</div>`,
+sys:`<h2>5. خدمات النظام (System Services)</h2><p class="lead">برامج تأتي مع النظام مقابل برامج يشغّلها المستخدم.</p>
+<div class="grid">
+<div class="card"><h3>الخدمات الخلفية (Background services)</h3><ul><li>تبدأ عند <b>الإقلاع</b>؛ بعضها للبدء ثم ينتهي، وبعضها يعمل من الإقلاع حتى الإغلاق</li><li>توفر فحص القرص وجدولة العمليات وتسجيل الأخطاء والطباعة</li><li>تعمل في <b>user context وليس kernel context</b></li><li>تسمى <b>services وsubsystems وdaemons</b></li></ul></div>
+<div class="card"><h3>برامج التطبيقات (Application programs)</h3><ul><li>لا تخص النظام</li><li>يشغّلها المستخدمون</li><li>لا تُعتبر عادةً جزءاً من نظام التشغيل</li><li>تُشغَّل بسطر الأوامر أو النقر أو لمسة الإصبع</li></ul></div>
+</div>`,
+ld:`<h2>6. الـ Linkers والـ Loaders</h2><p class="lead">كيف يتحول الكود المصدري إلى برنامج يعمل.</p>
+<div class="card" data-st><h3>تجربة تفاعلية: من الكود المصدري إلى برنامج يعمل</h3>
+<div class="flow"><span>Source code</span><i>←</i><span>Object files</span><i>←</i><span>Linker</span><i>←</i><span>Executable</span><i>←</i><span>Loader → Memory</span></div>
+<ol class="steps"><li data-b="0">يكتب المبرمج <b>الكود المصدري</b>.</li><li data-b="1">ينتج المترجم/المجمّع <b>ملفات object قابلة لإعادة التموضع (relocatable)</b> مصممة لتُحمَّل في <b>أي موقع فيزيائي في الذاكرة</b>.</li><li data-b="2">يجمع الـ <b>linker</b> ملفات object (ويضيف المكتبات) في <b>ملف تنفيذي ثنائي واحد</b>.</li><li data-b="3">يوجد الملف التنفيذي في <b>التخزين الثانوي</b>، وصيغ الملفات القياسية تجعل النظام يعرف كيف يحمّله ويشغّله.</li><li data-b="4">يُدخله الـ <b>loader</b> إلى الذاكرة الرئيسية. و<b>الـ relocation</b> تعطي العناوين النهائية وتعدّل الكود والبيانات لتناسبها. ثم يبدأ التنفيذ.</li></ol>
+<button class="btn nx">الخطوة التالية</button><button class="btn o rs">إعادة</button></div>
+<div class="grid">
+<div class="card"><h3>الـ Linker</h3>أداة مهمة تأخذ <b>ملفات object</b> (من المجمّع والمترجم) وأكواداً أخرى و<b>تضمّها في ملف تنفيذي واحد</b>. وظيفتها الأساسية <b>توليد الملفات التنفيذية</b>.</div>
+<div class="card"><h3>الـ Loader</h3>مكوّن أساسي في النظام <b>مسؤول عن تحميل البرامج والمكتبات إلى الذاكرة الرئيسية</b>. <b>مدخلاته هي الملف التنفيذي</b> الذي أنتجه الـ linker. يحمّل الكود التنفيذي في الذاكرة ليُنفَّذ.</div>
+</div>`,
+spec:`<h2>7. لماذا التطبيقات خاصة بنظام تشغيل معين</h2><p class="lead">لماذا لا يعمل تطبيق ويندوز ببساطة على لينكس.</p>
+<div class="card"><h3>الأسباب</h3><ul><li>التطبيقات المبنية على نظام غالباً <b>لا تعمل</b> على أنظمة أخرى</li><li>كل نظام له <b>system calls فريدة خاصة به</b></li><li>كل نظام له <b>صيغ ملفات خاصة</b> وغير ذلك</li></ul></div>
+<div class="card"><h3>كيف يعمل التطبيق على أكثر من نظام</h3><ul><li>كتابته بلغة <b>مفسَّرة (interpreted)</b> مثل Python وRuby مع توفر المفسّر على عدة أنظمة</li><li>كتابته بلغة تتضمن <b>آلة افتراضية (VM)</b> تحتوي التطبيق (مثل <b>Java</b>)</li><li>كتابته بلغة <b>قياسية</b> (مثل C) و<b>ترجمته بشكل منفصل</b> على كل نظام</li></ul></div>`,
+sum:`<h2>8. ملخص الشابتر</h2><p class="lead">راجعه قبل الامتحان مباشرة.</p>
+<div class="card"><ul>
+<li>خدمات النظام: <b>تساعد المستخدم</b> (واجهة، تنفيذ برامج، I/O، نظام ملفات، اتصالات، اكتشاف أخطاء) و<b>للكفاءة</b> (تخصيص موارد، تسجيل، حماية وأمان).</li>
+<li>الواجهات: <b>CLI</b> (shells)، <b>GUI</b> (سطح مكتب وأيقونات)، <b>لمس</b> (إيماءات ولوحة افتراضية وصوت).</li>
+<li>الـ <b>system calls</b> هي واجهة خدمات النظام؛ يستخدم المبرمج <b>API</b>، وتربطها <b>RTE</b> بالنواة عبر <b>جدول مرقّم</b>.</li>
+<li>تمرير المعاملات: <b>مسجلات</b> أو <b>block في الذاكرة</b> (Linux وSolaris) أو <b>stack</b>.</li>
+<li>ست فئات: <b>process control وfile management وdevice management وinformation maintenance وcommunications وprotection</b>.</li>
+<li>الـ <b>daemons</b> تعمل في user context؛ وبرامج التطبيقات ليست جزءاً من النظام.</li>
+<li><b>مترجم ← object files ← linker ← executable ← loader ← ذاكرة</b>؛ والـ relocation تعطي العناوين النهائية.</li>
+<li>التطبيقات خاصة بالنظام بسبب <b>system calls وصيغ الملفات</b>؛ وتصبح قابلة للنقل عبر المفسّرات أو VM أو إعادة الترجمة.</li></ul></div>
+<div class="card scroll"><h3>مقارنات سريعة</h3>
+<table><tr><th>المفهوم أ</th><th>المفهوم ب</th></tr>
+<tr><td><b>API</b>: دوال ومعاملات وقيم مرجعة يراها المبرمج</td><td><b>System call</b>: الطلب الفعلي إلى النواة</td></tr>
+<tr><td><b>Linker</b>: يضم ملفات object في ملف تنفيذي</td><td><b>Loader</b>: يضع الملف التنفيذي في الذاكرة الرئيسية</td></tr>
+<tr><td><b>Daemons</b>: تعمل في user context وجزء من بدء النظام</td><td><b>Application programs</b>: يشغّلها المستخدم وليست من النظام</td></tr>
+<tr><td><b>Registers</b>: الأبسط ومحدودة بعدد المسجلات</td><td><b>Block / stack</b>: بلا حد لعدد أو طول المعاملات</td></tr>
+<tr><td><b>CLI</b>: كتابة أوامر لـ shell</td><td><b>GUI</b>: أيقونات وفأرة؛ <b>Touch</b>: إيماءات وصوت</td></tr>
+<tr><td>اتصال بـ <b>shared memory</b></td><td><b>Message passing</b> (حزم ينقلها النظام)</td></tr></table></div>`};
+Object.keys(AR).forEach(function(k){var w=document.querySelector("#"+k+" .wrap"),d=document.createElement("div");d.className="arx";d.lang="ar";d.dir="rtl";d.innerHTML=AR[k]+(k=="ui"||k=="spec"||k=="sys"||k=="ld"||k=="types"||k=="sc"?"":"");w.appendChild(d)});
+document.querySelectorAll("[data-st]").forEach(st);
+/* language toggle */
+var NA=["خدمات النظام","واجهة المستخدم","استدعاءات النظام","أنواع الاستدعاءات","خدمات النظام الخلفية","Linkers وLoaders","تطبيقات خاصة بنظام","الملخص","الاختبار"];
+var NE=[].map.call(document.querySelectorAll("nav a"),function(a){return a.textContent});
+var H1=$(".hero h1"),HP=$(".hero p"),HB=document.querySelectorAll(".hero .btn"),H0=[H1.innerHTML,HP.textContent,HB[0].textContent,HB[1].textContent];
+var QE=[$("#quiz h2").textContent,$("#quiz .lead").textContent,$("#shuf").textContent,$("#rst").textContent,$("footer").textContent];
+$("#lang").onclick=function(){ar=!ar;document.body.classList.toggle("ar",ar);
+document.querySelectorAll("nav a").forEach(function(a,i){a.textContent=ar?NA[i]:NE[i]});
+H1.innerHTML=ar?"نظم التشغيل<br>الشابتر 2: خدمات النظام":H0[0];HP.textContent=ar?"دليل دراسة كامل وسهل: الخدمات والواجهات واستدعاءات النظام والـ linkers والـ loaders مشروحة، مع تجارب تفاعلية وملخص واختبار يخبرك فوراً إن كانت إجابتك صح أو غلط.":H0[1];
+HB[0].textContent=ar?"ابدأ الدراسة":H0[2];HB[1].textContent=ar?"اذهب للاختبار":H0[3];$("#lang").textContent=ar?"English":"العربية";
+$("#quiz h2").textContent=ar?"9. الاختبار التفاعلي":QE[0];$("#quiz .lead").textContent=ar?"اضغط على إجابة. الأخضر يعني صح، والأحمر غلط، ويظهر شرح الإجابة الصحيحة دائماً.":QE[1];
+$("#shuf").textContent=ar?"خلط وإعادة":QE[2];$("#rst").textContent=ar?"إعادة":QE[3];$("footer").textContent=ar?"مبني على سلايدات الشابتر 2: خدمات نظام التشغيل · نظم التشغيل (501471)":QE[4];
+$("#quiz .wrap").dir=ar?"rtl":"ltr";build(false)};
+build(false);
+})();
+</script>
+</body>
+</html>
