@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Operating Systems – Chapter 4 Study Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;700&family=JetBrains+Mono:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d0805;--panel:#1a100a;--panel2:#231510;--line:#4a2a14;--g:#ffa94d;--g2:#ff7a1a;--gd:#a64e0f;--am:#6fe0c3;--cd:#ffe3a3;--txt:#fbeee0;--mut:#c4a68c;--bad:#ff5d5d;--ok:#4ade80;
+box-sizing:border-box;color-scheme:dark;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(108px + env(safe-area-inset-top,0px))}
+body{margin:0;background:var(--bg);color:var(--txt);font:16px/1.65 "IBM Plex Sans",system-ui,sans-serif;
+background-image:repeating-linear-gradient(115deg,rgba(255,169,77,.05) 0 1px,transparent 1px 22px)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:30}
+#bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.6}
+main,header{position:relative;z-index:1}
+h1,h2,h3,summary{font-family:"Sora",system-ui,sans-serif;line-height:1.2;margin:0}
+.wrap{max-width:980px;margin:0 auto;padding:0 18px}
+.cbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:22;height:42px;background:#080402;border-bottom:1px solid var(--gd)}
+.cbar .wrap{display:flex;gap:6px;align-items:center;height:42px;overflow-x:auto;scrollbar-width:none}
+.cbar a{color:var(--mut);text-decoration:none;padding:4px 14px;border-radius:6px;font:600 14px "Sora",sans-serif;white-space:nowrap;border:1px solid transparent}
+.cbar a:hover,.cbar a:focus-visible{color:var(--g);border-color:var(--gd);outline:none}.cbar a.cur{background:var(--g);color:#1a0a00}
+nav{position:sticky;top:calc(42px + env(safe-area-inset-top,0px));z-index:20;background:rgba(13,8,5,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;gap:6px;overflow-x:auto;padding:10px 18px;scrollbar-width:none;align-items:center}
+nav a{color:var(--mut);text-decoration:none;white-space:nowrap;padding:6px 12px;border-radius:99px;font-size:14px;border:1px solid transparent}
+nav a:hover,nav a:focus-visible{color:var(--g);border-color:var(--gd);outline:none}
+.hero{display:grid;grid-template-columns:1.1fr 1fr;gap:28px;align-items:center;padding:54px 0 40px}
+.hero h1{font-size:clamp(34px,6vw,56px);color:var(--g);text-shadow:0 0 30px rgba(255,122,26,.45)}
+.hero p{color:var(--mut);max-width:46ch}
+.btn{display:inline-block;background:var(--g);color:#1a0a00;border:0;border-radius:8px;padding:11px 20px;cursor:pointer;font:600 15px "IBM Plex Sans",sans-serif;text-decoration:none;margin:4px 8px 4px 0}
+.btn.o{background:transparent;color:var(--g);border:1px solid var(--gd)}
+.btn.o.on{background:var(--g);color:#1a0a00}
+.btn.s{padding:7px 12px;font-size:13.5px;margin:3px 6px 3px 0}
+.btn:hover{box-shadow:0 0 18px rgba(255,122,26,.55)}
+.btn:focus-visible,summary:focus-visible,.opt:focus-visible,.ch:focus-visible,svg g:focus-visible{outline:2px solid var(--g);outline-offset:2px}
+.proc{background:#080402;border:1px solid var(--g2);border-radius:14px;box-shadow:0 0 44px rgba(255,122,26,.28);padding:16px}
+.proc .pt{font:12px "JetBrains Mono",monospace;color:var(--mut);margin-bottom:10px}
+.proc .sh{display:flex;gap:6px;margin-bottom:12px}
+.proc .sh span{flex:1;text-align:center;padding:6px 2px;border:1px dashed var(--am);color:var(--am);border-radius:7px;font:600 12px "JetBrains Mono",monospace}
+.ln{display:grid;grid-template-columns:78px 1fr;gap:10px;align-items:center;margin:9px 0;font:600 12.5px "Sora",sans-serif;color:var(--g)}
+.tr{height:12px;background:#1a100a;border-radius:7px;overflow:hidden;border:1px solid var(--gd)}
+.tr i{display:block;height:100%;width:100%;transform-origin:left;background:linear-gradient(90deg,var(--g2),var(--g));animation:run 2.6s linear infinite}
+@keyframes run{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.proc .pv{margin-top:10px;font-size:12.5px;color:var(--mut)}
+section{padding:44px 0 8px}
+section>.wrap>h2,.arx>h2{font-size:clamp(23px,3.6vw,32px);color:var(--g);margin-bottom:6px}
+.lead{color:var(--mut);margin:0 0 20px}
+.card{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:14px 0}
+.card h3{font-size:17px;color:var(--g);margin-bottom:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.grid .card{margin:0}
+.grid.s .card h3::before{content:attr(data-n);display:inline-block;background:var(--g);color:#1a0a00;border-radius:5px;padding:0 7px;margin-inline-end:8px;font-size:13px}
+ul{margin:6px 0;padding-left:20px}li{margin:4px 0}
+b,strong{color:var(--g)}
+code{font-family:"JetBrains Mono",monospace;font-size:.9em;background:#080402;border:1px solid var(--line);border-radius:5px;padding:1px 6px;color:var(--cd);direction:ltr;unicode-bidi:isolate}
+.tip{border-left:3px solid var(--am);background:rgba(111,224,195,.07);padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:15px}
+.scroll{overflow-x:auto}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin:12px 0}
+.pbox{border:1px solid var(--gd);border-radius:10px;padding:12px;background:#0f0804}
+.pbox h4{margin:0 0 8px;font:700 14px "Sora",sans-serif;color:var(--g)}
+.pbox .sh{display:flex;gap:5px;margin-bottom:8px}
+.pbox .sh span{flex:1;text-align:center;font:600 11.5px "JetBrains Mono",monospace;border:1px dashed var(--am);color:var(--am);border-radius:6px;padding:4px 0}
+.pbox .th{display:flex;gap:6px;flex-wrap:wrap}
+.pbox .th span{flex:1;min-width:84px;text-align:center;font-size:12px;border:1px solid var(--g2);border-radius:6px;padding:5px 3px;color:var(--cd);background:#1a0e07}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.ch{padding:8px 14px;border-radius:8px;border:1px solid var(--gd);background:#0f0804;color:var(--txt);font:600 14px "IBM Plex Sans",sans-serif;cursor:pointer;transition:.25s}
+.ch:hover{border-color:var(--g)}
+.ch.s{background:rgba(111,224,195,.18);border-color:var(--am);color:var(--am)}
+.ch.p{background:rgba(255,169,77,.2);border-color:var(--g);color:var(--g)}
+.msg{min-height:44px}
+.rb{height:16px;background:#0f0804;border:1px solid var(--gd);border-radius:8px;overflow:hidden;margin:8px 0}
+.rb i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--g2),var(--g))}
+.rl{font:600 12.5px "JetBrains Mono",monospace;color:var(--mut);margin-top:6px}
+svg.m{width:100%;max-width:560px;display:block;margin:10px auto;background:#0a0603;border:1px solid var(--line);border-radius:10px}
+svg.m text{font:600 13px "JetBrains Mono",monospace;fill:#1a0a00;text-anchor:middle;pointer-events:none}
+svg.m text.c{fill:var(--mut);font-size:11px;text-anchor:start}
+svg.m g{cursor:pointer}
+details{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:12px;margin:10px 0;overflow:hidden}
+summary{cursor:pointer;padding:14px 18px;font-size:16px;font-weight:700;color:var(--g);list-style:none}
+summary::before{content:"▸ ";color:var(--am)}details[open] summary::before{content:"▾ "}
+details>div{padding:0 20px 16px}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:14.5px}
+th,td{border:1px solid var(--line);padding:8px 12px;text-align:left;vertical-align:top}
+th{background:#3a1f0d;color:var(--g)}
+#bar{height:8px;background:#0f0804;border-radius:9px;overflow:hidden;margin:10px 0}
+#bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--g2),var(--g));transition:width .4s}
+.q{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0}
+.q p{margin:0 0 10px;font-weight:600}.q small{color:var(--mut);font-weight:400}
+.opt{display:block;width:100%;text-align:start;margin:6px 0;padding:10px 14px;border-radius:8px;border:1px solid var(--line);background:#120a05;color:var(--txt);font:inherit;cursor:pointer;transition:.2s}
+.opt:hover:not(:disabled){border-color:var(--g);background:#26150a}
+.opt.ok{background:rgba(74,222,128,.2);border-color:var(--ok);color:#fff}
+.opt.no{background:rgba(255,93,93,.18);border-color:var(--bad);color:#ffd6d6}
+.opt:disabled{cursor:default}
+.fb{display:none;margin-top:8px;padding:10px 14px;border-radius:8px;font-size:15px}
+.fb.show{display:block}.fb.ok{background:rgba(74,222,128,.1);border-left:3px solid var(--ok)}.fb.no{background:rgba(255,93,93,.1);border-left:3px solid var(--bad)}
+#score{font:700 21px "Sora",sans-serif;color:var(--g)}
+footer{padding:40px 18px 60px;text-align:center;color:var(--mut)}
+.arx{direction:rtl;text-align:start}body:not(.ar) .arx{display:none}
+body.ar section:not(#quiz) .wrap>*:not(.arx){display:none}
+body.ar{font-family:"Tajawal","IBM Plex Sans",sans-serif;font-size:17px}body.ar .btn,body.ar .ch{font-family:"Tajawal",sans-serif}
+body.ar h1,body.ar h2,body.ar h3,body.ar h4,body.ar summary,body.ar #score{font-family:"Tajawal",sans-serif}
+.arx ul{padding:0 20px 0 0}
+.arx .tip{border-left:0;border-right:3px solid var(--am);border-radius:8px 0 0 8px}
+.arx th,.arx td{text-align:start}
+#lang{flex:none;padding:6px 16px;margin:0 8px 0 0;font-size:14px}
+@media(max-width:760px){.hero{grid-template-columns:1fr;padding-top:34px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<canvas id="bg" aria-hidden="true"></canvas>
+<div class="cbar"><div class="wrap"><a href="index.html">⌂ Home</a><a href="ch1.html">Ch 1</a><a href="ch2.html">Ch 2</a><a href="ch3.html">Ch 3</a><a href="ch4.html" class="cur">Ch 4</a><a href="ch5.html">Ch 5</a><a href="ch8.html">Ch 8</a></div></div>
+<nav><div class="wrap">
+<button class="btn" id="lang" type="button">العربية</button><a href="#def">What is a Thread</a><a href="#adv">Advantages</a><a href="#typ">User &amp; Kernel Threads</a><a href="#mod">Threading Models</a><a href="#sum">Summary</a><a href="#quiz">Quiz</a>
+</div></nav>
+
+<header><div class="wrap hero">
+<div>
+<h1>Operating Systems<br>Chapter 4: Threads</h1>
+<p>A complete, easy-to-follow study guide: threads, their advantages, user and kernel threads, and the three multithreading models explained in plain English, with interactive demos, a summary, and a quiz that tells you instantly if you are right or wrong.</p>
+<a class="btn" href="#def">Start studying</a><a class="btn o" href="#quiz">Jump to quiz</a>
+</div>
+<div class="proc" aria-hidden="true"><div class="pt">$ process P · 3 threads running</div>
+<div class="sh"><span>code</span><span>data</span><span>files</span></div>
+<div class="ln"><em>Thread 1</em><div class="tr"><i style="animation-duration:2.2s"></i></div></div>
+<div class="ln"><em>Thread 2</em><div class="tr"><i style="animation-duration:3.1s"></i></div></div>
+<div class="ln"><em>Thread 3</em><div class="tr"><i style="animation-duration:2.7s"></i></div></div>
+<div class="pv">each thread: own ID · program counter · registers · stack</div></div>
+</div></header>
+
+<main>
+<section id="def"><div class="wrap">
+<h2>1. What is a Thread?</h2>
+<p class="lead">The basic unit of CPU utilization inside a process.</p>
+<div class="card"><h3>Definitions</h3>All modern operating systems let a process contain <b>multiple threads of control</b>. Several ways to say it:
+<ul><li>A thread is a <b>path of execution within a process</b>.</li><li>A thread is a <b>basic unit of CPU utilization</b>.</li><li>A thread is a <b>flow of control within a process</b>.</li><li>A thread of execution is the <b>smallest sequence of programmed instructions that can be managed independently by a scheduler</b> (typically part of the OS).</li></ul></div>
+<div class="card"><h3>What a thread has, and what it shares</h3>A thread comprises a <b>thread ID</b>, a <b>program counter</b>, a <b>register set</b>, and a <b>stack</b>. It <b>shares</b> with the other threads of the same process its <b>code section, data section</b>, and other OS resources such as <b>open files and signals</b>.
+<div class="two">
+<div class="pbox"><h4>Single-threaded process</h4><div class="sh"><span>code</span><span>data</span><span>files</span></div><div class="th"><span>1 thread<br>PC · regs · stack</span></div></div>
+<div class="pbox"><h4>Multithreaded process</h4><div class="sh"><span>code</span><span>data</span><span>files</span></div><div class="th"><span>thread 1<br>PC · regs · stack</span><span>thread 2<br>PC · regs · stack</span><span>thread 3<br>PC · regs · stack</span></div></div></div>
+A traditional (<b>heavyweight</b>) process has a <b>single thread of control</b>. With multiple threads it can <b>perform more than one task at a time</b>.</div>
+<div class="card" data-sh><h3>Interactive: shared or private?</h3>Tap each item to see whether threads of the same process <b>share</b> it or each have their <b>own</b>.
+<div class="chips"><button class="ch" data-k="s">Code section</button><button class="ch" data-k="s">Data section</button><button class="ch" data-k="s">Open files</button><button class="ch" data-k="s">Signals</button><button class="ch" data-k="p">Thread ID</button><button class="ch" data-k="p">Program counter</button><button class="ch" data-k="p">Register set</button><button class="ch" data-k="p">Stack</button></div>
+<div class="tip msg shm" data-s="SHARED among all threads of the same process." data-p="PRIVATE: every thread has its own.">Tap an item.</div><button class="btn s o shr">Reset</button></div>
+<div class="grid">
+<div class="card"><h3>Components of a thread</h3><ul><li>A <b>thread ID</b> that uniquely identifies it</li><li>A <b>register set</b> representing the processor status</li><li>A <b>user stack</b> (when running in user mode) and a <b>kernel stack</b> (when running in kernel mode)</li><li>A <b>private storage area</b> used by run-time libraries and dynamic link libraries (DLLs)</li></ul></div>
+<div class="card"><h3>Multithreading</h3>Allows <b>multiple parts of a program to execute at the same time</b>. These parts are the threads: <b>lightweight processes</b> inside the process. Multithreading leads to <b>maximum utilization of the CPU</b> by multitasking.</div>
+</div>
+<div class="card" data-run data-srun="Single-threaded: the 3 parts run one after another…" data-sdone="Done: 3 time units (sequential)." data-mrun="Multithreaded: the 3 parts run at the same time…" data-mdone="Done: 1 time unit (parallel on 3 CPU cores)."><h3>Interactive: single-threaded vs multithreaded</h3>A task with 3 equal parts (1 time unit each).
+<div class="rb"><i></i></div><div class="rb"><i></i></div><div class="rb"><i></i></div>
+<button class="btn s r1">Run single-threaded</button><button class="btn s o rm">Run multithreaded</button><div class="rl rt">Press a button.</div></div>
+</div></section>
+
+<section id="adv"><div class="wrap">
+<h2>2. Advantages of Threads over Processes</h2>
+<p class="lead">Six reasons threads are used.</p>
+<div class="grid s">
+<div class="card"><h3 data-n="1">Responsiveness</h3>If a process is divided into threads and one thread completes, its <b>output can be returned immediately</b>.</div>
+<div class="card"><h3 data-n="2">Faster context switch</h3>Context-switch time between threads is <b>lower</b> than between processes, which need <b>more CPU overhead</b>.</div>
+<div class="card"><h3 data-n="3">Use of multiprocessors</h3>Multiple threads of one process can be <b>scheduled on multiple processors</b>, making execution faster.</div>
+<div class="card"><h3 data-n="4">Resource sharing</h3><b>Code, data and files</b> are shared among all threads of a process.<div class="tip"><b>Stack and registers can’t be shared.</b> Each thread has its own.</div></div>
+<div class="card"><h3 data-n="5">Easier communication</h3>Threads share a <b>common address space</b>. Processes must use <b>specific communication techniques</b>.</div>
+<div class="card"><h3 data-n="6">Enhanced throughput</h3>If each thread function is a job, <b>more jobs complete per unit of time</b>.</div>
+</div>
+<div class="card scroll"><h3>Process vs thread</h3>
+<table><tr><th>Feature</th><th>Process</th><th>Thread</th></tr>
+<tr><td>Weight</td><td>Heavyweight (traditional process)</td><td>Lightweight process</td></tr>
+<tr><td>Context switch</td><td>More CPU overhead</td><td>Lower overhead, faster</td></tr>
+<tr><td>Communication</td><td>Needs a specific technique</td><td>Easy: shared address space</td></tr>
+<tr><td>Code, data, files</td><td>Own copy</td><td>Shared within the process</td></tr>
+<tr><td>Stack and registers</td><td>Own</td><td>Own for each thread (not shared)</td></tr></table></div>
+</div></section>
+
+<section id="typ"><div class="wrap">
+<h2>3. User Threads and Kernel Threads</h2>
+<p class="lead">Two types of threads in a modern system.</p>
+<div class="grid">
+<div class="card"><h3>User threads</h3>Supported <b>above the kernel, without kernel support</b>. These are the threads that <b>application programmers</b> put into their programs.</div>
+<div class="card"><h3>Kernel threads</h3>Supported <b>within the kernel of the OS itself</b>. All modern OSes support them, allowing the kernel to perform <b>multiple simultaneous tasks</b> and/or service <b>multiple kernel system calls simultaneously</b>.</div>
+</div>
+<div class="tip">In a specific implementation, user threads must be <b>mapped</b> to kernel threads using one of three strategies: the <b>multithreading models</b> in the next section.</div>
+</div></section>
+
+<section id="mod"><div class="wrap">
+<h2>4. Multithreading Models</h2>
+<p class="lead">How user threads relate to kernel threads.</p>
+<div class="grid">
+<div class="card"><h3>Many-to-One</h3>Maps <b>many user threads</b> to <b>a single kernel thread</b>.<ul><li><b>+</b> Quite efficient: thread management is done in <b>user space</b></li><li><b>−</b> A blocking system call <b>blocks the entire process</b></li><li><b>−</b> No parallel run: only one thread can access the kernel at a time</li><li><b>−</b> One kernel thread runs on one CPU, so a process <b>can’t be split across CPUs</b></li></ul></div>
+<div class="card"><h3>One-to-One</h3>Maps <b>each user thread</b> to a <b>kernel thread</b>.<ul><li><b>+</b> Many threads <b>run in parallel</b> on multiprocessors</li><li><b>+</b> Other threads run when one makes a <b>blocking system call</b></li><li><b>−</b> Creating a user thread <b>requires creating a kernel thread</b></li><li><b>−</b> Many kernel threads burden the system, so the <b>number of threads is restricted</b></li></ul></div>
+<div class="card"><h3>Many-to-Many</h3><b>Multiplexes</b> many user threads onto an <b>equal or smaller number</b> of kernel threads.<ul><li><b>+</b> <b>No restriction</b> on the number of user threads</li><li><b>+</b> Blocking kernel calls <b>don’t block the entire process</b></li><li><b>+</b> Processes can be <b>split across multiple processors</b></li><li><b>+</b> A process can get a <b>variable number of kernel threads</b> depending on CPUs and other factors</li></ul>It has none of the disadvantages of the other two.</div>
+</div>
+<div class="card"><h3>Two-tier model</h3>A popular variation of many-to-many that allows <b>either many-to-many or one-to-one</b> operation. Used by <b>IRIX, HP-UX, Tru64 UNIX</b>, and <b>Solaris before Solaris 9</b>.</div>
+<div class="card" data-mdl data-i1="Many-to-one: all 4 user threads share ONE kernel thread. Click a user thread (U) to make a blocking system call." data-b1="Blocking system call → the ENTIRE process is blocked (only one kernel thread, and only one thread can access the kernel at a time)." data-i2="One-to-one: each user thread has its own kernel thread. Click a user thread to make it block." data-b2="Only the blocked thread waits. The other threads keep running, and can run in parallel on multiple CPUs." data-i3="Many-to-many: 4 user threads are multiplexed onto 3 kernel threads. Click a user thread to make it block." data-b3="The blocking call does NOT block the whole process: the other user threads are scheduled on the remaining kernel threads." data-u="User threads" data-k="Kernel threads"><h3>Interactive: block a thread in each model</h3>
+<div><button class="btn s o on" data-m="1">Many-to-One</button><button class="btn s o" data-m="2">One-to-One</button><button class="btn s o" data-m="3">Many-to-Many</button><button class="btn s o rs">Unblock all</button></div>
+<svg class="m" viewBox="0 0 400 150" role="img" aria-label="Thread model diagram"></svg>
+<div class="tip msg mm"></div></div>
+</div></section>
+
+<section id="sum"><div class="wrap">
+<h2>5. Chapter Summary</h2>
+<p class="lead">Review this right before the exam.</p>
+<div class="card"><ul>
+<li>A <b>thread</b> = basic unit of CPU utilization: <b>thread ID, program counter, register set, stack</b>.</li>
+<li>Threads of one process <b>share code, data, open files, signals</b>; each has its <b>own stack and registers</b>.</li>
+<li>A traditional <b>heavyweight</b> process has one thread; multithreading gives <b>lightweight</b> parallel tasks and max CPU use.</li>
+<li>Advantages: <b>responsiveness, faster context switch, multiprocessor use, resource sharing, easier communication, higher throughput</b>.</li>
+<li><b>User threads</b> (above the kernel, no kernel support) vs <b>kernel threads</b> (supported by the OS kernel).</li>
+<li>Models: <b>many-to-one, one-to-one, many-to-many</b> (plus <b>two-tier</b>).</li></ul></div>
+<div class="card scroll"><h3>Compare the models</h3>
+<table><tr><th>Model</th><th>Mapping</th><th>Parallel on multiprocessor</th><th>Blocking call</th><th>Limit on threads</th></tr>
+<tr><td><b>Many-to-One</b></td><td>many user → 1 kernel</td><td>No</td><td>Blocks the entire process</td><td>No (user-space management, efficient)</td></tr>
+<tr><td><b>One-to-One</b></td><td>1 user → 1 kernel</td><td>Yes</td><td>Other threads keep running</td><td>Yes (kernel-thread burden)</td></tr>
+<tr><td><b>Many-to-Many</b></td><td>many user → equal or fewer kernel</td><td>Yes</td><td>Other threads keep running</td><td>No restriction</td></tr></table></div>
+<div class="card scroll"><h3>Quick comparisons</h3>
+<table><tr><th>Concept A</th><th>Concept B</th></tr>
+<tr><td><b>User threads</b>: above the kernel, no kernel support</td><td><b>Kernel threads</b>: supported inside the OS kernel</td></tr>
+<tr><td><b>Shared</b>: code, data, files</td><td><b>Private</b>: stack, registers, PC, thread ID</td></tr>
+<tr><td><b>Process</b> context switch: more overhead</td><td><b>Thread</b> context switch: less overhead</td></tr></table></div>
+</div></section>
+
+<section id="quiz"><div class="wrap">
+<h2>6. Interactive Quiz</h2>
+<p class="lead">Tap an answer. Green means correct, red means wrong, and the right answer is always explained.</p>
+<div class="card"><span id="score">Score: 0 / 0</span> <span style="color:var(--mut)" id="prog"></span><div id="bar"><i></i></div>
+<button class="btn" id="shuf">Shuffle &amp; restart</button><button class="btn o" id="rst">Restart</button></div>
+<div id="qs"></div>
+<div class="card" id="final" style="display:none"></div>
+</div></section>
+</main>
+<footer>Based on the slides of Chapter 4: Threads · Operating Systems (501471)</footer>
+
+<script>
+(function(){
+var $=function(s){return document.querySelector(s)};
+var rm=matchMedia("(prefers-reduced-motion:reduce)").matches;
+/* woven threads background */
+var cv=$("#bg"),cx=cv.getContext("2d"),W,H,t=0,N=9;
+function rs(){W=cv.width=innerWidth;H=cv.height=innerHeight}rs();addEventListener("resize",rs);
+function fr(){cx.clearRect(0,0,W,H);
+for(var k=0;k<N;k++){var by=(k+.5)*H/N,ph=k*.7,sp=.004+k*.0007;
+cx.beginPath();for(var x=0;x<=W;x+=14){var y=by+Math.sin(x/170+t*sp*60+ph)*22+Math.sin(x/70-t*sp*40+k)*8;x?cx.lineTo(x,y):cx.moveTo(x,y)}
+cx.strokeStyle="rgba(255,"+(130+k*10)+",50,.32)";cx.lineWidth=1.4;cx.stroke();
+var px=((t*(60+k*14))+k*210)%(W+80)-40,py=by+Math.sin(px/170+t*sp*60+ph)*22+Math.sin(px/70-t*sp*40+k)*8;
+var g=cx.createRadialGradient(px,py,0,px,py,14);g.addColorStop(0,"rgba(255,215,150,.95)");g.addColorStop(1,"rgba(255,122,26,0)");cx.fillStyle=g;cx.beginPath();cx.arc(px,py,14,0,6.3);cx.fill()}
+t+=.016;if(!rm)requestAnimationFrame(fr)}
+fr();
+/* demos */
+function sh(r){var m=r.querySelector(".shm"),m0=m.textContent,cs=r.querySelectorAll(".ch");
+cs.forEach(function(c){c.onclick=function(){c.classList.remove("s","p");c.classList.add(c.dataset.k);m.textContent=c.textContent+": "+(c.dataset.k=="s"?m.dataset.s:m.dataset.p)}});
+r.querySelector(".shr").onclick=function(){cs.forEach(function(c){c.classList.remove("s","p")});m.textContent=m0}}
+function run(r){var bars=r.querySelectorAll(".rb i"),t=r.querySelector(".rt"),tm;
+function go(mu){clearTimeout(tm);bars.forEach(function(b){b.style.transition="none";b.style.width="0"});void r.offsetWidth;
+bars.forEach(function(b,i){b.style.transition="width 1s linear "+(mu?0:i)+"s";b.style.width="100%"});
+t.textContent=r.dataset[mu?"mrun":"srun"];tm=setTimeout(function(){t.textContent=r.dataset[mu?"mdone":"sdone"]},mu?1000:3000)}
+r.querySelector(".r1").onclick=function(){go(false)};r.querySelector(".rm").onclick=function(){go(true)}}
+function mdl(r){var mode=1,bl=[],sv=r.querySelector("svg"),ms=r.querySelector(".mm"),ux=[50,150,250,350];
+function draw(){var K=mode==1?[200]:mode==2?[50,150,250,350]:[100,200,300],map=mode==1?[0,0,0,0]:mode==2?[0,1,2,3]:[0,0,1,2],h="";
+var kb={};bl.forEach(function(i){kb[map[i]]=1});if(mode==1&&bl.length)kb[0]=1;
+h+='<text class="c" x="6" y="14">'+r.dataset.u+'</text><text class="c" x="6" y="146">'+r.dataset.k+'</text>';
+for(var i=0;i<4;i++)h+='<line x1="'+ux[i]+'" y1="48" x2="'+K[map[i]]+'" y2="98" stroke="#a64e0f" stroke-width="2"/>';
+K.forEach(function(x,j){h+='<rect x="'+(x-22)+'" y="98" width="44" height="30" rx="6" fill="'+(kb[j]?"#ff5d5d":"#6fe0c3")+'"/><text x="'+x+'" y="118">K'+(j+1)+'</text>'});
+for(i=0;i<4;i++){var b=mode==1?bl.length>0:bl.indexOf(i)>-1;h+='<g data-i="'+i+'" tabindex="0" role="button"><circle cx="'+ux[i]+'" cy="30" r="18" fill="'+(b?"#ff5d5d":"#ffa94d")+'" stroke="#fff" stroke-width="'+(bl.indexOf(i)>-1?3:0)+'"/><text x="'+ux[i]+'" y="35">U'+(i+1)+'</text></g>'}
+sv.innerHTML=h;sv.querySelectorAll("g").forEach(function(g){var f=function(){var i=+g.dataset.i,p=bl.indexOf(i);if(p>-1)bl.splice(p,1);else bl.push(i);draw()};g.onclick=f;g.onkeydown=function(e){if(e.key=="Enter"||e.key==" "){e.preventDefault();f()}}});
+ms.textContent=bl.length?r.dataset["b"+mode]:r.dataset["i"+mode]}
+r.querySelectorAll("[data-m]").forEach(function(b){b.onclick=function(){mode=+b.dataset.m;bl=[];r.querySelectorAll("[data-m]").forEach(function(x){x.classList.toggle("on",x==b)});draw()}});
+r.querySelector(".rs").onclick=function(){bl=[];draw()};draw()}
+function init(){document.querySelectorAll("[data-sh]").forEach(sh);document.querySelectorAll("[data-run]").forEach(run);document.querySelectorAll("[data-mdl]").forEach(mdl)}
+/* quiz data */
+var TF=["True","False"];
+var Q=[
+["What is a thread?",["A basic unit of CPU utilization","A type of disk","A compiler","A network cable"],0,"A thread is a basic unit of CPU utilization, a path of execution within a process."],
+["Which of these does a thread comprise?",["Thread ID, program counter, register set and stack","Only a program counter","Only a stack","Code, data and files only"],0,"These four are private to each thread."],
+["Threads of the same process share…",["Code section, data section, and OS resources such as open files and signals","Their stacks","Their registers","Their program counters"],0,"Stacks, registers and PCs are private to each thread."],
+["Each thread has its own stack and registers.",TF,0,"True. Stack and registers can’t be shared among threads."],
+["Threads of the same process share the same stack.",TF,1,"False. Each thread has its own stack."],
+["A traditional (heavyweight) process has…",["A single thread of control","Many threads of control","No threads","Only kernel threads"],0,"With multiple threads a process can perform more than one task at a time."],
+["What does the thread ID do?",["Uniquely identifies the thread","Stores the code","Allocates memory","Controls the keyboard"],0,"It is one of the components of a thread."],
+["A kernel stack is used when the thread is running in…",["Kernel mode","User mode","Sleep mode","Batch mode"],0,"The user stack is used in user mode."],
+["The private storage area of a thread is used by…",["Run-time libraries and dynamic link libraries (DLLs)","The monitor","The keyboard","The network card only"],0,"It is a private area per thread."],
+["Multithreading allows…",["Multiple parts of a program to execute at the same time","Only one task at a time","Programs to run without a CPU","Only batch jobs"],0,"These parts are called threads."],
+["Threads are often called…",["Lightweight processes","Heavyweight processes","Zombie processes","Batch jobs"],0,"They are lightweight processes available within the process."],
+["Multithreading leads to…",["Maximum utilization of the CPU by multitasking","Lower CPU utilization","No change","Slower I/O only"],0,"Multiple tasks keep the CPU busy."],
+["Responsiveness means…",["When one thread completes, its output can be returned immediately","All threads wait for each other","The process restarts","Output is delayed"],0,"The user doesn’t have to wait for the whole process."],
+["Compared with processes, a thread context switch has…",["Lower overhead","Higher overhead","The same overhead","No overhead at all"],0,"Process switching requires more CPU overhead."],
+["How do threads help on a multiprocessor system?",["Multiple threads can be scheduled on multiple processors","Only one thread can run","Threads are disabled","They slow the CPU down"],0,"This makes process execution faster."],
+["Which can be shared among threads of a process?",["Code, data and files","Stack","Registers","Program counter"],0,"Resources like code, data and files are shared."],
+["Which can NOT be shared among threads?",["Stack and registers","Code","Data","Open files"],0,"Each thread has its own stack and registers."],
+["Communication between threads is easier because…",["Threads share a common address space","Threads use sockets only","They have separate memory","They are on different computers"],0,"Processes must follow a specific communication technique."],
+["Dividing a process into threads can increase system throughput.",TF,0,"True. More jobs are completed per unit of time."],
+["How many types of threads are managed in a modern system?",["Two: user threads and kernel threads","One","Three","Four"],0,"User threads and kernel threads."],
+["User threads are supported…",["Above the kernel, without kernel support","Inside the kernel only","By the hardware only","By the monitor"],0,"They are the threads application programmers put into their programs."],
+["Kernel threads are supported…",["Within the kernel of the OS itself","Without any OS","Only by the application","Only by the network"],0,"All modern OSes support kernel threads."],
+["Who normally creates user threads in their code?",["Application programmers","The CPU manufacturer","The monitor","The disk"],0,"User threads are created by application programmers."],
+["How many multithreading models relate user and kernel threads?",["Three","One","Two","Five"],0,"Many-to-one, one-to-one, many-to-many."],
+["The many-to-one model maps…",["Many user threads to a single kernel thread","Each user thread to a kernel thread","One user thread to many kernel threads","No threads"],0,"All user threads share a single kernel thread."],
+["The one-to-one model maps…",["Each user thread to a corresponding kernel thread","Many user threads to one kernel thread","Kernel threads to the disk","Processes to files"],0,"Each user thread has its own kernel thread."],
+["The many-to-many model multiplexes many user threads onto…",["A smaller or equal number of kernel threads","Exactly one kernel thread","More kernel threads than user threads","No kernel threads"],0,"This lets any number of user threads use fewer or equal kernel threads."],
+["A disadvantage of the many-to-one model is that…",["A blocking system call blocks the entire process","It needs many kernel threads","It limits user threads to 2","It cannot create threads"],0,"Only one kernel thread exists, so one blocking call blocks all."],
+["In the many-to-one model, multiple threads can run in parallel on a multiprocessor.",TF,1,"False. Only one thread can access the kernel at a time."],
+["Why is the many-to-one model efficient?",["Thread management is done in user space","It uses many CPUs","It avoids user threads","It needs no memory"],0,"User space manages the threads."],
+["Why can’t many-to-one split a process across multiple CPUs?",["A single kernel thread can operate on only a single CPU","It has no user threads","CPUs reject it","It has too many kernel threads"],0,"One kernel thread runs on one CPU."],
+["A disadvantage of the one-to-one model is…",["Creating a user thread requires creating a kernel thread (a burden on the system)","A blocking call blocks the whole process","It can’t run in parallel","It only works with one CPU"],0,"Many kernel threads burden the system, so the number of threads is restricted."],
+["In the one-to-one model, many threads can run in parallel on multiprocessors.",TF,0,"True. Other threads can also run when one makes a blocking system call."],
+["Which model has no restriction on the number of user threads and doesn’t block the entire process on a blocking call?",["Many-to-many","Many-to-one","One-to-one","None of them"],0,"Many-to-many has the advantages of both and none of their disadvantages."],
+["In the many-to-many model, processes can be…",["Split across multiple processors","Run on one CPU only","Run without threads","Run only in user mode"],0,"Kernel threads per process can vary with the number of CPUs."],
+["The two-tier model allows…",["Either many-to-many or one-to-one operation","Only one-to-one","Only many-to-one","No threads"],0,"It is a popular variation of many-to-many."],
+["Which of these used the two-tier model?",["IRIX, HP-UX and Tru64 UNIX (and Solaris before 9)","Only Windows","Only Android","Only DOS"],0,"Solaris used it prior to Solaris 9."],
+["A thread of execution is the smallest sequence of programmed instructions that can be managed independently by a scheduler.",TF,0,"True. The scheduler is typically part of the OS."],
+["Which model lets a process get a variable number of kernel threads depending on the number of CPUs?",["Many-to-many","Many-to-one","One-to-one","None"],0,"Variable numbers of kernel threads depending on CPUs and other factors."]
+];
+var AQ=[
+["ما هو الـ thread؟","الـ thread وحدة أساسية لاستخدام الـ CPU، ومسار تنفيذ داخل العملية."],
+["مما يتكون الـ thread؟","هذه الأربعة خاصة بكل thread."],
+["الـ threads في نفس العملية تتشارك…","الـ stack والمسجلات والـ PC خاصة بكل thread."],
+["لكل thread مكدس (stack) ومسجلات خاصة به.","صح. الـ stack والمسجلات لا تُشارَك بين الـ threads."],
+["الـ threads في نفس العملية تتشارك نفس الـ stack.","غلط. لكل thread stack خاص به."],
+["العملية التقليدية (heavyweight) لديها…","مع وجود عدة threads تستطيع العملية تنفيذ أكثر من مهمة في نفس الوقت."],
+["ماذا يفعل thread ID؟","هو أحد مكونات الـ thread."],
+["يُستخدم الـ kernel stack عندما يعمل الـ thread في…","الـ user stack يُستخدم في user mode."],
+["مساحة التخزين الخاصة بالـ thread تستخدمها…","هي مساحة خاصة بكل thread."],
+["يسمح تعدد الـ threads (multithreading) بـ…","هذه الأجزاء تسمى threads."],
+["تُسمى الـ threads غالباً…","هي عمليات خفيفة (lightweight) داخل العملية."],
+["يؤدي الـ multithreading إلى…","تعدد المهام يُبقي الـ CPU مشغولاً."],
+["الاستجابية (Responsiveness) تعني…","لا يحتاج المستخدم لانتظار العملية كلها."],
+["مقارنة بالعمليات، تبديل السياق بين الـ threads له…","تبديل العمليات يتطلب overhead أكبر من الـ CPU."],
+["كيف تساعد الـ threads في نظام متعدد المعالجات؟","وهذا يجعل تنفيذ العملية أسرع."],
+["أيٌّ مما يلي يمكن مشاركته بين threads العملية؟","موارد مثل الكود والبيانات والملفات تُشارَك."],
+["أيٌّ مما يلي لا يمكن مشاركته بين الـ threads؟","لكل thread stack ومسجلات خاصة به."],
+["التواصل بين الـ threads أسهل لأن…","أما العمليات فتحتاج تقنيات اتصال محددة."],
+["تقسيم العملية إلى threads قد يرفع إنتاجية (throughput) النظام.","صح. تُنجَز مهام أكثر في وحدة الزمن."],
+["كم نوعاً من الـ threads يُدار في النظام الحديث؟","user threads وkernel threads."],
+["الـ user threads تُدعَم…","هي الـ threads التي يضعها مبرمجو التطبيقات في برامجهم."],
+["الـ kernel threads تُدعَم…","كل الأنظمة الحديثة تدعم kernel threads."],
+["من ينشئ الـ user threads عادةً في الكود؟","يُنشئها مبرمجو التطبيقات."],
+["كم نموذجاً لتعدد الـ threads يربط user وkernel threads؟","many-to-one وone-to-one وmany-to-many."],
+["نموذج many-to-one يربط…","كل الـ user threads تتشارك kernel thread واحداً."],
+["نموذج one-to-one يربط…","لكل user thread هناك kernel thread خاص به."],
+["نموذج many-to-many يوزّع (multiplex) عدة user threads على…","أي عدد من الـ user threads على عدد أقل أو مساوٍ من الـ kernel threads."],
+["عيب نموذج many-to-one هو أن…","يوجد kernel thread واحد فقط، فأي استدعاء حاجز يوقف الجميع."],
+["في نموذج many-to-one يمكن لعدة threads العمل بالتوازي على معالج متعدد.","غلط. لا يستطيع الوصول إلى النواة إلا thread واحد في الوقت."],
+["لماذا يكون نموذج many-to-one فعالاً؟","فإدارة الـ threads تتم في user space."],
+["لماذا لا يستطيع many-to-one تقسيم العملية على عدة معالجات؟","الـ kernel thread الواحد يعمل على CPU واحد فقط."],
+["عيب نموذج one-to-one هو…","كثرة الـ kernel threads تُثقل النظام، لذلك يُحدَّد عدد الـ threads."],
+["في نموذج one-to-one يمكن لعدة threads العمل بالتوازي على معالجات متعددة.","صح. ويمكن لبقية الـ threads العمل عند حجب أحدها."],
+["أي نموذج لا يحدّ من عدد الـ user threads ولا يحجب العملية كلها عند استدعاء حاجز؟","نموذج many-to-many له مزايا الاثنين دون عيوبهما."],
+["في نموذج many-to-many يمكن للعمليات أن…","عدد kernel threads لكل عملية قد يتغير حسب عدد الـ CPUs."],
+["نموذج two-tier يسمح بـ…","هو تنويع شائع لـ many-to-many."],
+["أي مما يلي استخدم نموذج two-tier؟","استخدمه Solaris قبل الإصدار 9."],
+["الـ thread of execution هو أصغر تسلسل تعليمات برمجية يمكن للمجدول إدارته بشكل مستقل.","صح. والمجدول عادةً جزء من نظام التشغيل."],
+["أي نموذج يتيح للعملية عدداً متغيراً من kernel threads حسب عدد الـ CPUs؟","عدد متغير من الـ kernel threads حسب الـ CPUs وعوامل أخرى."]
+];
+var ar=false,order=[],ok=0,ans=0;
+function shf(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
+function build(s){order=Q.map(function(_,i){return i});if(s)shf(order);ok=0;ans=0;$("#final").style.display="none";var box=$("#qs");box.innerHTML="";
+order.forEach(function(qi,n){var q=Q[qi],d=document.createElement("div");d.className="q";
+var p=document.createElement("p");p.innerHTML="<small>"+(ar?"السؤال "+(n+1)+" من "+Q.length:"Question "+(n+1)+" of "+Q.length)+"</small><br>";p.appendChild(document.createTextNode(ar?AQ[qi][0]:q[0]));d.appendChild(p);
+var ix=q[1].map(function(_,i){return i});if(q[1]!==TF)shf(ix);
+var fb=document.createElement("div");fb.className="fb";var bs=[];
+ix.forEach(function(oi){var b=document.createElement("button");b.className="opt";b.textContent=(ar&&q[1]===TF)?(oi?"غلط":"صح"):q[1][oi];bs.push([b,oi]);
+b.onclick=function(){bs.forEach(function(x){x[0].disabled=true;if(x[1]==q[2])x[0].classList.add("ok")});
+var good=oi==q[2];if(!good)b.classList.add("no");ans++;if(good)ok++;
+fb.className="fb show "+(good?"ok":"no");var ra=(ar&&q[1]===TF)?(q[2]?"غلط":"صح"):q[1][q[2]];
+fb.innerHTML="<b>"+(good?(ar?"صح ✓":"Correct ✓"):(ar?"غلط ✗":"Wrong ✗"))+"</b> "+(good?"":(ar?"الإجابة الصحيحة: “"+ra+"”. ":"The right answer is “"+ra+"”. "));fb.appendChild(document.createTextNode(ar?AQ[qi][1]:q[3]));upd()};
+d.appendChild(b)});d.appendChild(fb);box.appendChild(d)});upd()}
+function upd(){$("#score").textContent=(ar?"النتيجة: ":"Score: ")+ok+" / "+ans;$("#prog").textContent=" · "+ans+(ar?" من "+Q.length+" تمت الإجابة":" of "+Q.length+" answered");$("#bar i").style.width=(ans/Q.length*100)+"%";
+if(ans==Q.length){var f=$("#final"),pc=Math.round(ok/Q.length*100);f.style.display="block";f.dir=ar?"rtl":"ltr";
+f.innerHTML="<h3>"+(ar?"انتهيت! ":"Finished! ")+ok+" / "+Q.length+" ("+pc+"%)</h3>"+(ar?(pc>=85?"عمل ممتاز، أنت جاهز للامتحان.":pc>=60?"جيد. راجع الأقسام التي أخطأت فيها ثم أعد المحاولة.":"أعد قراءة الدليل والملخص ثم اخلط الأسئلة وجرّب مرة أخرى."):(pc>=85?"Excellent work, you are ready for the exam.":pc>=60?"Good job. Review the sections you missed, then try again.":"Re-read the guide and the summary, then shuffle and try again."))}}
+$("#shuf").onclick=function(){build(true);scrollTo({top:$("#quiz").offsetTop})};$("#rst").onclick=function(){build(false);scrollTo({top:$("#quiz").offsetTop})};
+/* Arabic content */
+var AR={
+def:`<h2>1. ما هو الـ Thread؟</h2><p class="lead">الوحدة الأساسية لاستخدام الـ CPU داخل العملية.</p>
+<div class="card"><h3>التعريفات</h3>كل أنظمة التشغيل الحديثة تسمح للعملية باحتواء <b>عدة threads للتحكم</b>. عدة طرق للتعريف:
+<ul><li>الـ thread هو <b>مسار تنفيذ داخل العملية</b>.</li><li>الـ thread هو <b>وحدة أساسية لاستخدام الـ CPU</b>.</li><li>الـ thread هو <b>تدفق تحكم داخل العملية</b>.</li><li>الـ thread of execution هو <b>أصغر تسلسل تعليمات برمجية يمكن للمجدول إدارته بشكل مستقل</b> (والمجدول عادةً جزء من النظام).</li></ul></div>
+<div class="card"><h3>ماذا يملك الـ thread وماذا يشارك</h3>يتكون الـ thread من <b>thread ID</b> و<b>program counter</b> و<b>مجموعة مسجلات</b> و<b>stack</b>. و<b>يشارك</b> بقية threads نفس العملية في <b>قسم الكود وقسم البيانات</b> وموارد النظام الأخرى مثل <b>الملفات المفتوحة والإشارات (signals)</b>.
+<div class="two">
+<div class="pbox"><h4>عملية أحادية الـ thread</h4><div class="sh"><span>code</span><span>data</span><span>files</span></div><div class="th"><span>thread واحد<br>PC · regs · stack</span></div></div>
+<div class="pbox"><h4>عملية متعددة الـ threads</h4><div class="sh"><span>code</span><span>data</span><span>files</span></div><div class="th"><span>thread 1<br>PC · regs · stack</span><span>thread 2<br>PC · regs · stack</span><span>thread 3<br>PC · regs · stack</span></div></div></div>
+العملية التقليدية (<b>heavyweight</b>) لديها <b>thread واحد للتحكم</b>. ومع عدة threads تستطيع <b>تنفيذ أكثر من مهمة في نفس الوقت</b>.</div>
+<div class="card" data-sh><h3>تجربة تفاعلية: مشترك أم خاص؟</h3>اضغط على كل عنصر لترى هل <b>تتشاركه</b> threads نفس العملية أم لكل thread <b>نسخته الخاصة</b>.
+<div class="chips"><button class="ch" data-k="s">قسم الكود</button><button class="ch" data-k="s">قسم البيانات</button><button class="ch" data-k="s">الملفات المفتوحة</button><button class="ch" data-k="s">الإشارات (Signals)</button><button class="ch" data-k="p">Thread ID</button><button class="ch" data-k="p">Program counter</button><button class="ch" data-k="p">مجموعة المسجلات</button><button class="ch" data-k="p">Stack</button></div>
+<div class="tip msg shm" data-s="مشترك بين كل threads نفس العملية." data-p="خاص: لكل thread نسخته الخاصة.">اضغط على عنصر.</div><button class="btn s o shr">إعادة</button></div>
+<div class="grid">
+<div class="card"><h3>مكونات الـ thread</h3><ul><li><b>thread ID</b> يعرّفه بشكل فريد</li><li><b>مجموعة مسجلات</b> تمثل حالة المعالج</li><li><b>user stack</b> (في user mode) و<b>kernel stack</b> (في kernel mode)</li><li><b>مساحة تخزين خاصة</b> تستخدمها مكتبات وقت التشغيل ومكتبات الربط الديناميكي (DLLs)</li></ul></div>
+<div class="card"><h3>تعدد الـ Threads (Multithreading)</h3>يسمح <b>بتنفيذ عدة أجزاء من البرنامج في نفس الوقت</b>. هذه الأجزاء هي الـ threads: <b>عمليات خفيفة (lightweight)</b> داخل العملية. ويؤدي إلى <b>أقصى استخدام للـ CPU</b> عبر تعدد المهام.</div>
+</div>
+<div class="card" data-run data-srun="أحادي الـ thread: الأجزاء الثلاثة تعمل واحداً بعد الآخر…" data-sdone="انتهى: 3 وحدات زمن (تسلسلي)." data-mrun="متعدد الـ threads: الأجزاء الثلاثة تعمل في نفس الوقت…" data-mdone="انتهى: وحدة زمن واحدة (بالتوازي على 3 أنوية)."><h3>تجربة تفاعلية: أحادي مقابل متعدد الـ threads</h3>مهمة من 3 أجزاء متساوية (وحدة زمن لكل جزء).
+<div class="rb"><i></i></div><div class="rb"><i></i></div><div class="rb"><i></i></div>
+<button class="btn s r1">تشغيل أحادي الـ thread</button><button class="btn s o rm">تشغيل متعدد الـ threads</button><div class="rl rt">اضغط زراً.</div></div>`,
+adv:`<h2>2. مزايا الـ Threads على العمليات</h2><p class="lead">ست أسباب لاستخدام الـ threads.</p>
+<div class="grid s">
+<div class="card"><h3 data-n="1">الاستجابية (Responsiveness)</h3>إذا قُسّمت العملية إلى threads وأنهى أحدها عمله، <b>يمكن إرجاع ناتجه فوراً</b>.</div>
+<div class="card"><h3 data-n="2">تبديل سياق أسرع</h3>زمن تبديل السياق بين الـ threads <b>أقل</b> منه بين العمليات التي تحتاج <b>overhead أكبر من الـ CPU</b>.</div>
+<div class="card"><h3 data-n="3">استغلال تعدد المعالجات</h3>يمكن <b>جدولة عدة threads</b> من عملية واحدة <b>على عدة معالجات</b> فيصبح التنفيذ أسرع.</div>
+<div class="card"><h3 data-n="4">مشاركة الموارد</h3><b>الكود والبيانات والملفات</b> تُشارَك بين كل threads العملية.<div class="tip"><b>الـ stack والمسجلات لا تُشارَك.</b> لكل thread نسخته.</div></div>
+<div class="card"><h3 data-n="5">تواصل أسهل</h3>الـ threads تتشارك <b>مساحة عنوان مشتركة</b>. أما العمليات فتحتاج <b>تقنيات اتصال محددة</b>.</div>
+<div class="card"><h3 data-n="6">إنتاجية أعلى (Throughput)</h3>إذا اعتُبرت كل دالة thread مهمة، <b>يزيد عدد المهام المنجزة في وحدة الزمن</b>.</div>
+</div>
+<div class="card scroll"><h3>العملية مقابل الـ thread</h3>
+<table><tr><th>الميزة</th><th>العملية (Process)</th><th>الـ Thread</th></tr>
+<tr><td>الوزن</td><td>ثقيلة (heavyweight)</td><td>عملية خفيفة (lightweight)</td></tr>
+<tr><td>تبديل السياق</td><td>overhead أكبر</td><td>overhead أقل وأسرع</td></tr>
+<tr><td>التواصل</td><td>يحتاج تقنية محددة</td><td>سهل: مساحة عنوان مشتركة</td></tr>
+<tr><td>الكود والبيانات والملفات</td><td>نسخة خاصة</td><td>مشتركة داخل العملية</td></tr>
+<tr><td>الـ stack والمسجلات</td><td>خاصة</td><td>خاصة بكل thread (غير مشتركة)</td></tr></table></div>`,
+typ:`<h2>3. الـ User Threads والـ Kernel Threads</h2><p class="lead">نوعان من الـ threads في النظام الحديث.</p>
+<div class="grid">
+<div class="card"><h3>User threads</h3>تُدعَم <b>فوق النواة، دون دعم من النواة</b>. هي الـ threads التي <b>يضعها مبرمجو التطبيقات</b> في برامجهم.</div>
+<div class="card"><h3>Kernel threads</h3>تُدعَم <b>داخل نواة نظام التشغيل نفسه</b>. كل الأنظمة الحديثة تدعمها، مما يتيح للنواة تنفيذ <b>عدة مهام متزامنة</b> و/أو خدمة <b>عدة system calls متزامنة</b>.</div>
+</div>
+<div class="tip">في أي تنفيذ يجب <b>ربط</b> الـ user threads بالـ kernel threads بإحدى ثلاث استراتيجيات: <b>نماذج تعدد الـ threads</b> في القسم التالي.</div>`,
+mod:`<h2>4. نماذج تعدد الـ Threads</h2><p class="lead">كيف ترتبط الـ user threads بالـ kernel threads.</p>
+<div class="grid">
+<div class="card"><h3>Many-to-One</h3>يربط <b>عدة user threads</b> بـ<b>kernel thread واحد</b>.<ul><li><b>+</b> فعّال: إدارة الـ threads تتم في <b>user space</b></li><li><b>−</b> أي استدعاء نظام حاجز <b>يحجب العملية كلها</b></li><li><b>−</b> لا تشغيل متوازٍ: thread واحد فقط يصل للنواة في الوقت</li><li><b>−</b> kernel thread واحد يعمل على CPU واحد، فلا يمكن <b>تقسيم العملية على عدة CPUs</b></li></ul></div>
+<div class="card"><h3>One-to-One</h3>يربط <b>كل user thread</b> بـ<b>kernel thread</b>.<ul><li><b>+</b> عدة threads <b>تعمل بالتوازي</b> على المعالجات المتعددة</li><li><b>+</b> بقية الـ threads تعمل عند <b>استدعاء حاجز</b> من أحدها</li><li><b>−</b> إنشاء user thread <b>يتطلب إنشاء kernel thread</b></li><li><b>−</b> كثرة الـ kernel threads تُثقل النظام فيُقيَّد <b>عدد الـ threads</b></li></ul></div>
+<div class="card"><h3>Many-to-Many</h3><b>يوزّع (multiplex)</b> عدة user threads على عدد <b>مساوٍ أو أقل</b> من الـ kernel threads.<ul><li><b>+</b> <b>لا قيد</b> على عدد الـ user threads</li><li><b>+</b> الاستدعاءات الحاجزة <b>لا تحجب العملية كلها</b></li><li><b>+</b> يمكن <b>تقسيم العمليات على عدة معالجات</b></li><li><b>+</b> قد تحصل العملية على <b>عدد متغير من kernel threads</b> حسب عدد الـ CPUs وعوامل أخرى</li></ul>وليس فيه أي من عيوب النموذجين الآخرين.</div>
+</div>
+<div class="card"><h3>نموذج Two-tier</h3>تنويع شائع لـ many-to-many يسمح <b>بعمل many-to-many أو one-to-one</b>. استخدمته أنظمة <b>IRIX وHP-UX وTru64 UNIX</b> و<b>Solaris قبل الإصدار 9</b>.</div>
+<div class="card" data-mdl data-i1="Many-to-one: كل الـ 4 user threads تتشارك kernel thread واحداً. اضغط على user thread (U) لاستدعاء نظام حاجز." data-b1="استدعاء حاجز ← تُحجَب العملية كلها (kernel thread واحد فقط، وthread واحد فقط يصل للنواة في الوقت)." data-i2="One-to-one: لكل user thread kernel thread خاص به. اضغط على thread لحجبه." data-b2="ينتظر الـ thread المحجوب فقط. بقية الـ threads تستمر وقد تعمل بالتوازي على عدة CPUs." data-i3="Many-to-many: 4 user threads موزّعة على 3 kernel threads. اضغط على thread لحجبه." data-b3="الاستدعاء الحاجز لا يحجب العملية كلها: تُجدوَل بقية الـ user threads على الـ kernel threads المتبقية." data-u="User threads" data-k="Kernel threads"><h3>تجربة تفاعلية: احجب thread في كل نموذج</h3>
+<div><button class="btn s o on" data-m="1">Many-to-One</button><button class="btn s o" data-m="2">One-to-One</button><button class="btn s o" data-m="3">Many-to-Many</button><button class="btn s o rs">إلغاء الحجب</button></div>
+<svg class="m" viewBox="0 0 400 150" role="img" aria-label="Thread model diagram"></svg>
+<div class="tip msg mm"></div></div>`,
+sum:`<h2>5. ملخص الشابتر</h2><p class="lead">راجعه قبل الامتحان مباشرة.</p>
+<div class="card"><ul>
+<li><b>Thread</b> = وحدة أساسية لاستخدام الـ CPU: <b>thread ID وprogram counter ومجموعة مسجلات وstack</b>.</li>
+<li>threads العملية الواحدة <b>تتشارك الكود والبيانات والملفات المفتوحة والإشارات</b>؛ ولكل منها <b>stack ومسجلات خاصة</b>.</li>
+<li>العملية التقليدية <b>heavyweight</b> لها thread واحد؛ والـ multithreading يعطي مهام متوازية <b>خفيفة</b> وأقصى استخدام للـ CPU.</li>
+<li>المزايا: <b>استجابية، تبديل سياق أسرع، استغلال المعالجات المتعددة، مشاركة موارد، تواصل أسهل، إنتاجية أعلى</b>.</li>
+<li><b>User threads</b> (فوق النواة بدون دعمها) مقابل <b>kernel threads</b> (تدعمها نواة النظام).</li>
+<li>النماذج: <b>many-to-one وone-to-one وmany-to-many</b> (و<b>two-tier</b>).</li></ul></div>
+<div class="card scroll"><h3>مقارنة النماذج</h3>
+<table><tr><th>النموذج</th><th>الربط</th><th>توازٍ على المعالجات المتعددة</th><th>استدعاء حاجز</th><th>حد لعدد الـ threads</th></tr>
+<tr><td><b>Many-to-One</b></td><td>عدة user ← 1 kernel</td><td>لا</td><td>يحجب العملية كلها</td><td>لا (إدارة في user space، فعّال)</td></tr>
+<tr><td><b>One-to-One</b></td><td>1 user ← 1 kernel</td><td>نعم</td><td>بقية الـ threads تستمر</td><td>نعم (عبء الـ kernel threads)</td></tr>
+<tr><td><b>Many-to-Many</b></td><td>عدة user ← عدد مساوٍ أو أقل من kernel</td><td>نعم</td><td>بقية الـ threads تستمر</td><td>لا قيد</td></tr></table></div>
+<div class="card scroll"><h3>مقارنات سريعة</h3>
+<table><tr><th>المفهوم أ</th><th>المفهوم ب</th></tr>
+<tr><td><b>User threads</b>: فوق النواة بدون دعمها</td><td><b>Kernel threads</b>: تدعمها نواة النظام</td></tr>
+<tr><td><b>مشترك</b>: الكود والبيانات والملفات</td><td><b>خاص</b>: stack ومسجلات وPC وthread ID</td></tr>
+<tr><td>تبديل سياق <b>العملية</b>: overhead أكبر</td><td>تبديل سياق <b>الـ thread</b>: overhead أقل</td></tr></table></div>`};
+Object.keys(AR).forEach(function(k){var w=document.querySelector("#"+k+" .wrap"),d=document.createElement("div");d.className="arx";d.lang="ar";d.dir="rtl";d.innerHTML=AR[k];w.appendChild(d)});
+init();
+/* language toggle */
+var NA=["ما هو الـ Thread","المزايا","User وKernel threads","نماذج الـ Threads","الملخص","الاختبار"];
+var NE=[].map.call(document.querySelectorAll("nav a"),function(a){return a.textContent});
+var H1=$(".hero h1"),HP=$(".hero p"),HB=document.querySelectorAll(".hero .btn"),H0=[H1.innerHTML,HP.textContent,HB[0].textContent,HB[1].textContent];
+var QE=[$("#quiz h2").textContent,$("#quiz .lead").textContent,$("#shuf").textContent,$("#rst").textContent,$("footer").textContent];
+$("#lang").onclick=function(){ar=!ar;document.body.classList.toggle("ar",ar);
+document.querySelectorAll("nav a").forEach(function(a,i){a.textContent=ar?NA[i]:NE[i]});
+H1.innerHTML=ar?"نظم التشغيل<br>الشابتر 4: الـ Threads":H0[0];HP.textContent=ar?"دليل دراسة كامل وسهل: الـ threads ومزاياها وأنواعها (user وkernel) ونماذج تعدد الـ threads الثلاثة، مع تجارب تفاعلية وملخص واختبار يخبرك فوراً إن كانت إجابتك صح أو غلط.":H0[1];
+HB[0].textContent=ar?"ابدأ الدراسة":H0[2];HB[1].textContent=ar?"اذهب للاختبار":H0[3];$("#lang").textContent=ar?"English":"العربية";
+$("#quiz h2").textContent=ar?"6. الاختبار التفاعلي":QE[0];$("#quiz .lead").textContent=ar?"اضغط على إجابة. الأخضر يعني صح، والأحمر غلط، ويظهر شرح الإجابة الصحيحة دائماً.":QE[1];
+$("#shuf").textContent=ar?"خلط وإعادة":QE[2];$("#rst").textContent=ar?"إعادة":QE[3];$("footer").textContent=ar?"مبني على سلايدات الشابتر 4: الـ Threads · نظم التشغيل (501471)":QE[4];
+$("#quiz .wrap").dir=ar?"rtl":"ltr";build(false)};
+build(false);
+})();
+</script>
+</body>
+</html>
