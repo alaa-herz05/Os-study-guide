@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Operating Systems – Chapter 5 Study Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@600;700&family=JetBrains+Mono:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0c0508;--panel:#1a0a10;--panel2:#240d17;--line:#4d1a2e;--g:#ff6b8f;--g2:#ff2e63;--gd:#a31d44;--am:#5ee7d0;--cd:#ffd1dc;--txt:#fbe8ee;--mut:#c79aab;--bad:#ff5d5d;--ok:#4ade80;
+box-sizing:border-box;color-scheme:dark;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(108px + env(safe-area-inset-top,0px))}
+body{margin:0;background:var(--bg);color:var(--txt);font:16px/1.65 "IBM Plex Sans",system-ui,sans-serif;
+background-image:linear-gradient(90deg,rgba(255,107,143,.05) 1px,transparent 1px);background-size:60px 100%}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:30}
+#bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.5}
+main,header{position:relative;z-index:1}
+h1,h2,h3,h4,summary{font-family:"Oxanium",system-ui,sans-serif;line-height:1.2;margin:0}
+.wrap{max-width:980px;margin:0 auto;padding:0 18px}
+.cbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:22;height:42px;background:#070204;border-bottom:1px solid var(--gd)}
+.cbar .wrap{display:flex;gap:6px;align-items:center;height:42px;overflow-x:auto;scrollbar-width:none}
+.cbar a{color:var(--mut);text-decoration:none;padding:4px 14px;border-radius:6px;font:700 14px "Oxanium",sans-serif;white-space:nowrap;border:1px solid transparent}
+.cbar a:hover,.cbar a:focus-visible{color:var(--g);border-color:var(--gd);outline:none}.cbar a.cur{background:var(--g);color:#1f0610}
+nav{position:sticky;top:calc(42px + env(safe-area-inset-top,0px));z-index:20;background:rgba(12,5,8,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;gap:6px;overflow-x:auto;padding:10px 18px;scrollbar-width:none;align-items:center}
+nav a{color:var(--mut);text-decoration:none;white-space:nowrap;padding:6px 12px;border-radius:99px;font-size:14px;border:1px solid transparent}
+nav a:hover,nav a:focus-visible{color:var(--g);border-color:var(--gd);outline:none}
+.hero{display:grid;grid-template-columns:1.1fr 1fr;gap:28px;align-items:center;padding:54px 0 40px}
+.hero h1{font-size:clamp(34px,6vw,56px);color:var(--g);text-shadow:0 0 30px rgba(255,46,99,.5)}
+.hero p{color:var(--mut);max-width:46ch}
+.btn{display:inline-block;background:var(--g);color:#1f0610;border:0;border-radius:8px;padding:11px 20px;cursor:pointer;font:600 15px "IBM Plex Sans",sans-serif;text-decoration:none;margin:4px 8px 4px 0}
+.btn.o{background:transparent;color:var(--g);border:1px solid var(--gd)}
+.btn.o.on{background:var(--g);color:#1f0610}
+.btn.s{padding:7px 12px;font-size:13.5px;margin:3px 6px 3px 0}
+.btn:hover{box-shadow:0 0 18px rgba(255,46,99,.55)}
+.btn:focus-visible,summary:focus-visible,.opt:focus-visible,input:focus-visible{outline:2px solid var(--g);outline-offset:2px}
+.gh{background:#070204;border:1px solid var(--g2);border-radius:14px;box-shadow:0 0 44px rgba(255,46,99,.3);padding:16px}
+.gh .pt{font:12px "JetBrains Mono",monospace;color:var(--mut);margin-bottom:12px}
+.gs{display:flex;height:48px;border-radius:8px;overflow:hidden;background:#12060b;border:1px solid var(--line)}
+.gs .sg{animation:pop .4s ease both}
+.gq{margin-top:12px;font:13px "JetBrains Mono",monospace;color:var(--am);min-height:22px}
+.sg{position:relative;min-width:30px;display:grid;place-items:center;color:#1f0610;font:700 14px "Oxanium",sans-serif;border-right:2px solid #0c0508}
+@keyframes pop{from{opacity:0;transform:scaleY(.2)}to{opacity:1;transform:none}}
+section{padding:44px 0 8px}
+section>.wrap>h2,.arx>h2{font-size:clamp(23px,3.6vw,32px);color:var(--g);margin-bottom:6px}
+.lead{color:var(--mut);margin:0 0 20px}
+.card{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:14px 0}
+.card h3{font-size:18px;color:var(--g);margin-bottom:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.grid .card{margin:0}
+.grid.s .card h3::before{content:attr(data-n);display:inline-block;background:var(--g);color:#1f0610;border-radius:5px;padding:0 7px;margin-inline-end:8px;font-size:13px}
+ul{margin:6px 0;padding-left:20px}li{margin:4px 0}
+b,strong{color:var(--g)}
+code{font-family:"JetBrains Mono",monospace;font-size:.9em;background:#070204;border:1px solid var(--line);border-radius:5px;padding:1px 6px;color:var(--cd);direction:ltr;unicode-bidi:isolate}
+.tip{border-left:3px solid var(--am);background:rgba(94,231,208,.07);padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:15px}
+.scroll{overflow-x:auto}
+.cyc{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
+.cyc span{padding:10px 14px;border-radius:8px;font:700 13px "Oxanium",sans-serif;background:#12060b;border:1px solid var(--gd);color:var(--mut);animation:hl 4.2s infinite}
+.cyc span.io{border-color:var(--am)}
+@keyframes hl{0%,16%{background:var(--g);color:#1f0610}17%,100%{background:#12060b;color:var(--mut)}}
+.cyc span.io{animation-name:hl2}
+@keyframes hl2{0%,16%{background:var(--am);color:#04201b}17%,100%{background:#12060b;color:var(--mut)}}
+.pt3{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.pt3 .flow{display:flex;gap:6px}
+.sim .alg{margin:6px 0}
+.tbl{width:100%;max-width:520px;border-collapse:collapse;margin:8px 0}
+.tbl th,.tbl td{border:1px solid var(--line);padding:5px 8px;text-align:center;font-size:14px}
+.tbl th{background:#3a1020;color:var(--g)}
+.tbl input,.qin{width:84px;padding:6px 8px;border-radius:7px;border:1px solid var(--gd);background:#070204;color:var(--txt);font:600 15px "JetBrains Mono",monospace;text-align:center}
+.gt{display:flex;margin:18px 0 34px;border-radius:8px;border:1px solid var(--line);background:#12060b}
+.gt .sg{height:50px;animation:pop .45s ease both}
+.gt .tk{position:absolute;left:-1px;top:54px;font:11px "JetBrains Mono",monospace;color:var(--mut)}
+.gt .te{position:absolute;right:-1px;top:54px;font:11px "JetBrains Mono",monospace;color:var(--mut)}
+.res{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:10px 0}
+.res div{border:1px solid var(--g2);border-radius:10px;padding:10px 12px;background:#12060b;font-size:14px}
+.res b{display:block;font:700 26px "JetBrains Mono",monospace}
+.msg{min-height:44px}
+details{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:12px;margin:10px 0;overflow:hidden}
+summary{cursor:pointer;padding:14px 18px;font-size:16px;font-weight:700;color:var(--g);list-style:none}
+summary::before{content:"▸ ";color:var(--am)}details[open] summary::before{content:"▾ "}
+details>div{padding:0 20px 16px}
+table.t{border-collapse:collapse;width:100%;min-width:520px;font-size:14.5px}
+table.t th,table.t td{border:1px solid var(--line);padding:8px 12px;text-align:left;vertical-align:top}
+table.t th{background:#3a1020;color:var(--g)}
+#bar{height:8px;background:#12060b;border-radius:9px;overflow:hidden;margin:10px 0}
+#bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--g2),var(--g));transition:width .4s}
+.q{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0}
+.q p{margin:0 0 10px;font-weight:600}.q small{color:var(--mut);font-weight:400}
+.opt{display:block;width:100%;text-align:start;margin:6px 0;padding:10px 14px;border-radius:8px;border:1px solid var(--line);background:#12060b;color:var(--txt);font:inherit;cursor:pointer;transition:.2s}
+.opt:hover:not(:disabled){border-color:var(--g);background:#2a0e1b}
+.opt.ok{background:rgba(74,222,128,.2);border-color:var(--ok);color:#fff}
+.opt.no{background:rgba(255,93,93,.18);border-color:var(--bad);color:#ffd6d6}
+.opt:disabled{cursor:default}
+.fb{display:none;margin-top:8px;padding:10px 14px;border-radius:8px;font-size:15px}
+.fb.show{display:block}.fb.ok{background:rgba(74,222,128,.1);border-left:3px solid var(--ok)}.fb.no{background:rgba(255,93,93,.1);border-left:3px solid var(--bad)}
+#score{font:700 21px "Oxanium",sans-serif;color:var(--g)}
+footer{padding:40px 18px 60px;text-align:center;color:var(--mut)}
+.arx{direction:rtl;text-align:start}body:not(.ar) .arx{display:none}
+body.ar section:not(#quiz) .wrap>*:not(.arx){display:none}
+body.ar{font-family:"Tajawal","IBM Plex Sans",sans-serif;font-size:17px}body.ar .btn{font-family:"Tajawal",sans-serif}
+body.ar h1,body.ar h2,body.ar h3,body.ar h4,body.ar summary,body.ar #score{font-family:"Tajawal",sans-serif}
+.arx ul{padding:0 20px 0 0}
+.arx .tip{border-left:0;border-right:3px solid var(--am);border-radius:8px 0 0 8px}
+.arx table.t th,.arx table.t td{text-align:start}
+.arx .gt,.arx .gs{direction:ltr}
+#lang{flex:none;padding:6px 16px;margin:0 8px 0 0;font-size:14px}
+@media(max-width:760px){.hero{grid-template-columns:1fr;padding-top:34px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<canvas id="bg" aria-hidden="true"></canvas>
+<div class="cbar"><div class="wrap"><a href="index.html">⌂ Home</a><a href="ch1.html">Ch 1</a><a href="ch2.html">Ch 2</a><a href="ch3.html">Ch 3</a><a href="ch4.html">Ch 4</a><a href="ch5.html" class="cur">Ch 5</a><a href="ch8.html">Ch 8</a></div></div>
+<nav><div class="wrap">
+<button class="btn" id="lang" type="button">العربية</button><a href="#con">Basic Concepts</a><a href="#dsp">Scheduler &amp; Dispatcher</a><a href="#crt">Criteria</a><a href="#alg">Algorithms</a><a href="#sim">Simulator</a><a href="#sum">Summary</a><a href="#quiz">Quiz</a>
+</div></nav>
+
+<header><div class="wrap hero">
+<div>
+<h1>Operating Systems<br>Chapter 5: CPU Scheduling</h1>
+<p>A complete, easy-to-follow study guide: scheduler, dispatcher, criteria, FCFS, SJF, Round Robin and Priority scheduling in plain English, with a live scheduling simulator, a summary, and a quiz that tells you instantly if you are right or wrong.</p>
+<a class="btn" href="#con">Start studying</a><a class="btn o" href="#sim">Open the simulator</a>
+</div>
+<div class="gh" aria-hidden="true"><div class="pt">$ round robin · quantum = 4 ms</div><div class="gs" id="hg"></div><div class="gq" id="hq"></div></div>
+</div></header>
+
+<main>
+<section id="con"><div class="wrap">
+<h2>1. Basic Concepts</h2>
+<p class="lead">Why we schedule the CPU at all.</p>
+<div class="card"><h3>Multiprogramming and the ready queue</h3>On a system with a <b>single CPU core, only one process can run at a time</b>. Other processes must wait until the core is free and can be rescheduled. The objective of <b>multiprogramming</b> is to have <b>some process running at all times</b>, to <b>maximize CPU utilization</b>.</div>
+<div class="card"><h3>CPU–I/O burst cycle</h3>Process execution is an <b>alternating sequence of CPU bursts and I/O bursts</b>. A process runs on the CPU, then waits for I/O, then runs again, and so on.
+<div class="cyc" aria-hidden="true"><span>CPU burst</span><span class="io">I/O burst</span><span style="animation-delay:.7s">CPU burst</span><span class="io" style="animation-delay:.7s">I/O burst</span><span style="animation-delay:1.4s">CPU burst</span><span class="io" style="animation-delay:1.4s">I/O burst</span></div></div>
+<div class="card"><h3>CPU scheduler</h3>Whenever the CPU becomes <b>idle</b>, the OS must select one process from the <b>ready queue</b>. The <b>CPU scheduler</b> selects a process from those in memory that are ready to execute and <b>allocates the CPU</b> to it.
+<ul><li>The ready queue is <b>not necessarily FIFO</b>. It can be a <b>FIFO queue, a priority queue, a tree, or an unordered linked list</b>.</li><li>Conceptually, all processes in the ready queue are lined up waiting for a chance to run. The records in the queues are generally the <b>PCBs</b> of the processes.</li></ul></div>
+<div class="tip">Chapter objectives: describe various CPU scheduling algorithms; assess them using scheduling criteria; explain multiprocessor and multicore scheduling issues; describe real-time scheduling and the Windows, Linux and Solaris schedulers; use modeling and simulation. <b>Your slides cover only the single-core basics and four algorithms.</b></div>
+</div></section>
+
+<section id="dsp"><div class="wrap">
+<h2>2. The Dispatcher</h2>
+<p class="lead">The module that actually hands the CPU to the chosen process.</p>
+<div class="card"><h3>What the dispatcher does</h3>The <b>dispatcher</b> gives control of the CPU’s core to the process selected by the CPU scheduler. This involves:
+<ul><li><b>Switching context</b> from one process to another</li><li><b>Switching to user mode</b></li><li><b>Jumping to the proper location</b> in the user program to resume it</li></ul>
+The dispatcher should be <b>as fast as possible</b>, since it is invoked during <b>every context switch</b>.</div>
+<div class="grid">
+<div class="card"><h3>Dispatch latency</h3>The time it takes the dispatcher to <b>stop one process and start another</b> running.</div>
+<div class="card"><h3>Scheduler vs dispatcher</h3><b>Scheduler</b> = <i>chooses</i> which ready process runs next.<br><b>Dispatcher</b> = <i>gives</i> the CPU to that process (context switch, user mode, jump).</div>
+</div>
+</div></section>
+
+<section id="crt"><div class="wrap">
+<h2>3. Scheduling Criteria</h2>
+<p class="lead">How we judge whether an algorithm is good. The choice of criteria can change which algorithm looks best.</p>
+<div class="grid s">
+<div class="card"><h3 data-n="1">CPU utilization</h3>Keep the CPU <b>as busy as possible</b>. Conceptually <b>0 to 100%</b>; in a real system it should range from <b>40% to 90%</b>.</div>
+<div class="card"><h3 data-n="2">Throughput</h3>The <b>number of processes completed per time unit</b>.</div>
+<div class="card"><h3 data-n="3">Turnaround time</h3>From <b>submission to completion</b>. It is the sum of the periods spent <b>waiting in the ready queue, executing on the CPU, and doing I/O</b>.</div>
+<div class="card"><h3 data-n="4">Waiting time</h3>The sum of the periods spent <b>waiting in the ready queue</b>.</div>
+<div class="card"><h3 data-n="5">Response time</h3>From <b>submission of a request until the first response</b> is produced: the time to <b>start responding</b>, not the time to output the whole response.</div>
+</div>
+<div class="tip">Typical goal: <b>maximize</b> CPU utilization and throughput; <b>minimize</b> turnaround, waiting and response time.</div>
+</div></section>
+
+<section id="alg"><div class="wrap">
+<h2>4. Scheduling Algorithms</h2>
+<p class="lead">Decide which process in the ready queue gets the CPU. Explained for a <b>single CPU with one core</b>. Tap to open each.</p>
+<details open><summary>1. First-Come, First-Served (FCFS)</summary><div>The process that <b>requests the CPU first</b> is allocated the CPU first. Implemented with a <b>FIFO queue</b>: when a process enters the ready queue its PCB is linked onto the <b>tail</b>; when the CPU is free it goes to the process at the <b>head</b>, which is then removed from the queue. The code is simple to write and understand.
+<div class="tip">A <b>Gantt chart</b> is a bar chart that illustrates a particular schedule, including the <b>start and finish times</b> of each process.<br>Example (all arrive at 0): P1 = 24 ms, P2 = 3 ms, P3 = 3 ms in the order P1, P2, P3 → waiting times 0, 24, 27 → <b>average waiting time = 17 ms</b>. A short job stuck behind a long one waits a long time.</div></div></details>
+<details><summary>2. Shortest-Job-First (SJF)</summary><div>Associates with each process the <b>length of its next CPU burst</b>. When the CPU is available it goes to the process with the <b>smallest next CPU burst</b>. If two next bursts are equal, <b>FCFS breaks the tie</b>.
+<div class="tip">Example: P1 = 6, P2 = 8, P3 = 7, P4 = 3 → order P4, P1, P3, P2 → waiting times 0, 3, 9, 16 → <b>average = 7 ms</b>.</div></div></details>
+<details><summary>3. Round-Robin (RR)</summary><div>Similar to FCFS but with <b>preemption</b> added so the system can switch between processes. A small unit of time, the <b>time quantum (time slice)</b>, is defined, generally <b>10 to 100 ms</b>. The ready queue is a <b>circular queue</b>; the scheduler goes around it, giving each process the CPU for <b>up to 1 time quantum</b>.
+<ul><li>No process gets the CPU for more than 1 quantum in a row (unless it is the only runnable process).</li><li>If a burst exceeds 1 quantum, the process is <b>preempted</b> and put back in the ready queue. So RR is <b>preemptive</b>.</li><li>Performance depends heavily on the <b>size of the quantum</b>: if it is <b>extremely large</b>, RR is the <b>same as FCFS</b>; if it is <b>extremely small</b> (say 1 ms), RR causes a <b>large number of context switches</b>.</li></ul>
+<div class="tip">Example (quantum = 4 ms): P1 = 24, P2 = 3, P3 = 3 → <b>average waiting time ≈ 5.66 ms</b>.</div></div></details>
+<details><summary>4. Priority scheduling</summary><div>A <b>priority</b> is associated with each process, and the CPU goes to the process with the <b>highest priority</b>. <b>Equal priorities are scheduled FCFS</b>. SJF is simply a priority algorithm where the priority is the <b>inverse of the (predicted) next CPU burst</b>: the larger the burst, the lower the priority.
+<ul><li><b>Major problem: indefinite blocking, or starvation.</b> A ready process waiting for the CPU is effectively blocked; low-priority processes may wait indefinitely.</li><li><b>Solution: aging</b> – <b>gradually increasing the priority</b> of processes that wait in the system for a long time.</li></ul>
+<div class="tip">Example (smaller number = higher priority): bursts P1..P5 = 10, 1, 2, 1, 5 with priorities 3, 1, 4, 5, 2 → order P2, P5, P1, P3, P4 → <b>average waiting time = 8.2 ms</b>.</div></div></details>
+<div class="tip">The tables of the examples are in images in your slides, so I couldn’t read them. The numbers above are the standard textbook examples. Use the simulator below to try your own values.</div>
+</div></section>
+
+<section id="sim"><div class="wrap">
+<h2>5. Scheduling Simulator</h2>
+<p class="lead">Enter bursts (all processes arrive at time 0), pick an algorithm, and watch the Gantt chart and averages.</p>
+<div class="card sim" data-sim data-nf="FCFS: the process that requests the CPU first gets it first (FIFO). A short job behind a long one waits a long time." data-ns="SJF: the CPU goes to the process with the smallest next CPU burst; ties are broken by FCFS." data-np="Priority: the highest-priority process runs first (here a smaller number = higher priority); ties are FCFS." data-nr="Round Robin: each process gets at most 1 time quantum, then is preempted and goes to the back of the circular ready queue." data-hp="Process" data-hb="Burst" data-hw="Waiting" data-ht="Turnaround" data-ha="Average" data-sw="Average waiting time" data-st="Average turnaround time" data-cs="Context switches">
+<div class="alg"><button class="btn s o on" data-a="fcfs">FCFS</button><button class="btn s o" data-a="sjf">SJF</button><button class="btn s o" data-a="pri">Priority</button><button class="btn s o" data-a="rr">Round Robin</button></div>
+<table class="tbl"><tr><th>Process</th><th>Burst (ms)</th><th>Priority</th></tr>
+<tr><td>P1</td><td><input class="bi" type="number" min="0" value="24"></td><td><input class="pi" type="number" value="1"></td></tr>
+<tr><td>P2</td><td><input class="bi" type="number" min="0" value="3"></td><td><input class="pi" type="number" value="2"></td></tr>
+<tr><td>P3</td><td><input class="bi" type="number" min="0" value="3"></td><td><input class="pi" type="number" value="3"></td></tr>
+<tr><td>P4</td><td><input class="bi" type="number" min="0" value=""></td><td><input class="pi" type="number" value=""></td></tr>
+<tr><td>P5</td><td><input class="bi" type="number" min="0" value=""></td><td><input class="pi" type="number" value=""></td></tr></table>
+<div>Time quantum (RR): <input class="qin" type="number" min="1" value="4"> ms</div>
+<div style="margin-top:8px"><button class="btn s" data-run>Run</button><span style="color:var(--mut);font-size:14px"> Presets: </span><button class="btn s o" data-p="fcfs">FCFS example</button><button class="btn s o" data-p="sjf">SJF example</button><button class="btn s o" data-p="rr">RR example</button><button class="btn s o" data-p="pri">Priority example</button></div>
+<div class="gt"></div><div class="res"></div><div class="scroll"><table class="tbl out"></table></div><div class="tip msg sn"></div></div>
+</div></section>
+
+<section id="sum"><div class="wrap">
+<h2>6. Chapter Summary</h2>
+<p class="lead">Review this right before the exam.</p>
+<div class="card"><ul>
+<li>Single core = <b>one process at a time</b>; multiprogramming keeps the CPU busy. Processes alternate <b>CPU and I/O bursts</b>.</li>
+<li>The <b>CPU scheduler</b> picks from the ready queue (FIFO, priority queue, tree, list of PCBs); the <b>dispatcher</b> performs the switch (context, user mode, jump). <b>Dispatch latency</b> = time to switch.</li>
+<li>Criteria: <b>CPU utilization (40–90%), throughput, turnaround, waiting, response</b>.</li>
+<li><b>FCFS</b>: FIFO, simple, long waits behind long jobs. <b>SJF</b>: smallest next burst. <b>RR</b>: time quantum (10–100 ms), preemptive, circular queue. <b>Priority</b>: highest priority first, FCFS ties.</li>
+<li>Priority problem: <b>starvation</b>; fix: <b>aging</b>. SJF is priority = inverse of predicted burst.</li>
+<li>RR quantum: huge → FCFS; tiny → too many context switches.</li></ul></div>
+<div class="card scroll"><h3>Compare the algorithms</h3>
+<table class="t"><tr><th>Algorithm</th><th>Who runs next</th><th>Preemptive?</th><th>Key point</th></tr>
+<tr><td><b>FCFS</b></td><td>Head of the FIFO queue</td><td>No</td><td>Simple; long jobs delay short ones</td></tr>
+<tr><td><b>SJF</b></td><td>Smallest next CPU burst (ties: FCFS)</td><td>As described in slides: picks smallest burst when CPU is free</td><td>Special case of priority</td></tr>
+<tr><td><b>Priority</b></td><td>Highest priority (ties: FCFS)</td><td>As described in slides: picks highest priority when CPU is free</td><td>Starvation → aging</td></tr>
+<tr><td><b>Round Robin</b></td><td>Next in circular queue, up to 1 quantum</td><td>Yes</td><td>Quantum size decides performance</td></tr></table></div>
+<div class="card scroll"><h3>Quick comparisons</h3>
+<table class="t"><tr><th>Concept A</th><th>Concept B</th></tr>
+<tr><td><b>Scheduler</b>: selects the next process</td><td><b>Dispatcher</b>: gives it the CPU</td></tr>
+<tr><td><b>Waiting time</b>: time in the ready queue</td><td><b>Turnaround time</b>: submission to completion (ready queue + CPU + I/O)</td></tr>
+<tr><td><b>Response time</b>: time to first response</td><td><b>Throughput</b>: processes completed per time unit</td></tr>
+<tr><td><b>Starvation</b>: low priority waits indefinitely</td><td><b>Aging</b>: gradually raise waiting processes’ priority</td></tr></table></div>
+</div></section>
+
+<section id="quiz"><div class="wrap">
+<h2>7. Interactive Quiz</h2>
+<p class="lead">Tap an answer. Green means correct, red means wrong, and the right answer is always explained.</p>
+<div class="card"><span id="score">Score: 0 / 0</span> <span style="color:var(--mut)" id="prog"></span><div id="bar"><i></i></div>
+<button class="btn" id="shuf">Shuffle &amp; restart</button><button class="btn o" id="rst">Restart</button></div>
+<div id="qs"></div>
+<div class="card" id="final" style="display:none"></div>
+</div></section>
+</main>
+<footer>Based on the slides of Chapter 5: CPU Scheduling · Operating Systems (501471)</footer>
+
+<script>
+(function(){
+var $=function(s){return document.querySelector(s)};
+var rm=matchMedia("(prefers-reduced-motion:reduce)").matches;
+var COL=["#ff6b8f","#5ee7d0","#ffd166","#a78bfa","#7dd3fc"];
+/* scrolling gantt background */
+var cv=$("#bg"),cx=cv.getContext("2d"),W,H,rows=[],R=7;
+function rs(){W=cv.width=innerWidth;H=cv.height=innerHeight;rows=[];for(var k=0;k<R;k++){var x=-Math.random()*200,bl=[];while(x<W+300){var w=40+Math.random()*150;bl.push({x:x,w:w,c:Math.floor(Math.random()*5)});x+=w+3}rows.push({b:bl,v:.25+Math.random()*.55,y:(k+.5)*H/R})}}
+rs();addEventListener("resize",rs);
+function fr(){cx.clearRect(0,0,W,H);
+rows.forEach(function(r){r.b.forEach(function(b){b.x-=r.v;cx.globalAlpha=.3;cx.fillStyle=COL[b.c];cx.fillRect(b.x,r.y-14,b.w,28)});
+if(r.b[0].x+r.b[0].w<0)r.b.shift();var l=r.b[r.b.length-1];if(l.x+l.w<W+100){var w=40+Math.random()*150;r.b.push({x:l.x+l.w+3,w:w,c:Math.floor(Math.random()*5)})}});
+cx.globalAlpha=1;if(!rm)requestAnimationFrame(fr)}
+fr();
+/* scheduler core */
+function sched(a,P,q){var segs=[],t=0;
+if(a=="rr"){var rem=P.map(function(x){return x.b}),Qu=P.map(function(_,i){return i}),qq=Math.max(1,q||4);
+while(Qu.length){var k=Qu.shift(),d=Math.min(qq,rem[k]);segs.push({p:k,s:t,e:t+d});t+=d;rem[k]-=d;if(rem[k]>0)Qu.push(k);segs[segs.length-1].q=Qu.slice()}}
+else{var ord=P.map(function(_,i){return i});if(a=="sjf")ord.sort(function(x,y){return P[x].b-P[y].b||x-y});if(a=="pri")ord.sort(function(x,y){return P[x].p-P[y].p||x-y});
+ord.forEach(function(k){segs.push({p:k,s:t,e:t+P[k].b});t+=P[k].b})}
+return segs}
+function gantt(segs,P,anim){var h="";segs.forEach(function(s,i){var last=i==segs.length-1;
+h+='<div class="sg" style="flex:'+(s.e-s.s)+';background:'+COL[P[s.p].i%5]+';animation-delay:'+(anim?i*.18:0)+'s">'+P[s.p].n+'<span class="tk">'+s.s+'</span>'+(last?'<span class="te">'+s.e+'</span>':'')+'</div>'});return h}
+/* hero demo */
+var hp=[{n:"P1",b:24,i:0},{n:"P2",b:3,i:1},{n:"P3",b:3,i:2}],hs=sched("rr",hp,4),hi=0,hg=$("#hg"),hq=$("#hq");
+function hstep(){if(hi>hs.length){hi=0}
+if(hi==0){hg.innerHTML="";hq.textContent="ready queue: P1 P2 P3"}
+else{var s=hs[hi-1],d=document.createElement("div");d.className="sg";d.style.flex=s.e-s.s;d.style.background=COL[s.p];d.textContent=hp[s.p].n+" ("+(s.e-s.s)+")";hg.appendChild(d);
+hq.textContent=s.q&&s.q.length?"ready queue: "+s.q.map(function(k){return hp[k].n}).join(" "):"ready queue: (empty) · t = "+s.e}
+hi++;if(hi>hs.length+2)hi=0}
+if(rm){hg.innerHTML=gantt(hs,hp,false);hq.textContent="t = 30"}else{hstep();setInterval(hstep,850)}
+/* simulator */
+var PRE={fcfs:["fcfs",[[24,1],[3,2],[3,3],[,],[,]]],sjf:["sjf",[[6,1],[8,2],[7,3],[3,4],[,]]],rr:["rr",[[24,1],[3,2],[3,3],[,],[,]],4],pri:["pri",[[10,3],[1,1],[2,4],[1,5],[5,2]]]};
+function sim(r){var alg="fcfs",bi=r.querySelectorAll(".bi"),pi=r.querySelectorAll(".pi"),qi=r.querySelector(".qin"),ab=r.querySelectorAll("[data-a]"),d=r.dataset;
+function setA(a){alg=a;ab.forEach(function(b){b.classList.toggle("on",b.dataset.a==a)})}
+function run(){var P=[];bi.forEach(function(x,i){var b=+x.value;if(b>0)P.push({n:"P"+(i+1),b:b,p:+pi[i].value||0,i:i})});
+var g=r.querySelector(".gt"),res=r.querySelector(".res"),out=r.querySelector(".out"),sn=r.querySelector(".sn");
+if(!P.length){g.innerHTML="";res.innerHTML="";out.innerHTML="";sn.textContent="";return}
+var segs=sched(alg,P,+qi.value),comp=[];segs.forEach(function(s){comp[s.p]=s.e});
+g.innerHTML=gantt(segs,P,true);var tw=0,tt=0,h='<tr><th>'+d.hp+'</th><th>'+d.hb+'</th><th>'+d.hw+'</th><th>'+d.ht+'</th></tr>';
+P.forEach(function(p,k){var w=comp[k]-p.b;tw+=w;tt+=comp[k];h+='<tr><td>'+p.n+'</td><td>'+p.b+'</td><td>'+w+'</td><td>'+comp[k]+'</td></tr>'});
+h+='<tr><th>'+d.ha+'</th><th></th><th>'+(tw/P.length).toFixed(2)+'</th><th>'+(tt/P.length).toFixed(2)+'</th></tr>';out.innerHTML=h;
+res.innerHTML='<div>'+d.sw+'<b>'+(tw/P.length).toFixed(2)+'</b></div><div>'+d.st+'<b>'+(tt/P.length).toFixed(2)+'</b></div><div>'+d.cs+'<b>'+(segs.length-1)+'</b></div>';
+sn.textContent=d[{fcfs:"nf",sjf:"ns",pri:"np",rr:"nr"}[alg]]}
+ab.forEach(function(b){b.onclick=function(){setA(b.dataset.a);run()}});
+r.querySelector("[data-run]").onclick=run;
+r.querySelectorAll("[data-p]").forEach(function(b){b.onclick=function(){var p=PRE[b.dataset.p];setA(p[0]);p[1].forEach(function(x,i){bi[i].value=x[0]==null?"":x[0];pi[i].value=x[1]==null?"":x[1]});if(p[2])qi.value=p[2];run()}});
+r.querySelectorAll("input").forEach(function(i){i.onkeydown=function(e){if(e.key=="Enter")run()}});run()}
+function init(){document.querySelectorAll("[data-sim]").forEach(sim)}
+/* quiz data */
+var TF=["True","False"];
+var Q=[
+["On a system with a single CPU core, how many processes can run at a time?",["Only one","Two","As many as are in the ready queue","None"],0,"Other processes must wait until the core is free."],
+["What is the objective of multiprogramming?",["To have some process running at all times, to maximize CPU utilization","To reduce memory","To stop I/O","To avoid the ready queue"],0,"Keeping the CPU busy maximizes utilization."],
+["The CPU–I/O burst cycle is…",["An alternating sequence of CPU and I/O bursts","Only CPU bursts","Only I/O bursts","A type of memory"],0,"Processes alternate between running on the CPU and waiting for I/O."],
+["What does the CPU scheduler do when the CPU becomes idle?",["Selects a process from the ready queue and allocates the CPU to it","Shuts the system down","Deletes a process","Loads a new OS"],0,"It chooses from the processes in memory that are ready to execute."],
+["The ready queue is always a first-in, first-out (FIFO) queue.",TF,1,"False. It can also be a priority queue, a tree, or an unordered linked list."],
+["Which of these can be used to implement the ready queue?",["FIFO queue, priority queue, tree, or unordered linked list","Only a stack","Only a FIFO queue","Only a hash table"],0,"The implementation depends on the scheduling algorithm."],
+["The records in the ready queue are generally…",["The PCBs of the processes","Source code files","Device drivers","User passwords"],0,"Each queue entry is a process control block."],
+["The dispatcher is the module that…",["Gives control of the CPU core to the process selected by the scheduler","Selects which process runs next","Compiles programs","Allocates disk space"],0,"The scheduler chooses; the dispatcher hands over the CPU."],
+["Which is NOT a dispatcher function?",["Deciding which ready process should run next","Switching context from one process to another","Switching to user mode","Jumping to the proper location in the user program"],0,"Choosing the process is the scheduler’s job."],
+["The dispatcher should be…",["As fast as possible, since it is invoked during every context switch","Slow and careful","Rarely invoked","Only used at boot"],0,"Dispatch latency is pure overhead."],
+["Dispatch latency is…",["The time the dispatcher takes to stop one process and start another","The time a process runs","The I/O time","The compile time"],0,"It is the time to switch processes."],
+["In a real system, CPU utilization should range from about…",["40% to 90%","0% to 10%","100% only","90% to 100% always"],0,"Conceptually it can range from 0 to 100 percent."],
+["Conceptually, CPU utilization can range from…",["0 to 100 percent","0 to 40 percent","40 to 90 percent","50 to 150 percent"],0,"In a real system it ranges from 40% to 90%."],
+["Throughput is…",["The number of processes completed per time unit","The time a process waits","The time to first response","The CPU speed"],0,"More completed processes per unit of time means higher throughput."],
+["Turnaround time is…",["The interval from submission of a process to its completion","Only the time waiting in the ready queue","Only the CPU time","The time to first response"],0,"It includes waiting in the ready queue, executing on the CPU and doing I/O."],
+["Waiting time is…",["The sum of the periods spent waiting in the ready queue","The total time from submission to completion","The time to first response","The I/O time only"],0,"It doesn’t include CPU execution time or I/O."],
+["Response time is…",["The time from submission of a request until the first response is produced","The time to output the whole response","The total CPU time","The turnaround time"],0,"It is the time it takes to start responding."],
+["Response time is the time it takes to output the complete response.",TF,1,"False. It is the time until the first response is produced."],
+["The scheduling algorithms in the chapter are described in the context of…",["A single CPU with a single processing core","Many CPUs only","GPUs only","Distributed systems"],0,"Only one process can run at a time."],
+["FCFS scheduling is easily implemented with…",["A FIFO queue","A stack","A tree","A priority heap"],0,"The PCB is linked onto the tail; the CPU goes to the head."],
+["In FCFS, when the CPU is free it is allocated to…",["The process at the head of the queue","The process with the smallest burst","The process at the tail","A random process"],0,"The running process is then removed from the queue."],
+["A Gantt chart is…",["A bar chart that illustrates a schedule including start and finish times of processes","A type of queue","A memory map","A PCB"],0,"It shows when each process runs."],
+["P1 = 24 ms, P2 = 3 ms, P3 = 3 ms arrive at time 0 and are served FCFS in that order. The average waiting time is… (textbook example)",["17 ms","3 ms","10 ms","27 ms"],0,"Waiting times are 0, 24 and 27, so the average is 51 / 3 = 17 ms."],
+["SJF assigns the CPU to…",["The process with the smallest next CPU burst","The process that arrived first","The process with the largest burst","A random process"],0,"It associates each process with the length of its next CPU burst."],
+["In SJF, if two processes have the same next CPU burst…",["FCFS is used to break the tie","The larger PCB wins","Both are deleted","The system crashes"],0,"Ties are broken by FCFS scheduling."],
+["An SJF algorithm is a priority algorithm where the priority is…",["The inverse of the (predicted) next CPU burst","The process ID","The memory size","The arrival time"],0,"The larger the CPU burst, the lower the priority."],
+["Round-robin scheduling is similar to FCFS but adds…",["Preemption","Priorities","Disk caching","Aging"],0,"Preemption lets the system switch between processes."],
+["A time quantum is generally…",["10 to 100 milliseconds","1 to 5 seconds","1 microsecond","10 to 100 seconds"],0,"It is a small unit of time."],
+["In RR, the ready queue is treated as…",["A circular queue","A stack","A tree","A priority queue"],0,"The scheduler goes around the queue giving each process up to 1 quantum."],
+["If the time quantum is extremely large, RR is the same as…",["FCFS","SJF","Priority scheduling","Aging"],0,"No process would be preempted before it finishes its burst."],
+["If the time quantum is extremely small (say 1 ms), RR results in…",["A large number of context switches","No context switches","Starvation","Faster dispatching"],0,"Context switching overhead becomes large."],
+["Round-robin scheduling is preemptive.",TF,0,"True. A process whose burst exceeds 1 quantum is preempted and put back in the ready queue."],
+["In RR, a process whose CPU burst exceeds 1 time quantum…",["Is preempted and put back in the ready queue","Keeps running until it finishes","Is terminated","Moves to the front"],0,"No process gets more than 1 quantum in a row (unless it is the only runnable process)."],
+["The performance of RR depends heavily on…",["The size of the time quantum","The number of disks","The monitor","The compiler"],0,"Too large behaves like FCFS; too small causes many context switches."],
+["Priority scheduling allocates the CPU to…",["The process with the highest priority","The oldest process","The shortest process only","The newest process"],0,"A priority is associated with each process."],
+["Processes with equal priority are scheduled…",["In FCFS order","Randomly","By memory size","Never"],0,"Ties are broken by FCFS."],
+["Indefinite blocking of low-priority processes is called…",["Starvation","Aging","Dispatch latency","Throughput"],0,"A priority algorithm can leave low-priority processes waiting indefinitely."],
+["What is the solution to starvation?",["Aging","Bigger quantum","More memory","FCFS only"],0,"Aging gradually increases the priority of processes that wait a long time."],
+["Aging involves…",["Gradually increasing the priority of processes that wait in the system for a long time","Decreasing the priority of old processes","Deleting old processes","Increasing the time quantum"],0,"This prevents indefinite waiting."],
+["A priority scheduling algorithm can leave some low-priority processes waiting indefinitely.",TF,0,"True. This is the starvation problem."],
+["SJF with bursts P1 = 6, P2 = 8, P3 = 7, P4 = 3 (all at time 0) gives an average waiting time of… (textbook example)",["7 ms","10.25 ms","3 ms","16 ms"],0,"Order P4, P1, P3, P2; waiting times 0, 3, 9, 16 → 28 / 4 = 7 ms."],
+["RR with quantum = 4 ms and bursts P1 = 24, P2 = 3, P3 = 3 gives an average waiting time of about… (textbook example)",["5.66 ms","17 ms","4 ms","10 ms"],0,"P1 waits 6, P2 waits 4, P3 waits 7 → 17 / 3 ≈ 5.66 ms."]
+];
+var AQ=[
+["على نظام بنواة CPU واحدة، كم عملية يمكن أن تعمل في وقت واحد؟","على العمليات الأخرى الانتظار حتى تتحرر النواة."],
+["ما هدف الـ multiprogramming؟","إبقاء الـ CPU مشغولاً يعظّم استخدامه."],
+["دورة CPU–I/O burst هي…","تتناوب العملية بين التنفيذ على الـ CPU والانتظار للـ I/O."],
+["ماذا يفعل مجدول الـ CPU عندما يصبح المعالج عاطلاً (idle)؟","يختار من العمليات الموجودة في الذاكرة والجاهزة للتنفيذ."],
+["الـ ready queue دائماً طابور FIFO.","غلط. قد يكون أيضاً priority queue أو tree أو linked list غير مرتبة."],
+["أيٌّ مما يلي يمكن استخدامه لتنفيذ الـ ready queue؟","يعتمد التنفيذ على خوارزمية الجدولة."],
+["السجلات في الـ ready queue عادةً هي…","كل مدخل في الطابور هو process control block."],
+["الـ dispatcher هو الوحدة التي…","المجدول يختار؛ والـ dispatcher يسلّم الـ CPU."],
+["أيٌّ مما يلي ليس وظيفة للـ dispatcher؟","اختيار العملية مهمة المجدول (scheduler)."],
+["يجب أن يكون الـ dispatcher…","لأنه يُستدعى في كل تبديل سياق، وزمنه overhead خالص."],
+["Dispatch latency هو…","هو الزمن اللازم للتبديل بين العمليات."],
+["في النظام الحقيقي يجب أن يتراوح استخدام الـ CPU تقريباً بين…","نظرياً يتراوح من 0 إلى 100 بالمئة."],
+["نظرياً يتراوح استخدام الـ CPU من…","في النظام الحقيقي يتراوح من 40% إلى 90%."],
+["الـ Throughput هو…","كلما زادت العمليات المنجزة في وحدة الزمن زاد الـ throughput."],
+["الـ Turnaround time هو…","يشمل الانتظار في الـ ready queue والتنفيذ على الـ CPU والـ I/O."],
+["الـ Waiting time هو…","لا يشمل وقت التنفيذ على الـ CPU ولا الـ I/O."],
+["الـ Response time هو…","هو الزمن اللازم لبدء الاستجابة."],
+["الـ Response time هو الزمن اللازم لإخراج الاستجابة كاملة.","غلط. هو الزمن حتى إنتاج أول استجابة."],
+["خوارزميات الشابتر تُشرح في سياق…","يمكن تشغيل عملية واحدة فقط في الوقت."],
+["تُنفَّذ جدولة FCFS بسهولة باستخدام…","يُربط الـ PCB بذيل الطابور ويذهب الـ CPU للرأس."],
+["في FCFS عندما يتحرر الـ CPU يُخصَّص لـ…","ثم تُزال العملية الجارية من الطابور."],
+["مخطط Gantt هو…","يبيّن متى تعمل كل عملية."],
+["P1 = 24 وP2 = 3 وP3 = 3 تصل في الزمن 0 وتُخدَم بـ FCFS بهذا الترتيب. متوسط وقت الانتظار هو… (مثال الكتاب)","أوقات الانتظار 0 و24 و27، فالمتوسط 51 / 3 = 17 ms."],
+["يعطي SJF الـ CPU لـ…","يربط كل عملية بطول الـ CPU burst التالي لها."],
+["في SJF إذا تساوى الـ burst التالي لعمليتين…","تُكسر المساواة بجدولة FCFS."],
+["خوارزمية SJF هي خوارزمية أولوية حيث الأولوية هي…","كلما كبر الـ CPU burst قلّت الأولوية."],
+["تشبه جدولة round-robin جدولة FCFS لكنها تضيف…","الـ preemption يتيح للنظام التبديل بين العمليات."],
+["الـ time quantum عادةً…","هو وحدة زمنية صغيرة."],
+["في RR يُعامَل الـ ready queue على أنه…","يدور المجدول على الطابور ويعطي كل عملية حتى quantum واحد."],
+["إذا كان الـ time quantum كبيراً جداً فإن RR يصبح مثل…","لن تتم مقاطعة أي عملية قبل إنهاء الـ burst."],
+["إذا كان الـ time quantum صغيراً جداً (مثلاً 1 ms) ينتج عن RR…","يصبح overhead تبديل السياق كبيراً."],
+["جدولة round-robin هي preemptive.","صح. العملية التي يتجاوز burst لها quantum واحداً تُقاطَع وتعود إلى الـ ready queue."],
+["في RR العملية التي يتجاوز الـ CPU burst لها time quantum واحداً…","لا تأخذ أي عملية أكثر من quantum متتالياً (إلا إن كانت العملية الوحيدة القابلة للتشغيل)."],
+["يعتمد أداء RR بشكل كبير على…","كبير جداً يشبه FCFS؛ وصغير جداً يسبب تبديلات سياق كثيرة."],
+["تخصّص جدولة الأولوية الـ CPU لـ…","تُربط أولوية بكل عملية."],
+["العمليات متساوية الأولوية تُجدوَل…","تُكسر المساواة بـ FCFS."],
+["الحجب اللانهائي للعمليات منخفضة الأولوية يسمى…","قد تترك خوارزمية الأولوية عمليات منخفضة الأولوية تنتظر إلى ما لا نهاية."],
+["ما حل مشكلة الـ starvation؟","الـ aging يرفع تدريجياً أولوية العمليات التي تنتظر طويلاً."],
+["الـ Aging يعني…","وهذا يمنع الانتظار اللانهائي."],
+["قد تترك خوارزمية جدولة الأولوية بعض العمليات منخفضة الأولوية تنتظر إلى ما لا نهاية.","صح. وهذه هي مشكلة الـ starvation."],
+["SJF مع P1 = 6 وP2 = 8 وP3 = 7 وP4 = 3 (كلها في الزمن 0) يعطي متوسط انتظار… (مثال الكتاب)","الترتيب P4 ثم P1 ثم P3 ثم P2؛ الانتظار 0 و3 و9 و16 ← 28 / 4 = 7 ms."],
+["RR مع quantum = 4 ms وP1 = 24 وP2 = 3 وP3 = 3 يعطي متوسط انتظار حوالي… (مثال الكتاب)","P1 تنتظر 6 وP2 تنتظر 4 وP3 تنتظر 7 ← 17 / 3 ≈ 5.66 ms."]
+];
+var ar=false,order=[],ok=0,ans=0;
+function shf(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
+function build(s){order=Q.map(function(_,i){return i});if(s)shf(order);ok=0;ans=0;$("#final").style.display="none";var box=$("#qs");box.innerHTML="";
+order.forEach(function(qi,n){var q=Q[qi],d=document.createElement("div");d.className="q";
+var p=document.createElement("p");p.innerHTML="<small>"+(ar?"السؤال "+(n+1)+" من "+Q.length:"Question "+(n+1)+" of "+Q.length)+"</small><br>";p.appendChild(document.createTextNode(ar?AQ[qi][0]:q[0]));d.appendChild(p);
+var ix=q[1].map(function(_,i){return i});if(q[1]!==TF)shf(ix);
+var fb=document.createElement("div");fb.className="fb";var bs=[];
+ix.forEach(function(oi){var b=document.createElement("button");b.className="opt";b.textContent=(ar&&q[1]===TF)?(oi?"غلط":"صح"):q[1][oi];bs.push([b,oi]);
+b.onclick=function(){bs.forEach(function(x){x[0].disabled=true;if(x[1]==q[2])x[0].classList.add("ok")});
+var good=oi==q[2];if(!good)b.classList.add("no");ans++;if(good)ok++;
+fb.className="fb show "+(good?"ok":"no");var ra=(ar&&q[1]===TF)?(q[2]?"غلط":"صح"):q[1][q[2]];
+fb.innerHTML="<b>"+(good?(ar?"صح ✓":"Correct ✓"):(ar?"غلط ✗":"Wrong ✗"))+"</b> "+(good?"":(ar?"الإجابة الصحيحة: “"+ra+"”. ":"The right answer is “"+ra+"”. "));fb.appendChild(document.createTextNode(ar?AQ[qi][1]:q[3]));upd()};
+d.appendChild(b)});d.appendChild(fb);box.appendChild(d)});upd()}
+function upd(){$("#score").textContent=(ar?"النتيجة: ":"Score: ")+ok+" / "+ans;$("#prog").textContent=" · "+ans+(ar?" من "+Q.length+" تمت الإجابة":" of "+Q.length+" answered");$("#bar i").style.width=(ans/Q.length*100)+"%";
+if(ans==Q.length){var f=$("#final"),pc=Math.round(ok/Q.length*100);f.style.display="block";f.dir=ar?"rtl":"ltr";
+f.innerHTML="<h3>"+(ar?"انتهيت! ":"Finished! ")+ok+" / "+Q.length+" ("+pc+"%)</h3>"+(ar?(pc>=85?"عمل ممتاز، أنت جاهز للامتحان.":pc>=60?"جيد. راجع الأقسام التي أخطأت فيها ثم أعد المحاولة.":"أعد قراءة الدليل والملخص ثم اخلط الأسئلة وجرّب مرة أخرى."):(pc>=85?"Excellent work, you are ready for the exam.":pc>=60?"Good job. Review the sections you missed, then try again.":"Re-read the guide and the summary, then shuffle and try again."))}}
+$("#shuf").onclick=function(){build(true);scrollTo({top:$("#quiz").offsetTop})};$("#rst").onclick=function(){build(false);scrollTo({top:$("#quiz").offsetTop})};
+/* Arabic content */
+var AR={
+con:`<h2>1. المفاهيم الأساسية (Basic Concepts)</h2><p class="lead">لماذا نجدول الـ CPU أصلاً.</p>
+<div class="card"><h3>الـ Multiprogramming والـ ready queue</h3>في نظام بنواة <b>CPU واحدة، لا تعمل إلا عملية واحدة في الوقت</b>. على العمليات الأخرى الانتظار حتى تتحرر النواة وتُعاد جدولتها. هدف الـ <b>multiprogramming</b> أن تكون <b>هناك عملية تعمل دائماً</b> لـ<b>تعظيم استخدام الـ CPU</b>.</div>
+<div class="card"><h3>دورة CPU–I/O burst</h3>تنفيذ العملية هو <b>تتابع متناوب من CPU bursts وI/O bursts</b>. تعمل العملية على الـ CPU ثم تنتظر I/O ثم تعمل من جديد وهكذا.
+<div class="cyc" aria-hidden="true"><span>CPU burst</span><span class="io">I/O burst</span><span style="animation-delay:.7s">CPU burst</span><span class="io" style="animation-delay:.7s">I/O burst</span><span style="animation-delay:1.4s">CPU burst</span><span class="io" style="animation-delay:1.4s">I/O burst</span></div></div>
+<div class="card"><h3>مجدول الـ CPU (CPU scheduler)</h3>كلما أصبح الـ CPU <b>عاطلاً</b> يجب أن يختار النظام عملية من الـ <b>ready queue</b>. يختار <b>CPU scheduler</b> عملية من العمليات الموجودة في الذاكرة والجاهزة للتنفيذ و<b>يخصّص لها الـ CPU</b>.
+<ul><li>الـ ready queue <b>ليس بالضرورة FIFO</b>. قد يكون <b>طابور FIFO أو priority queue أو tree أو linked list غير مرتبة</b>.</li><li>نظرياً كل عمليات الـ ready queue مصطفة تنتظر فرصة للتنفيذ. والسجلات في الطوابير عادةً هي <b>PCBs</b> للعمليات.</li></ul></div>
+<div class="tip">أهداف الشابتر: وصف خوارزميات الجدولة؛ تقييمها بمعايير الجدولة؛ شرح مشاكل جدولة المعالجات المتعددة والأنوية؛ وصف جدولة الزمن الحقيقي وجدولة Windows وLinux وSolaris؛ استخدام النمذجة والمحاكاة. <b>سلايداتك تغطي أساسيات النواة الواحدة وأربع خوارزميات فقط.</b></div>`,
+dsp:`<h2>2. المُرسِل (Dispatcher)</h2><p class="lead">الوحدة التي تسلّم الـ CPU فعلياً للعملية المختارة.</p>
+<div class="card"><h3>ماذا يفعل الـ dispatcher</h3>يعطي <b>الـ dispatcher</b> التحكم في نواة الـ CPU للعملية التي اختارها المجدول. ويتضمن ذلك:
+<ul><li><b>تبديل السياق (context switch)</b> من عملية إلى أخرى</li><li><b>التحويل إلى user mode</b></li><li><b>القفز إلى الموقع الصحيح</b> في برنامج المستخدم لاستئنافه</li></ul>
+يجب أن يكون الـ dispatcher <b>سريعاً قدر الإمكان</b> لأنه يُستدعى في <b>كل تبديل سياق</b>.</div>
+<div class="grid">
+<div class="card"><h3>Dispatch latency</h3>الزمن الذي يستغرقه الـ dispatcher <b>لإيقاف عملية وبدء أخرى</b>.</div>
+<div class="card"><h3>المجدول مقابل الـ dispatcher</h3><b>Scheduler</b> = <i>يختار</i> أي عملية جاهزة تعمل بعد ذلك.<br><b>Dispatcher</b> = <i>يعطي</i> الـ CPU لتلك العملية (تبديل سياق، user mode، قفز).</div>
+</div>`,
+crt:`<h2>3. معايير الجدولة (Scheduling Criteria)</h2><p class="lead">كيف نحكم على جودة الخوارزمية. اختيار المعايير قد يغيّر أي خوارزمية تبدو الأفضل.</p>
+<div class="grid s">
+<div class="card"><h3 data-n="1">استخدام الـ CPU</h3>إبقاء الـ CPU <b>مشغولاً قدر الإمكان</b>. نظرياً من <b>0 إلى 100%</b>؛ وفي النظام الحقيقي يجب أن يتراوح بين <b>40% و90%</b>.</div>
+<div class="card"><h3 data-n="2">Throughput</h3><b>عدد العمليات المنجزة في وحدة الزمن</b>.</div>
+<div class="card"><h3 data-n="3">Turnaround time</h3>من <b>تقديم العملية إلى اكتمالها</b>. وهو مجموع فترات <b>الانتظار في الـ ready queue والتنفيذ على الـ CPU والـ I/O</b>.</div>
+<div class="card"><h3 data-n="4">Waiting time</h3>مجموع الفترات التي تقضيها العملية <b>في انتظار الـ ready queue</b>.</div>
+<div class="card"><h3 data-n="5">Response time</h3>من <b>تقديم الطلب حتى إنتاج أول استجابة</b>: زمن <b>بدء الاستجابة</b> وليس زمن إخراجها كاملة.</div>
+</div>
+<div class="tip">الهدف المعتاد: <b>تعظيم</b> استخدام الـ CPU والـ throughput؛ و<b>تقليل</b> الـ turnaround والـ waiting والـ response time.</div>`,
+alg:`<h2>4. خوارزميات الجدولة</h2><p class="lead">تقرر أي عملية في الـ ready queue تأخذ الـ CPU. مشروحة لـ<b>CPU واحدة بنواة واحدة</b>. اضغط لفتح كل واحدة.</p>
+<details open><summary>1. First-Come, First-Served (FCFS)</summary><div>العملية التي <b>تطلب الـ CPU أولاً</b> تأخذه أولاً. تُنفَّذ بـ<b>طابور FIFO</b>: عند دخول عملية إلى الـ ready queue يُربط الـ PCB الخاص بها بـ<b>الذيل</b>؛ وعند تحرر الـ CPU يُعطى للعملية في <b>الرأس</b> وتُزال من الطابور. كودها بسيط وسهل الفهم.
+<div class="tip"><b>مخطط Gantt</b> هو مخطط أعمدة يوضح جدولاً معيناً، بما فيه <b>أوقات بدء وانتهاء</b> كل عملية.<br>مثال (الكل يصل عند 0): P1 = 24 ms وP2 = 3 ms وP3 = 3 ms بالترتيب P1 وP2 وP3 ← أوقات الانتظار 0 و24 و27 ← <b>متوسط الانتظار = 17 ms</b>. المهمة القصيرة خلف الطويلة تنتظر وقتاً طويلاً.</div></div></details>
+<details><summary>2. Shortest-Job-First (SJF)</summary><div>يربط بكل عملية <b>طول الـ CPU burst التالي</b> لها. عندما يتوفر الـ CPU يُعطى للعملية ذات <b>أصغر CPU burst تالٍ</b>. إذا تساوى burst عمليتين <b>تُكسر المساواة بـ FCFS</b>.
+<div class="tip">مثال: P1 = 6 وP2 = 8 وP3 = 7 وP4 = 3 ← الترتيب P4 وP1 وP3 وP2 ← الانتظار 0 و3 و9 و16 ← <b>المتوسط = 7 ms</b>.</div></div></details>
+<details><summary>3. Round-Robin (RR)</summary><div>تشبه FCFS لكن مع إضافة <b>الـ preemption</b> ليستطيع النظام التبديل بين العمليات. تُعرَّف وحدة زمن صغيرة هي <b>time quantum (time slice)</b>، عادةً <b>10 إلى 100 ms</b>. يُعامَل الـ ready queue كـ<b>طابور دائري</b>؛ يدور المجدول عليه ويعطي كل عملية الـ CPU لمدة <b>تصل إلى quantum واحد</b>.
+<ul><li>لا تأخذ أي عملية الـ CPU أكثر من quantum متتالياً (إلا إن كانت العملية الوحيدة القابلة للتشغيل).</li><li>إذا تجاوز الـ burst الـ quantum تُقاطَع العملية (<b>preempted</b>) وتعود إلى الـ ready queue. إذن RR هي <b>preemptive</b>.</li><li>يعتمد الأداء بشدة على <b>حجم الـ quantum</b>: إذا كان <b>كبيراً جداً</b> فـ RR <b>مثل FCFS</b>؛ وإذا كان <b>صغيراً جداً</b> (مثلاً 1 ms) فيحدث <b>عدد كبير من تبديلات السياق</b>.</li></ul>
+<div class="tip">مثال (quantum = 4 ms): P1 = 24 وP2 = 3 وP3 = 3 ← <b>متوسط الانتظار ≈ 5.66 ms</b>.</div></div></details>
+<details><summary>4. جدولة الأولوية (Priority)</summary><div>تُربط <b>أولوية</b> بكل عملية، ويُعطى الـ CPU للعملية ذات <b>أعلى أولوية</b>. <b>العمليات متساوية الأولوية تُجدوَل بـ FCFS</b>. الـ SJF هي ببساطة خوارزمية أولوية حيث الأولوية هي <b>معكوس الـ CPU burst التالي (المتوقع)</b>: كلما كبر الـ burst قلّت الأولوية.
+<ul><li><b>المشكلة الكبرى: الحجب اللانهائي أو الـ starvation.</b> العملية الجاهزة التي تنتظر الـ CPU تُعتبر محجوبة؛ وقد تنتظر العمليات منخفضة الأولوية إلى ما لا نهاية.</li><li><b>الحل: aging</b> – <b>رفع أولوية</b> العمليات التي تنتظر في النظام وقتاً طويلاً <b>تدريجياً</b>.</li></ul>
+<div class="tip">مثال (الرقم الأصغر = أولوية أعلى): الـ bursts للعمليات P1..P5 = 10 و1 و2 و1 و5 بأولويات 3 و1 و4 و5 و2 ← الترتيب P2 وP5 وP1 وP3 وP4 ← <b>متوسط الانتظار = 8.2 ms</b>.</div></div></details>
+<div class="tip">جداول الأمثلة في السلايدات موجودة كصور فلم أستطع قراءتها. الأرقام أعلاه هي أمثلة الكتاب القياسية. استخدم المحاكي بالأسفل لتجربة قيمك.</div>`,
+sim:`<h2>5. محاكي الجدولة</h2><p class="lead">أدخل الـ bursts (كل العمليات تصل عند الزمن 0)، اختر الخوارزمية، وشاهد مخطط Gantt والمتوسطات.</p>
+<div class="card sim" data-sim data-nf="FCFS: العملية التي تطلب الـ CPU أولاً تأخذه أولاً (FIFO). المهمة القصيرة خلف الطويلة تنتظر وقتاً طويلاً." data-ns="SJF: يذهب الـ CPU للعملية ذات أصغر CPU burst تالٍ؛ وتُكسر المساواة بـ FCFS." data-np="Priority: تعمل العملية ذات أعلى أولوية أولاً (هنا الرقم الأصغر = أولوية أعلى)؛ والمساواة بـ FCFS." data-nr="Round Robin: تأخذ كل عملية quantum واحداً كحد أقصى ثم تُقاطَع وتذهب لآخر الطابور الدائري." data-hp="العملية" data-hb="Burst" data-hw="الانتظار" data-ht="الدوران" data-ha="المتوسط" data-sw="متوسط وقت الانتظار" data-st="متوسط وقت الدوران" data-cs="تبديلات السياق">
+<div class="alg"><button class="btn s o on" data-a="fcfs">FCFS</button><button class="btn s o" data-a="sjf">SJF</button><button class="btn s o" data-a="pri">Priority</button><button class="btn s o" data-a="rr">Round Robin</button></div>
+<table class="tbl"><tr><th>العملية</th><th>Burst (ms)</th><th>الأولوية</th></tr>
+<tr><td>P1</td><td><input class="bi" type="number" min="0" value="24"></td><td><input class="pi" type="number" value="1"></td></tr>
+<tr><td>P2</td><td><input class="bi" type="number" min="0" value="3"></td><td><input class="pi" type="number" value="2"></td></tr>
+<tr><td>P3</td><td><input class="bi" type="number" min="0" value="3"></td><td><input class="pi" type="number" value="3"></td></tr>
+<tr><td>P4</td><td><input class="bi" type="number" min="0" value=""></td><td><input class="pi" type="number" value=""></td></tr>
+<tr><td>P5</td><td><input class="bi" type="number" min="0" value=""></td><td><input class="pi" type="number" value=""></td></tr></table>
+<div>الـ time quantum (لـ RR): <input class="qin" type="number" min="1" value="4"> ms</div>
+<div style="margin-top:8px"><button class="btn s" data-run>تشغيل</button><span style="color:var(--mut);font-size:14px"> أمثلة جاهزة: </span><button class="btn s o" data-p="fcfs">مثال FCFS</button><button class="btn s o" data-p="sjf">مثال SJF</button><button class="btn s o" data-p="rr">مثال RR</button><button class="btn s o" data-p="pri">مثال Priority</button></div>
+<div class="gt"></div><div class="res"></div><div class="scroll"><table class="tbl out"></table></div><div class="tip msg sn"></div></div>`,
+sum:`<h2>6. ملخص الشابتر</h2><p class="lead">راجعه قبل الامتحان مباشرة.</p>
+<div class="card"><ul>
+<li>نواة واحدة = <b>عملية واحدة في الوقت</b>؛ والـ multiprogramming يُبقي الـ CPU مشغولاً. تتناوب العمليات بين <b>CPU وI/O bursts</b>.</li>
+<li><b>CPU scheduler</b> يختار من الـ ready queue (FIFO أو priority queue أو tree أو قائمة PCBs)؛ و<b>dispatcher</b> ينفّذ التبديل (سياق، user mode، قفز). <b>Dispatch latency</b> = زمن التبديل.</li>
+<li>المعايير: <b>استخدام CPU (40–90%) وthroughput وturnaround وwaiting وresponse</b>.</li>
+<li><b>FCFS</b>: FIFO، بسيط، انتظار طويل خلف المهام الطويلة. <b>SJF</b>: أصغر burst تالٍ. <b>RR</b>: time quantum (10–100 ms)، preemptive، طابور دائري. <b>Priority</b>: الأعلى أولوية أولاً، والمساواة FCFS.</li>
+<li>مشكلة الأولوية: <b>starvation</b>؛ الحل: <b>aging</b>. وSJF = أولوية معكوس الـ burst المتوقع.</li>
+<li>الـ quantum في RR: كبير جداً ← FCFS؛ صغير جداً ← تبديلات سياق كثيرة.</li></ul></div>
+<div class="card scroll"><h3>مقارنة الخوارزميات</h3>
+<table class="t"><tr><th>الخوارزمية</th><th>من يعمل بعد ذلك</th><th>Preemptive؟</th><th>النقطة المهمة</th></tr>
+<tr><td><b>FCFS</b></td><td>رأس طابور FIFO</td><td>لا</td><td>بسيطة؛ المهام الطويلة تؤخر القصيرة</td></tr>
+<tr><td><b>SJF</b></td><td>أصغر CPU burst تالٍ (المساواة: FCFS)</td><td>كما في السلايدات: تختار الأصغر عند توفر الـ CPU</td><td>حالة خاصة من Priority</td></tr>
+<tr><td><b>Priority</b></td><td>الأعلى أولوية (المساواة: FCFS)</td><td>كما في السلايدات: تختار الأعلى أولوية عند توفر الـ CPU</td><td>Starvation ← aging</td></tr>
+<tr><td><b>Round Robin</b></td><td>التالي في الطابور الدائري حتى quantum واحد</td><td>نعم</td><td>حجم الـ quantum يحدد الأداء</td></tr></table></div>
+<div class="card scroll"><h3>مقارنات سريعة</h3>
+<table class="t"><tr><th>المفهوم أ</th><th>المفهوم ب</th></tr>
+<tr><td><b>Scheduler</b>: يختار العملية التالية</td><td><b>Dispatcher</b>: يعطيها الـ CPU</td></tr>
+<tr><td><b>Waiting time</b>: الزمن في الـ ready queue</td><td><b>Turnaround time</b>: من التقديم إلى الاكتمال (ready queue + CPU + I/O)</td></tr>
+<tr><td><b>Response time</b>: زمن أول استجابة</td><td><b>Throughput</b>: عمليات منجزة في وحدة الزمن</td></tr>
+<tr><td><b>Starvation</b>: العملية منخفضة الأولوية تنتظر للأبد</td><td><b>Aging</b>: رفع أولوية العمليات المنتظرة تدريجياً</td></tr></table></div>`};
+Object.keys(AR).forEach(function(k){var w=document.querySelector("#"+k+" .wrap"),d=document.createElement("div");d.className="arx";d.lang="ar";d.dir="rtl";d.innerHTML=AR[k];w.appendChild(d)});
+init();
+/* language toggle */
+var NA=["المفاهيم الأساسية","المجدول والـ Dispatcher","المعايير","الخوارزميات","المحاكي","الملخص","الاختبار"];
+var NE=[].map.call(document.querySelectorAll("nav a"),function(a){return a.textContent});
+var H1=$(".hero h1"),HP=$(".hero p"),HB=document.querySelectorAll(".hero .btn"),H0=[H1.innerHTML,HP.textContent,HB[0].textContent,HB[1].textContent];
+var QE=[$("#quiz h2").textContent,$("#quiz .lead").textContent,$("#shuf").textContent,$("#rst").textContent,$("footer").textContent];
+$("#lang").onclick=function(){ar=!ar;document.body.classList.toggle("ar",ar);
+document.querySelectorAll("nav a").forEach(function(a,i){a.textContent=ar?NA[i]:NE[i]});
+H1.innerHTML=ar?"نظم التشغيل<br>الشابتر 5: جدولة الـ CPU":H0[0];HP.textContent=ar?"دليل دراسة كامل وسهل: المجدول والـ dispatcher والمعايير وخوارزميات FCFS وSJF وRound Robin وPriority، مع محاكي جدولة حي وملخص واختبار يخبرك فوراً إن كانت إجابتك صح أو غلط.":H0[1];
+HB[0].textContent=ar?"ابدأ الدراسة":H0[2];HB[1].textContent=ar?"افتح المحاكي":H0[3];$("#lang").textContent=ar?"English":"العربية";
+$("#quiz h2").textContent=ar?"7. الاختبار التفاعلي":QE[0];$("#quiz .lead").textContent=ar?"اضغط على إجابة. الأخضر يعني صح، والأحمر غلط، ويظهر شرح الإجابة الصحيحة دائماً.":QE[1];
+$("#shuf").textContent=ar?"خلط وإعادة":QE[2];$("#rst").textContent=ar?"إعادة":QE[3];$("footer").textContent=ar?"مبني على سلايدات الشابتر 5: جدولة الـ CPU · نظم التشغيل (501471)":QE[4];
+$("#quiz .wrap").dir=ar?"rtl":"ltr";build(false)};
+build(false);
+})();
+</script>
+</body>
+</html>
