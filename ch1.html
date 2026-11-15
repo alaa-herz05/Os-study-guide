@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Operating Systems – Chapter 1 Study Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#040705;--panel:#0b140e;--panel2:#10200f;--line:#1f3a26;--g:#9dffb0;--g2:#5be37d;--gd:#2a7a43;--txt:#e4f5e8;--mut:#8fb09a;--bad:#ff6b6b;
+box-sizing:border-box;color-scheme:dark;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(108px + env(safe-area-inset-top,0px))}
+body{margin:0;background:var(--bg);color:var(--txt);font:16px/1.65 "IBM Plex Sans",system-ui,sans-serif;
+background-image:linear-gradient(rgba(157,255,176,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(157,255,176,.045) 1px,transparent 1px);background-size:40px 40px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:30}
+#bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+main,nav,header{position:relative;z-index:1}
+h1,h2,h3{font-family:"Chakra Petch",system-ui,sans-serif;line-height:1.15;margin:0}
+.wrap{max-width:980px;margin:0 auto;padding:0 18px}
+nav{position:sticky;top:calc(42px + env(safe-area-inset-top,0px));z-index:20;background:rgba(4,7,5,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;gap:6px;overflow-x:auto;padding:10px 18px;scrollbar-width:none}
+nav a{color:var(--mut);text-decoration:none;white-space:nowrap;padding:6px 12px;border-radius:99px;font-size:14px;border:1px solid transparent}
+nav a:hover,nav a:focus-visible{color:var(--g);border-color:var(--gd);outline:none}
+.hero{display:grid;grid-template-columns:1.2fr 1fr;gap:28px;align-items:center;padding:56px 0 40px}
+.hero h1{font-size:clamp(34px,6vw,58px);color:var(--g);text-shadow:0 0 28px rgba(157,255,176,.35)}
+.hero p{color:var(--mut);max-width:46ch}
+.btn{display:inline-block;background:var(--g);color:#04110a;font-weight:600;border:0;border-radius:8px;padding:11px 20px;cursor:pointer;font:600 15px "IBM Plex Sans",sans-serif;text-decoration:none;margin:4px 8px 4px 0}
+.btn.o{background:transparent;color:var(--g);border:1px solid var(--gd)}
+.btn:hover{box-shadow:0 0 18px rgba(157,255,176,.45)}
+.btn:focus-visible,summary:focus-visible,.opt:focus-visible{outline:2px solid var(--g);outline-offset:2px}
+.chipbox{display:grid;place-items:center}
+.chip{position:relative;width:min(270px,70vw);aspect-ratio:1;background:#07100a;border:2px solid var(--g2);border-radius:14px;padding:26px;display:grid;grid-template-columns:repeat(5,1fr);gap:6px;box-shadow:0 0 44px rgba(91,227,125,.3),inset 0 0 30px rgba(91,227,125,.12)}
+.chip::before,.chip::after{content:"";position:absolute;background:repeating-linear-gradient(90deg,var(--g2) 0 6px,transparent 6px 20px);}
+.chip::before{left:18px;right:18px;top:-9px;height:7px;box-shadow:0 calc(min(270px,70vw) + 4px) 0 var(--g2)}
+.chip::after{top:18px;bottom:18px;left:-9px;width:7px;background:repeating-linear-gradient(0deg,var(--g2) 0 6px,transparent 6px 20px);box-shadow:calc(min(270px,70vw) + 4px) 0 0 var(--g2)}
+.core{background:#0c1d11;border:1px solid var(--gd);border-radius:4px;transition:.35s}
+.core.on{background:var(--g);box-shadow:0 0 14px var(--g);border-color:var(--g)}
+.core.os{grid-area:2/2/5/5;display:grid;place-items:center;font:700 34px "Chakra Petch";color:var(--g);background:#0f2a17;animation:pulse 2.2s infinite}
+@keyframes pulse{50%{box-shadow:0 0 30px var(--g);color:#fff}}
+section{padding:44px 0 8px}
+section>.wrap>h2{font-size:clamp(26px,4vw,36px);color:var(--g);margin-bottom:6px}
+.lead{color:var(--mut);margin:0 0 20px}
+.card{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:14px 0}
+.card h3{font-size:19px;color:var(--g);margin-bottom:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.grid .card{margin:0}
+ul{margin:6px 0;padding-left:20px}li{margin:4px 0}
+b,strong{color:var(--g)}
+.tip{border-left:3px solid var(--g2);background:rgba(91,227,125,.07);padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:15px}
+.scroll{overflow-x:auto}
+.stack div{padding:12px;text-align:center;border:1px solid var(--gd);margin:6px auto;border-radius:8px;background:#0a1a0f}
+.stack div:nth-child(1){width:60%}.stack div:nth-child(2){width:72%}.stack div:nth-child(3){width:86%;border-color:var(--g);box-shadow:0 0 18px rgba(157,255,176,.25);color:var(--g)}.stack div:nth-child(4){width:100%}
+.bus{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:8px 0}
+.bus span{padding:9px 14px;border:1px solid var(--g2);border-radius:8px;background:#0a1a0f;font-size:14px}
+.wire{height:8px;border-radius:4px;margin:10px 0;background:linear-gradient(90deg,var(--gd),var(--g),var(--gd));background-size:200% 100%;animation:flow 1.8s linear infinite}
+@keyframes flow{to{background-position:-200% 0}}
+.pyr div{margin:5px auto;padding:9px 12px;text-align:center;border-radius:6px;border:1px solid var(--gd);background:#0a1a0f;font-size:14px}
+.pyr div:nth-child(1){width:34%;background:#1c5a31}.pyr div:nth-child(2){width:46%;background:#174a29}.pyr div:nth-child(3){width:60%;background:#123b21}.pyr div:nth-child(4){width:76%;background:#0e2e1a}.pyr div:nth-child(5){width:100%}
+.axis{display:flex;justify-content:space-between;color:var(--mut);font-size:13px;margin-top:6px}
+details{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:12px;margin:10px 0;overflow:hidden}
+summary{cursor:pointer;padding:14px 18px;font:700 18px "Chakra Petch";color:var(--g);list-style:none}
+summary::before{content:"▸ ";color:var(--g2)}details[open] summary::before{content:"▾ "}
+details>div{padding:0 20px 16px}
+.demo{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.mode{font:700 26px "Chakra Petch";padding:10px 22px;border-radius:10px;border:2px solid var(--g);min-width:190px;text-align:center;transition:.3s}
+.mode.k{background:var(--g);color:#04110a;box-shadow:0 0 26px var(--g)}
+.steps{counter-reset:s;list-style:none;padding:0}
+.steps li{counter-increment:s;padding:9px 12px 9px 44px;position:relative;border:1px solid var(--line);border-radius:8px;margin:6px 0;color:var(--mut);transition:.3s}
+.steps li::before{content:counter(s);position:absolute;left:10px;top:8px;width:24px;height:24px;border-radius:50%;background:#0c1d11;border:1px solid var(--gd);text-align:center;line-height:22px;font-size:13px}
+.steps li.a{color:var(--txt);border-color:var(--g);background:rgba(157,255,176,.09);box-shadow:0 0 16px rgba(157,255,176,.18)}
+.steps li.a::before{background:var(--g);color:#04110a}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:15px}
+th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+th{background:#10281a;color:var(--g)}
+#bar{height:8px;background:#0c1d11;border-radius:9px;overflow:hidden;margin:10px 0}
+#bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--g2),var(--g));transition:width .4s}
+.q{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0}
+.q p{margin:0 0 10px;font-weight:600}
+.q small{color:var(--mut);font-weight:400}
+.opt{display:block;width:100%;text-align:start;margin:6px 0;padding:10px 14px;border-radius:8px;border:1px solid var(--line);background:#08130b;color:var(--txt);font:inherit;cursor:pointer;transition:.2s}
+.opt:hover:not(:disabled){border-color:var(--g);background:#0d2514}
+.opt.ok{background:rgba(91,227,125,.22);border-color:var(--g);color:#fff}
+.opt.no{background:rgba(255,107,107,.18);border-color:var(--bad);color:#ffd6d6}
+.opt:disabled{cursor:default}
+.fb{display:none;margin-top:8px;padding:10px 14px;border-radius:8px;font-size:15px}
+.fb.show{display:block}.fb.ok{background:rgba(91,227,125,.12);border-left:3px solid var(--g)}.fb.no{background:rgba(255,107,107,.1);border-left:3px solid var(--bad)}
+#score{font:700 22px "Chakra Petch";color:var(--g)}
+footer{padding:40px 18px 60px;text-align:center;color:var(--mut)}
+@media(max-width:760px){.hero{grid-template-columns:1fr;padding-top:34px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+.arx{direction:rtl;text-align:start}body:not(.ar) .arx{display:none}
+body.ar section:not(#quiz) .wrap>*:not(.arx){display:none}
+body.ar{font-family:"Tajawal","IBM Plex Sans",sans-serif;font-size:17px}body.ar .btn{font-family:"Tajawal",sans-serif}
+body.ar h1,body.ar h2,body.ar h3,body.ar summary,body.ar .mode,body.ar #score{font-family:"Tajawal","Chakra Petch",sans-serif}
+.arx ul{padding:0 20px 0 0}
+.arx .steps{padding:0}.arx .steps li{padding:9px 44px 9px 12px}.arx .steps li::before{left:auto;right:10px}
+.arx .tip{border-left:0;border-right:3px solid var(--g2);border-radius:8px 0 0 8px}
+.arx th,.arx td{text-align:start}
+#lang{flex:none;padding:6px 16px;margin:0 8px 0 0;font-size:14px}
+.cbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:22;height:42px;background:#020503;border-bottom:1px solid var(--gd)}
+.cbar .wrap{display:flex;gap:6px;align-items:center;height:42px;overflow-x:auto;scrollbar-width:none}
+.cbar a{color:var(--mut);text-decoration:none;padding:4px 14px;border-radius:6px;font:600 14px "Chakra Petch",sans-serif;white-space:nowrap;border:1px solid transparent}
+.cbar a:hover,.cbar a:focus-visible{color:var(--g);border-color:var(--gd);outline:none}.cbar a.cur{background:var(--g);color:#04110a}
+</style>
+</head>
+<body>
+<canvas id="bg" aria-hidden="true"></canvas>
+<div class="cbar"><div class="wrap"><a href="index.html">⌂ Home</a><a href="ch1.html" class="cur">Ch 1</a><a href="ch2.html">Ch 2</a><a href="ch3.html">Ch 3</a><a href="ch4.html">Ch 4</a><a href="ch5.html">Ch 5</a><a href="ch8.html">Ch 8</a></div></div>
+<nav><div class="wrap">
+<button class="btn" id="lang" type="button">العربية</button><a href="#what">What is an OS</a><a href="#org">Organization</a><a href="#int">Interrupts</a><a href="#store">Boot &amp; Storage</a><a href="#dma">DMA</a><a href="#types">Types of OS</a><a href="#mode">Dual-Mode &amp; Timer</a><a href="#mgmt">Management</a><a href="#sum">Summary</a><a href="#quiz">Quiz</a>
+</div></nav>
+
+<header><div class="wrap hero">
+<div>
+<h1>Operating Systems<br>Chapter 1: Introduction</h1>
+<p>A complete, easy-to-follow study guide: every concept from the slides explained in plain English, with interactive demos, a summary, and a quiz that tells you instantly if you are right or wrong.</p>
+<a class="btn" href="#what">Start studying</a><a class="btn o" href="#quiz">Jump to quiz</a>
+</div>
+<div class="chipbox" aria-hidden="true"><div class="chip" id="chip"></div></div>
+</div></header>
+
+<main>
+<section id="what"><div class="wrap">
+<h2>1. What Operating Systems Do</h2>
+<p class="lead">The big picture: what an OS is and why every computer needs one.</p>
+<div class="card"><h3>Definition</h3>
+An <b>operating system (OS)</b> is software that <b>manages a computer’s hardware</b>. It provides a basis for application programs and acts as an <b>intermediary</b> between the computer user and the hardware.
+<div class="stack" style="margin-top:14px"><div>Users</div><div>Application programs (browser, games, Word)</div><div>Operating System (kernel)</div><div>Hardware (CPU, memory, I/O devices)</div></div>
+</div>
+<div class="grid">
+<div class="card"><h3>The kernel</h3>The one program that is <b>running at all times</b> on the computer is the <b>kernel</b>. It is the core part of the operating system.</div>
+<div class="card"><h3>OS goals</h3><ul><li>Execute user programs and make solving user problems easier</li><li>Make the computer system <b>convenient</b> to use</li><li>Use the hardware in an <b>efficient</b> manner</li></ul></div>
+</div>
+<div class="card"><h3>Chapter objectives</h3><ul><li>Describe the general organization of a computer system and the role of <b>interrupts</b></li><li>Describe the components of a modern <b>multiprocessor</b> system</li><li>Illustrate the transition from <b>user mode to kernel mode</b></li><li>Discuss how operating systems are used in various computing environments</li><li>Give examples of free and open-source operating systems</li></ul></div>
+</div></section>
+
+<section id="org"><div class="wrap">
+<h2>2. Computer-System Organization</h2>
+<p class="lead">How the CPU, memory and devices are connected and work together.</p>
+<div class="card"><h3>How the parts connect</h3>
+One or more <b>CPUs</b> and <b>device controllers</b> are connected through a common <b>bus</b> that gives access to <b>shared memory</b>. The CPUs and devices run <b>concurrently</b> and compete for memory cycles.
+<div class="bus"><span>CPU 1</span><span>CPU 2</span><span>Memory</span><span>Disk controller</span><span>USB controller</span><span>Graphics adapter</span></div>
+<div class="wire"></div><div style="text-align:center;color:var(--mut);font-size:14px">Common system bus</div>
+</div>
+<div class="grid">
+<div class="card"><h3>Device controller = hardware</h3>Each controller is in charge of <b>one particular device type</b> and has a <b>local buffer</b> (temporary storage). Example: <b>USB</b> = Universal Serial Bus.</div>
+<div class="card"><h3>Device driver = software</h3>Each controller type has an OS <b>device driver</b> to manage it. It provides a <b>uniform interface</b> between the controller and the kernel.</div>
+</div>
+<div class="card"><h3>How an I/O operation works</h3><ul>
+<li>I/O devices and the CPU can <b>execute concurrently</b>.</li>
+<li>The CPU moves data <b>between main memory and the controller’s local buffers</b>.</li>
+<li>I/O itself goes from the <b>device to the local buffer</b> of the controller.</li>
+<li>When finished, the controller informs the CPU by causing an <b>interrupt</b>.</li></ul></div>
+</div></section>
+
+<section id="int"><div class="wrap">
+<h2>3. Interrupts</h2>
+<p class="lead">The mechanism that makes an OS “interrupt driven”.</p>
+<div class="card"><h3>What is an interrupt?</h3>
+A signal emitted by <b>hardware or software</b> when a process or event needs <b>immediate attention</b>. It alerts the processor to a high-priority event that requires interrupting the current work.
+<ul><li>The interrupt is handled by the <b>Interrupt Service Routine (ISR)</b>.</li>
+<li>The processor first <b>completes the current instruction i</b>, then loads the <b>Program Counter (PC)</b> with the address of the ISR’s first instruction.</li>
+<li>The address of the interrupted instruction is <b>saved</b> in a temporary location, so the CPU can continue with <b>i+1</b> afterwards.</li></ul></div>
+<div class="grid">
+<div class="card"><h3>Common functions</h3><ul><li>Control transfers to the ISR through the <b>interrupt vector</b>, which holds the <b>addresses of all service routines</b></li><li>The architecture must <b>save the address</b> of the interrupted instruction</li><li>An <b>operating system is interrupt driven</b></li></ul></div>
+<div class="card"><h3>Trap / exception</h3>A <b>software-generated interrupt</b> caused either by an <b>error</b> (e.g. divide by zero) or by a <b>user request</b> (system call).</div>
+</div>
+<div class="card"><h3>Interactive: interrupt handling step by step</h3>
+<ol class="steps" id="isteps">
+<li>CPU is running a user program (instruction i).</li>
+<li>A device controller finishes its job and raises an <b>interrupt</b>.</li>
+<li>CPU finishes instruction i; OS <b>saves the state</b> (registers + program counter).</li>
+<li>OS <b>determines the interrupt type</b> and uses the <b>interrupt vector</b> to jump to the right ISR.</li>
+<li>The ISR (separate code for each interrupt type) runs and handles the event.</li>
+<li>State is <b>restored</b> and the CPU <b>resumes</b> the program at i+1.</li></ol>
+<button class="btn" id="inext">Next step</button><button class="btn o" id="ireset">Reset</button></div>
+</div></section>
+
+<section id="store"><div class="wrap">
+<h2>4. Computer Startup &amp; Storage Hierarchy</h2>
+<p class="lead">How a computer wakes up, and why memory comes in layers.</p>
+<div class="card"><h3>Bootstrap program</h3><ul><li>Loaded at <b>power-up or reboot</b></li><li>Stored in <b>ROM or EPROM</b>, generally known as <b>firmware</b></li><li><b>Initializes</b> all aspects of the system</li><li><b>Loads the OS kernel</b> and starts its execution</li></ul></div>
+<div class="card"><h3>Storage hierarchy</h3>Storage is organized in a hierarchy by <b>speed</b>, <b>cost</b> and <b>volatility</b>.
+<div class="pyr" style="margin-top:12px"><div>Registers</div><div>Cache</div><div>Main memory (RAM) – volatile</div><div>Solid-state / electronic disk</div><div>Hard disk, optical disk, magnetic tape – non-volatile</div></div>
+<div class="axis"><span>▲ Faster, more expensive per bit, smaller</span><span>▼ Slower, cheaper, larger</span></div>
+<div class="tip"><b>Caching</b> = copying information into a faster storage system. Main memory can be viewed as a <b>cache for secondary storage</b>. <b>Volatile</b> storage loses its contents when power is off.</div></div>
+</div></section>
+
+<section id="dma"><div class="wrap">
+<h2>5. Direct Memory Access (DMA)</h2>
+<p class="lead">Letting fast devices talk to memory without bothering the CPU.</p>
+<div class="card">
+<b>DMA</b> allows an I/O device to send or receive data <b>directly to or from main memory, bypassing the CPU</b>. It is managed by a chip called the <b>DMA controller (DMAC)</b>.
+<ul><li>Used for <b>high-speed I/O devices</b> that transfer at close to memory speed.</li>
+<li>The device controller moves <b>whole blocks</b> of data from its buffer straight to main memory <b>without CPU intervention</b>.</li>
+<li><b>Only one interrupt per block</b> is generated, instead of one interrupt per byte.</li></ul>
+<div class="tip">Result: the CPU is free to do other work while data is being transferred.</div></div>
+</div></section>
+
+<section id="types"><div class="wrap">
+<h2>6. Types of Operating Systems</h2>
+<p class="lead">Tap each type to open it.</p>
+<details open><summary>1. Batch OS</summary><div>The user does <b>not interact</b> with the computer directly. An <b>operator</b> groups jobs with similar requirements into <b>batches</b> and submits them. <br><b>Examples:</b> payroll systems, bank statement systems.</div></details>
+<details><summary>2. Multiprogrammed OS</summary><div><b>More than one job</b> is in main memory at the same time. When the running job waits for I/O (the CPU would be idle), the OS <b>switches to another job</b> in memory. This keeps the <b>CPU busy</b>.</div></details>
+<details><summary>3. Time-Sharing OS (Multitasking)</summary><div>Each task gets a small slice of CPU time called a <b>quantum</b>. When it expires, the OS switches to the next task, so every user feels like they own the whole system. Tasks can come from one user or many.</div></details>
+<details><summary>4. Distributed OS</summary><div>Connects <b>multiple computers</b> through a common communication network. Each system has its <b>own CPU and memory</b>, and <b>remote access</b> is available.</div></details>
+<details><summary>5. Network OS</summary><div>Connects <b>autonomous computers</b> over a network to support workstations and <b>share databases, applications, files and printers</b>. <br><b>Examples:</b> Windows Server 2003/2008, UNIX, Linux, Mac OS X.</div></details>
+<details><summary>6. Real-Time OS (RTOS)</summary><div>Serves real-time systems where the <b>response time</b> (time to process and respond to input) must be very small.<ul><li><b>Hard real-time:</b> strict deadlines; even the shortest delay is unacceptable (automatic parachutes, airbags). Virtual memory is rarely found.</li><li><b>Soft real-time:</b> time constraints are less strict.</li></ul></div></details>
+<details><summary>7. Multiprocessor OS</summary><div>Used on systems with <b>multiple processors</b> to increase speed and computing power.<ul><li><b>Advantages:</b> parallel execution, higher <b>throughput</b>, <b>reliability</b> (if one processor fails the system keeps working).</li><li><b>Disadvantages:</b> <b>high cost</b> and more complex (scheduling issues).</li></ul></div></details>
+</div></section>
+
+<section id="mode"><div class="wrap">
+<h2>7. Dual-Mode Operation &amp; Timer</h2>
+<p class="lead">How the OS protects itself and keeps control of the CPU.</p>
+<div class="card"><h3>Dual-mode operation</h3>Lets the OS <b>protect itself and other system components</b> using two modes, selected by a <b>mode bit</b> provided by hardware: <b>user mode</b> (running a user program) and <b>kernel mode</b> (kernel code executing).
+<div class="demo" style="margin-top:14px"><div class="mode" id="mbox">USER MODE · bit 1</div><button class="btn" id="msys">System call (trap)</button><button class="btn o" id="mret">Return to user</button></div>
+<div class="tip" id="mtxt">A user program is running. It cannot run privileged instructions directly.</div></div>
+<div class="card"><h3>Timer</h3>Prevents an <b>infinite loop</b> or a process hogging resources.<ul><li>The timer is set to <b>interrupt the computer</b> after some period.</li><li>A <b>counter</b> is decremented by the physical clock; the OS sets it (a <b>privileged instruction</b>).</li><li>When the counter reaches <b>zero</b>, an interrupt is generated.</li><li>Set up <b>before scheduling</b> a process, so the OS can regain control or terminate a program that exceeds its time.</li></ul>
+<div class="demo"><div class="mode" id="tbox">Counter: 5</div><button class="btn" id="tgo">Start timer</button></div><div class="tip" id="ttxt">Press start to watch the counter drop to zero.</div></div>
+</div></section>
+
+<section id="mgmt"><div class="wrap">
+<h2>8. Resource Management</h2>
+<p class="lead">Process, memory and I/O management.</p>
+<div class="card"><h3>Process management</h3><ul><li>A <b>process is a program in execution</b>, a unit of work. A program is <b>passive</b>; a process is <b>active</b>.</li><li>Needs resources: CPU, memory, I/O, files, initialization data. These are reclaimed on termination.</li><li><b>Single-threaded</b> process: one program counter. <b>Multi-threaded</b>: one program counter <b>per thread</b>.</li><li>Many processes (user and OS) run concurrently on one or more CPUs.</li></ul>
+<b>OS activities:</b> creating and deleting user and system processes; <b>suspending and resuming</b>; process <b>synchronization</b>; process <b>communication</b>; <b>deadlock handling</b>.</div>
+<div class="card"><h3>Memory management</h3>To run a program, its instructions and data (all or part) must be <b>in memory</b>. Goal: optimize CPU utilization and response time. Activities:<ul><li>Keep track of which parts of memory are used, and by whom</li><li>Decide which processes and data to move <b>into and out of</b> memory</li><li><b>Allocate and deallocate</b> memory space as needed</li></ul></div>
+<div class="card"><h3>I/O subsystem</h3>One purpose of the OS is to <b>hide the peculiarities of hardware devices</b> from the user. The I/O subsystem handles:<ul><li><b>Buffering</b> – temporarily storing data while it is transferred</li><li><b>Caching</b> – keeping parts of data in faster storage for performance</li><li><b>Spooling</b> – overlapping the output of one job with the input of other jobs</li></ul></div>
+</div></section>
+
+<section id="sum"><div class="wrap">
+<h2>9. Chapter Summary</h2>
+<p class="lead">Review this right before the exam.</p>
+<div class="card"><ul>
+<li>The <b>OS</b> manages hardware and sits between users and hardware; the <b>kernel</b> always runs.</li>
+<li>CPUs and <b>device controllers</b> share memory over a <b>bus</b>; <b>drivers</b> (software) manage controllers (hardware).</li>
+<li><b>Interrupts</b> signal events: save state → find ISR via <b>interrupt vector</b> → run ISR → resume. A <b>trap</b> is a software interrupt.</li>
+<li>The <b>bootstrap program</b> (firmware in ROM/EPROM) loads the kernel at startup.</li>
+<li>Storage hierarchy: faster = costlier and smaller. <b>Caching</b> copies data to faster storage.</li>
+<li><b>DMA</b> moves blocks directly between device and memory: one interrupt per block.</li>
+<li>OS types: <b>Batch, Multiprogrammed, Time-sharing, Distributed, Network, Real-time, Multiprocessor</b>.</li>
+<li><b>Dual-mode</b> (user/kernel, mode bit) and the <b>timer</b> protect the system.</li>
+<li>OS manages <b>processes, memory and I/O</b> (buffering, caching, spooling).</li></ul></div>
+<div class="card scroll"><h3>Quick comparisons</h3>
+<table><tr><th>Concept A</th><th>Concept B</th></tr>
+<tr><td><b>Device controller</b>: hardware, has a local buffer</td><td><b>Device driver</b>: software in the OS</td></tr>
+<tr><td><b>Program</b>: passive entity</td><td><b>Process</b>: active entity (program in execution)</td></tr>
+<tr><td><b>Single-threaded</b>: 1 program counter</td><td><b>Multi-threaded</b>: 1 program counter per thread</td></tr>
+<tr><td><b>Hard real-time</b>: strict, no delay allowed</td><td><b>Soft real-time</b>: less strict</td></tr>
+<tr><td><b>Distributed OS</b>: many computers, own CPU and memory each</td><td><b>Multiprocessor OS</b>: one system, many processors</td></tr>
+<tr><td><b>Interrupt</b>: hardware or software signal</td><td><b>Trap</b>: software-generated (error or user request)</td></tr>
+<tr><td><b>Buffering</b>: temporary storage during transfer</td><td><b>Caching</b>: copy in faster storage</td></tr></table></div>
+</div></section>
+
+<section id="quiz"><div class="wrap">
+<h2>10. Interactive Quiz</h2>
+<p class="lead">Tap an answer. Green means correct, red means wrong, and the right answer is always explained.</p>
+<div class="card"><span id="score">Score: 0 / 0</span> <span style="color:var(--mut)" id="prog"></span><div id="bar"><i></i></div>
+<button class="btn" id="shuf">Shuffle &amp; restart</button><button class="btn o" id="rst">Restart</button></div>
+<div id="qs"></div>
+<div class="card" id="final" style="display:none"></div>
+</div></section>
+</main>
+<footer>Based on the slides of Chapter 1: Introduction · Operating Systems (501471)</footer>
+
+<script>
+(function(){
+var $=function(s){return document.querySelector(s)};
+/* background circuit pulses */
+var cv=$("#bg"),cx=cv.getContext("2d"),W,H,P=[],S=40,rm=matchMedia("(prefers-reduced-motion:reduce)").matches;
+function rs(){W=cv.width=innerWidth;H=cv.height=innerHeight}rs();addEventListener("resize",rs);
+function np(){var h=Math.random()<.5;return{x:Math.floor(Math.random()*W/S)*S,y:Math.floor(Math.random()*H/S)*S,dx:h?(Math.random()<.5?1:-1):0,dy:h?0:(Math.random()<.5?1:-1),n:0}}
+for(var i=0;i<26;i++)P.push(np());
+function fr(){cx.fillStyle="rgba(4,7,5,.12)";cx.fillRect(0,0,W,H);
+P.forEach(function(p,i){cx.strokeStyle="rgba(157,255,176,.85)";cx.lineWidth=2;cx.beginPath();cx.moveTo(p.x,p.y);p.x+=p.dx*2;p.y+=p.dy*2;cx.lineTo(p.x,p.y);cx.stroke();p.n+=2;
+if(p.n%S==0&&Math.random()<.35){var t=p.dx;p.dx=p.dy*(Math.random()<.5?1:-1);p.dy=t*(Math.random()<.5?1:-1)}
+if(p.x<0||p.y<0||p.x>W||p.y>H||p.n>600)P[i]=np()});
+if(!rm)requestAnimationFrame(fr)}
+cx.fillStyle="#040705";cx.fillRect(0,0,innerWidth,innerHeight);if(!rm)fr();
+cv.style.opacity=.45;
+/* chip */
+var chip=$("#chip"),cores=[];
+for(var i=0;i<25;i++){var d=document.createElement("div");d.className="core";var r=Math.floor(i/5),c=i%5;
+if(r>=1&&r<=3&&c>=1&&c<=3){if(r==1&&c==1){d.className="core os";d.textContent="OS"}else continue}else cores.push(d);chip.appendChild(d)}
+if(!rm)setInterval(function(){cores.forEach(function(c){c.classList.toggle("on",Math.random()<.3)})},450);
+/* interrupt steps */
+var is=document.querySelectorAll("#isteps li"),ic=-1;
+function ish(){is.forEach(function(l,i){l.classList.toggle("a",i==ic)})}
+$("#inext").onclick=function(){ic=(ic+1)%is.length;ish()};$("#ireset").onclick=function(){ic=-1;ish()};
+/* mode */
+function mset(k){$("#mbox").className="mode"+(k?" k":"");$("#mbox").textContent=k?"KERNEL MODE · bit 0":"USER MODE · bit 1";
+$("#mtxt").textContent=k?"The trap switched the mode bit to kernel. The OS can now run privileged instructions for the request.":"A user program is running. It cannot run privileged instructions directly."}
+$("#msys").onclick=function(){mset(true)};$("#mret").onclick=function(){mset(false)};
+/* timer */
+var tm=null;
+$("#tgo").onclick=function(){clearInterval(tm);var n=5;$("#tbox").className="mode";$("#tbox").textContent="Counter: "+n;$("#ttxt").textContent="OS set the counter (privileged). Clock is counting down…";
+tm=setInterval(function(){n--;$("#tbox").textContent="Counter: "+n;if(n<=0){clearInterval(tm);$("#tbox").className="mode k";$("#ttxt").textContent="Counter is zero → interrupt! The OS regains control and can switch or terminate the process."}},800)};
+/* quiz */
+var TF=["True","False"];
+var Q=[
+["What is an operating system?",["Software that manages hardware and acts as an intermediary between user and hardware","A type of CPU","An application that only edits documents","A storage device"],0,"An OS manages the computer’s hardware and provides a base for application programs."],
+["The kernel is the one program running at all times on the computer.",TF,0,"True. The kernel is the core of the OS and is always running."],
+["Which is NOT a goal of an operating system?",["Execute user programs","Make the computer convenient to use","Use hardware efficiently","Make hardware more expensive"],3,"Goals: run programs, be convenient, and be efficient. Cost is not an OS goal."],
+["A device controller is ____ and a device driver is ____.",["hardware; software","software; hardware","hardware; hardware","software; software"],0,"The controller is hardware with a local buffer; the driver is OS software that manages it."],
+["I/O devices and the CPU can execute concurrently.",TF,0,"True. Both run at the same time and compete for memory cycles."],
+["During I/O, data first moves from the device to…",["The controller’s local buffer","The CPU registers","The hard disk","ROM"],0,"I/O is from the device to the local buffer of the controller; the CPU then moves it to or from main memory."],
+["How does a device controller tell the CPU it has finished?",["By causing an interrupt","By rebooting the system","By deleting its buffer","By running the compiler"],0,"The controller informs the CPU by generating an interrupt."],
+["The interrupt vector contains…",["Addresses of all the interrupt service routines","The user’s passwords","All running processes","The data of the disk"],0,"The vector is a table of addresses of the service routines (ISRs)."],
+["A trap (exception) is a hardware-generated interrupt.",TF,1,"False. A trap is a software-generated interrupt caused by an error or a user request."],
+["What must the interrupt architecture save?",["The address of the interrupted instruction","The size of the disk","The monitor resolution","The ISR’s name"],0,"It saves the interrupted instruction’s address so execution can resume afterwards."],
+["An operating system is…",["Interrupt driven","Batch driven only","Disk driven","Keyboard driven only"],0,"Modern operating systems are interrupt driven."],
+["What does the OS do first when handling an interrupt?",["Preserves the CPU state (registers and program counter)","Shuts down the device","Formats memory","Deletes the process"],0,"The state is saved so the interrupted program can resume correctly."],
+["Where is the bootstrap program typically stored?",["ROM or EPROM (firmware)","Hard disk only","Cache","Tape"],0,"It is stored in ROM/EPROM, known as firmware, so it is available at power-up."],
+["What does the bootstrap program do?",["Initializes the system and loads the OS kernel","Compiles user programs","Prints documents","Backs up files"],0,"It initializes all aspects of the system, then loads the kernel and starts it."],
+["Which order goes from fastest to slowest storage?",["Registers → Cache → Main memory → Disk","Disk → Main memory → Cache → Registers","Cache → Disk → Registers → Memory","Main memory → Registers → Disk → Cache"],0,"Higher in the hierarchy means faster, smaller and costlier per bit."],
+["Main memory can be viewed as a cache for secondary storage.",TF,0,"True. Caching means copying data into faster storage; RAM caches disk data."],
+["Moving DOWN the storage hierarchy (registers → tape), what generally happens?",["Speed decreases, cost per bit decreases, capacity increases","Speed increases and cost increases","Everything stays the same","Speed increases, capacity decreases"],0,"Lower levels are slower and cheaper, with larger capacity."],
+["Which storage is volatile?",["Main memory (RAM)","Hard disk","Magnetic tape","ROM"],0,"RAM loses its contents when power is lost."],
+["What is the purpose of DMA?",["Move data between I/O devices and memory without CPU involvement for each transfer","Increase the CPU clock","Encrypt files","Replace the OS"],0,"DMA bypasses the CPU so high-speed devices can transfer data directly to memory."],
+["With DMA, an interrupt is generated…",["Once per block of data","Once per byte","Never","Once per second"],0,"Only one interrupt per block, instead of one per byte."],
+["With DMA, the CPU must copy every byte from the device to memory.",TF,1,"False. The DMA controller moves the data without CPU intervention."],
+["Which is an example of a Batch OS?",["Payroll system","Airbag controller","Smartphone","Web browser"],0,"Payroll and bank statement systems process similar jobs in batches without user interaction."],
+["In a multiprogrammed OS, what happens when the running job waits for I/O?",["The OS switches the CPU to another job in memory","The CPU stays idle","The system shuts down","The job is deleted"],0,"Switching to another job keeps the CPU busy."],
+["Time-sharing systems are also called multitasking, and the time each task gets is called…",["Quantum","Buffer","Kernel","Spool"],0,"The time slice given to each task is the quantum."],
+["In a distributed OS, each system has its own CPU and memory.",TF,0,"True. Multiple computers are connected through a communication network."],
+["Which is an example of a Network OS?",["Windows Server or UNIX/Linux","Automatic parachute controller","Bootstrap program","Device driver"],0,"Network OSs support sharing files, printers, databases and applications."],
+["Which system needs a HARD real-time OS?",["Car airbag","Payroll","Word processor","Photo gallery"],0,"Hard real-time systems cannot tolerate even the shortest delay (airbags, automatic parachutes)."],
+["Soft real-time systems have strict time constraints where any delay is unacceptable.",TF,1,"False. Soft real-time constraints are less strict; strict ones are hard real-time."],
+["Which is a disadvantage of a multiprocessor OS?",["High cost and more complexity","Lower throughput","Lower reliability","No parallelism"],0,"Advantages: parallelism, throughput, reliability. Disadvantages: cost and scheduling complexity."],
+["What provides the user/kernel distinction?",["The mode bit, provided by hardware","The file name","The monitor","The keyboard"],0,"The hardware mode bit says whether user code or kernel code is running."],
+["What is the purpose of the timer?",["Prevent infinite loops and process hogging, so the OS regains control","Show the time of day","Speed up the disk","Encrypt memory"],0,"When the counter hits zero an interrupt returns control to the OS."],
+["Setting the timer counter is a privileged instruction.",TF,0,"True. Only the OS (kernel mode) may set it, so users cannot disable it."],
+["Which statement is correct?",["A program is passive; a process is active","A program is active; a process is passive","Both are passive","Both are the same thing"],0,"A process is a program in execution."],
+["A multi-threaded process has…",["One program counter per thread","Only one program counter","No program counter","One per CPU only"],0,"A single-threaded process has one program counter; multi-threaded has one per thread."],
+["Which is a process-management activity of the OS?",["Suspending and resuming processes","Manufacturing RAM","Designing keyboards","Printing manuals"],0,"Also: create/delete, synchronization, communication and deadlock handling."],
+["Which is a memory-management activity?",["Allocating and deallocating memory space as needed","Creating disk platters","Setting the monitor brightness","Charging the battery"],0,"The OS tracks used memory, decides what moves in/out, and allocates space."],
+["Spooling means…",["Overlapping the output of one job with the input of other jobs","Storing data in faster storage","Temporarily holding data during a transfer","Setting a timer"],0,"Buffering = temporary holding; caching = faster storage copy; spooling = overlapping output and input of jobs."]
+];
+var order=[],cur=0,ok=0,ans=0;
+function sh(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
+function build(s){order=Q.map(function(_,i){return i});if(s)sh(order);ok=0;ans=0;$("#final").style.display="none";var box=$("#qs");box.innerHTML="";
+order.forEach(function(qi,n){var q=Q[qi],d=document.createElement("div");d.className="q";
+var p=document.createElement("p");p.innerHTML="<small>"+(ar?"السؤال "+(n+1)+" من "+Q.length:"Question "+(n+1)+" of "+Q.length)+"</small><br>";p.appendChild(document.createTextNode(ar?AQ[qi][0]:q[0]));d.appendChild(p);
+var ix=q[1].map(function(_,i){return i});if(q[1]!==TF)sh(ix);
+var fb=document.createElement("div");fb.className="fb";var bs=[];
+ix.forEach(function(oi){var b=document.createElement("button");b.className="opt";b.textContent=(ar&&q[1]===TF)?(oi?"غلط":"صح"):q[1][oi];bs.push([b,oi]);
+b.onclick=function(){bs.forEach(function(x){x[0].disabled=true;if(x[1]==q[2])x[0].classList.add("ok")});
+var good=oi==q[2];if(!good)b.classList.add("no");ans++;if(good)ok++;
+fb.className="fb show "+(good?"ok":"no");var ra=(ar&&q[1]===TF)?(q[2]?"غلط":"صح"):q[1][q[2]];fb.innerHTML="<b>"+(good?(ar?"صح ✓":"Correct ✓"):(ar?"غلط ✗":"Wrong ✗"))+"</b> "+(good?"":(ar?"الإجابة الصحيحة: “"+ra+"”. ":"The right answer is “"+ra+"”. "));fb.appendChild(document.createTextNode(ar?AQ[qi][1]:q[3]));upd()};
+d.appendChild(b)});d.appendChild(fb);box.appendChild(d)});upd()}
+function upd(){$("#score").textContent=(ar?"النتيجة: ":"Score: ")+ok+" / "+ans;$("#prog").textContent=" · "+ans+(ar?" من "+Q.length+" تمت الإجابة":" of "+Q.length+" answered");$("#bar i").style.width=(ans/Q.length*100)+"%";
+if(ans==Q.length){var f=$("#final"),pc=Math.round(ok/Q.length*100);f.style.display="block";f.dir=ar?"rtl":"ltr";f.innerHTML="<h3>"+(ar?"انتهيت! ":"Finished! ")+ok+" / "+Q.length+" ("+pc+"%)</h3>"+(ar?(pc>=85?"عمل ممتاز، أنت جاهز للامتحان.":pc>=60?"جيد. راجع الأقسام التي أخطأت فيها ثم أعد المحاولة.":"أعد قراءة الدليل والملخص ثم اخلط الأسئلة وجرّب مرة أخرى."):(pc>=85?"Excellent work, you are ready for the exam.":pc>=60?"Good job. Review the sections you missed, then try again.":"Re-read the guide and the summary, then shuffle and try again."))}}
+$("#shuf").onclick=function(){build(true);scrollTo({top:$("#quiz").offsetTop})};$("#rst").onclick=function(){build(false);scrollTo({top:$("#quiz").offsetTop})};
+var ar=false;
+var AR={
+what:`<h2>1. ماذا يفعل نظام التشغيل (What Operating Systems Do)</h2><p class="lead">الصورة الكبيرة: ما هو نظام التشغيل ولماذا يحتاجه كل حاسوب.</p>
+<div class="card"><h3>التعريف</h3>نظام التشغيل (<b>OS</b>) هو برنامج <b>يدير عتاد الحاسوب (hardware)</b>، ويوفّر أساساً لعمل برامج التطبيقات، ويعمل <b>كوسيط</b> بين المستخدم والعتاد.<div class="stack" style="margin-top:14px"><div>المستخدمون</div><div>برامج التطبيقات (متصفح، ألعاب، Word)</div><div>نظام التشغيل (Kernel)</div><div>العتاد (CPU، الذاكرة، أجهزة الإدخال والإخراج)</div></div></div>
+<div class="grid"><div class="card"><h3>النواة (Kernel)</h3>هي البرنامج الوحيد الذي <b>يعمل طوال الوقت</b> على الحاسوب، وهي الجزء الأساسي من نظام التشغيل.</div>
+<div class="card"><h3>أهداف نظام التشغيل</h3><ul><li>تنفيذ برامج المستخدم وتسهيل حل مشاكله</li><li>جعل الحاسوب <b>مريحاً</b> في الاستخدام</li><li>استخدام العتاد بـ<b>كفاءة</b></li></ul></div></div>
+<div class="card"><h3>أهداف الشابتر (Objectives)</h3><ul><li>وصف التنظيم العام لنظام الحاسوب ودور <b>المقاطعات (interrupts)</b></li><li>وصف مكونات النظام الحديث متعدد المعالجات (<b>multiprocessor</b>)</li><li>توضيح الانتقال من <b>user mode إلى kernel mode</b></li><li>مناقشة استخدام أنظمة التشغيل في بيئات الحوسبة المختلفة</li><li>إعطاء أمثلة على أنظمة التشغيل الحرة ومفتوحة المصدر</li></ul></div>`,
+org:`<h2>2. تنظيم نظام الحاسوب (Computer-System Organization)</h2><p class="lead">كيف ترتبط المعالجات والذاكرة والأجهزة وتعمل معاً.</p>
+<div class="card"><h3>كيف ترتبط الأجزاء</h3>يرتبط معالج واحد أو أكثر (<b>CPUs</b>) مع <b>متحكمات الأجهزة (device controllers)</b> عبر ناقل مشترك (<b>bus</b>) يتيح الوصول إلى <b>ذاكرة مشتركة</b>. تعمل المعالجات والأجهزة <b>بالتزامن (concurrently)</b> وتتنافس على دورات الذاكرة.<div class="bus"><span>معالج 1</span><span>معالج 2</span><span>الذاكرة</span><span>متحكم القرص</span><span>متحكم USB</span><span>بطاقة الرسوميات</span></div><div class="wire"></div><div style="text-align:center;color:var(--mut);font-size:14px">الناقل المشترك (Common bus)</div></div>
+<div class="grid"><div class="card"><h3>Device controller = عتاد (hardware)</h3>كل متحكم مسؤول عن <b>نوع واحد من الأجهزة</b> ولديه <b>ذاكرة مؤقتة محلية (local buffer)</b>. مثال: <b>USB</b> = Universal Serial Bus.</div>
+<div class="card"><h3>Device driver = برمجية (software)</h3>لكل نوع متحكم <b>مشغّل (driver)</b> ضمن نظام التشغيل يديره، ويوفّر <b>واجهة موحّدة</b> بين المتحكم والنواة.</div></div>
+<div class="card"><h3>كيف تعمل عملية الإدخال والإخراج (I/O)</h3><ul><li>أجهزة I/O والـ CPU يمكنها <b>العمل بالتزامن</b>.</li><li>ينقل الـ CPU البيانات <b>بين الذاكرة الرئيسية والـ local buffer</b> للمتحكم.</li><li>عملية I/O نفسها تتم <b>من الجهاز إلى الـ local buffer</b> الخاص بالمتحكم.</li><li>عند الانتهاء يُعلِم المتحكم الـ CPU عبر <b>مقاطعة (interrupt)</b>.</li></ul></div>`,
+int:`<h2>3. المقاطعات (Interrupts)</h2><p class="lead">الآلية التي تجعل نظام التشغيل “interrupt driven”.</p>
+<div class="card"><h3>ما هي المقاطعة؟</h3>إشارة يرسلها <b>العتاد أو البرمجيات</b> عندما تحتاج عملية أو حدث إلى <b>انتباه فوري</b>. تنبّه المعالج إلى حدث عالي الأولوية يتطلب إيقاف العمل الحالي.<ul><li>تتم معالجتها بواسطة <b>Interrupt Service Routine (ISR)</b>.</li><li>يُكمل المعالج أولاً <b>تنفيذ التعليمة الحالية i</b>، ثم يضع في <b>Program Counter (PC)</b> عنوان أول تعليمة في الـ ISR.</li><li>يُحفظ عنوان التعليمة المقاطَعة في مكان مؤقت، ليتمكن المعالج بعدها من المتابعة من التعليمة <b>i+1</b>.</li></ul></div>
+<div class="grid"><div class="card"><h3>وظائف شائعة</h3><ul><li>ينتقل التحكم إلى الـ ISR عبر <b>interrupt vector</b> الذي يحتوي <b>عناوين جميع روتينات الخدمة</b></li><li>يجب أن تحفظ البنية <b>عنوان التعليمة</b> المقاطَعة</li><li><b>نظام التشغيل مُوجَّه بالمقاطعات (interrupt driven)</b></li></ul></div>
+<div class="card"><h3>Trap / exception</h3><b>مقاطعة تولّدها البرمجيات</b> بسبب <b>خطأ</b> (مثل القسمة على صفر) أو <b>طلب من المستخدم</b> (system call).</div></div>
+<div class="card"><h3>تجربة تفاعلية: معالجة المقاطعة خطوة بخطوة</h3><ol class="steps" id="aisteps"><li>الـ CPU ينفذ برنامج المستخدم (التعليمة i).</li><li>متحكم الجهاز ينهي عمله ويرسل <b>مقاطعة</b>.</li><li>يُكمل الـ CPU التعليمة i، ويقوم النظام بـ<b>حفظ الحالة</b> (المسجلات + program counter).</li><li>يحدد النظام <b>نوع المقاطعة</b> ويستخدم الـ <b>interrupt vector</b> للقفز إلى الـ ISR المناسب.</li><li>يعمل الـ ISR (كود منفصل لكل نوع مقاطعة) ويعالج الحدث.</li><li>تُستعاد الحالة و<b>يتابع</b> الـ CPU البرنامج من i+1.</li></ol><button class="btn" id="ainext">الخطوة التالية</button><button class="btn o" id="aireset">إعادة</button></div>`,
+store:`<h2>4. إقلاع الحاسوب وهرمية التخزين</h2><p class="lead">كيف يستيقظ الحاسوب، ولماذا تأتي الذاكرة في طبقات.</p>
+<div class="card"><h3>برنامج الإقلاع (Bootstrap)</h3><ul><li>يُحمَّل عند <b>التشغيل أو إعادة التشغيل</b></li><li>مخزّن عادةً في <b>ROM أو EPROM</b> ويُسمى <b>firmware</b></li><li><b>يهيّئ</b> جميع أجزاء النظام</li><li><b>يحمّل نواة نظام التشغيل</b> ويبدأ تنفيذها</li></ul></div>
+<div class="card"><h3>هرمية التخزين (Storage hierarchy)</h3>يُنظَّم التخزين في هرم حسب <b>السرعة</b> و<b>التكلفة</b> و<b>التطايرية (volatility)</b>.<div class="pyr" style="margin-top:12px"><div>Registers</div><div>Cache</div><div>الذاكرة الرئيسية RAM – متطايرة</div><div>Solid-state / electronic disk</div><div>Hard disk، optical disk، magnetic tape – غير متطايرة</div></div><div class="axis"><span>▲ أسرع، أغلى لكل بت، أصغر</span><span>▼ أبطأ، أرخص، أكبر</span></div>
+<div class="tip"><b>Caching</b> = نسخ المعلومات إلى نظام تخزين أسرع. يمكن اعتبار الذاكرة الرئيسية <b>cache للتخزين الثانوي</b>. التخزين <b>المتطاير (volatile)</b> يفقد محتواه عند انقطاع الكهرباء.</div></div>`,
+dma:`<h2>5. الوصول المباشر للذاكرة (DMA)</h2><p class="lead">السماح للأجهزة السريعة بالتعامل مع الذاكرة دون إزعاج الـ CPU.</p>
+<div class="card"><b>DMA</b> تسمح لجهاز I/O بإرسال واستقبال البيانات <b>مباشرة من/إلى الذاكرة الرئيسية دون المرور بالـ CPU</b>. تُدار بشريحة تسمى <b>DMA controller (DMAC)</b>.<ul><li>تُستخدم مع <b>أجهزة I/O عالية السرعة</b> التي تنقل بسرعة قريبة من سرعة الذاكرة.</li><li>ينقل المتحكم <b>كتلاً كاملة (blocks)</b> من بياناته مباشرة إلى الذاكرة <b>دون تدخل الـ CPU</b>.</li><li>تُولَّد <b>مقاطعة واحدة فقط لكل كتلة</b> بدلاً من مقاطعة لكل بايت.</li></ul><div class="tip">النتيجة: يبقى الـ CPU حراً لعمل أشياء أخرى أثناء نقل البيانات.</div></div>`,
+types:`<h2>6. أنواع أنظمة التشغيل</h2><p class="lead">اضغط على كل نوع لفتحه.</p>
+<details open><summary>1. Batch OS (الدفعات)</summary><div>المستخدم <b>لا يتفاعل</b> مع الحاسوب مباشرة. يقوم <b>مشغّل (operator)</b> بتجميع المهام ذات المتطلبات المتشابهة في <b>دفعات (batches)</b> ويرسلها للنظام.<br><b>أمثلة:</b> أنظمة الرواتب، أنظمة كشوف الحسابات البنكية.</div></details>
+<details><summary>2. Multiprogrammed OS</summary><div>يوجد <b>أكثر من مهمة</b> في الذاكرة الرئيسية في نفس الوقت. عندما تنتظر المهمة الجارية عملية I/O (فيصبح الـ CPU عاطلاً)، <b>يبدّل النظام إلى مهمة أخرى</b> في الذاكرة. هكذا يبقى الـ <b>CPU مشغولاً</b>.</div></details>
+<details><summary>3. Time-Sharing OS (تعدد المهام)</summary><div>تحصل كل مهمة على شريحة زمنية صغيرة من الـ CPU تسمى <b>quantum</b>. عند انتهائها يبدّل النظام إلى المهمة التالية، فيشعر كل مستخدم أنه يملك النظام كله. يمكن أن تأتي المهام من مستخدم واحد أو عدة مستخدمين.</div></details>
+<details><summary>4. Distributed OS (الموزّع)</summary><div>يربط <b>عدة حواسيب</b> عبر شبكة اتصال مشتركة. لكل نظام <b>CPU وذاكرة خاصان به</b>، ويتوفر <b>الوصول عن بعد (remote access)</b>.</div></details>
+<details><summary>5. Network OS (الشبكي)</summary><div>يربط <b>حواسيب مستقلة</b> عبر شبكة لدعم محطات العمل و<b>مشاركة قواعد البيانات والتطبيقات والملفات والطابعات</b>.<br><b>أمثلة:</b> Windows Server 2003/2008، UNIX، Linux، Mac OS X.</div></details>
+<details><summary>6. Real-Time OS (الزمن الحقيقي)</summary><div>يخدم أنظمة الزمن الحقيقي حيث يجب أن يكون <b>زمن الاستجابة (response time)</b> صغيراً جداً.<ul><li><b>Hard real-time:</b> قيود زمنية صارمة؛ لا يُقبل أي تأخير ولو صغيراً (الباراشوت الآلي، وسائد الهواء airbags). نادراً ما توجد الذاكرة الافتراضية فيها.</li><li><b>Soft real-time:</b> القيود الزمنية أقل صرامة.</li></ul></div></details>
+<details><summary>7. Multiprocessor OS</summary><div>يُستخدم في الأنظمة ذات <b>عدة معالجات</b> لزيادة السرعة والقدرة الحاسوبية.<ul><li><b>المزايا:</b> تنفيذ متوازٍ، زيادة <b>الإنتاجية (throughput)</b>، <b>الموثوقية</b> (إذا تعطل معالج يستمر النظام).</li><li><b>العيوب:</b> <b>تكلفة عالية</b> وتعقيد أكبر (مشاكل الجدولة).</li></ul></div></details>`,
+mode:`<h2>7. الوضعان (Dual-Mode) والمؤقّت (Timer)</h2><p class="lead">كيف يحمي نظام التشغيل نفسه ويحتفظ بالتحكم في الـ CPU.</p>
+<div class="card"><h3>Dual-mode operation</h3>يسمح للنظام <b>بحماية نفسه ومكونات النظام الأخرى</b> عبر وضعين يحددهما <b>mode bit</b> يوفره العتاد: <b>user mode</b> (تشغيل برنامج مستخدم) و<b>kernel mode</b> (تنفيذ كود النواة).<div class="demo" style="margin-top:14px"><div class="mode" id="amb">USER MODE · bit 1</div><button class="btn" id="amsys">استدعاء نظام (trap)</button><button class="btn o" id="amret">العودة للمستخدم</button></div><div class="tip" id="amtxt">برنامج مستخدم قيد التشغيل. لا يستطيع تنفيذ التعليمات الحساسة (privileged) مباشرة.</div></div>
+<div class="card"><h3>المؤقّت (Timer)</h3>يمنع <b>الحلقات اللانهائية</b> أو استحواذ عملية على الموارد.<ul><li>يُضبط المؤقت لإحداث <b>مقاطعة</b> بعد فترة زمنية.</li><li><b>عدّاد</b> ينقص مع الساعة الفيزيائية؛ ويضبطه النظام (تعليمة <b>privileged</b>).</li><li>عندما يصل العدّاد إلى <b>صفر</b> تُولَّد مقاطعة.</li><li>يُضبط <b>قبل جدولة</b> العملية ليستعيد النظام التحكم أو ينهي برنامجاً تجاوز وقته.</li></ul><div class="demo"><div class="mode" id="atb">العدّاد: 5</div><button class="btn" id="atgo">ابدأ المؤقّت</button></div><div class="tip" id="attxt">اضغط ابدأ لترى العدّاد ينزل إلى الصفر.</div></div>`,
+mgmt:`<h2>8. إدارة الموارد (Resource Management)</h2><p class="lead">إدارة العمليات والذاكرة والـ I/O.</p>
+<div class="card"><h3>إدارة العمليات (Process management)</h3><ul><li><b>العملية (process) هي برنامج قيد التنفيذ</b> ووحدة عمل. البرنامج كيان <b>سلبي (passive)</b> والعملية كيان <b>نشط (active)</b>.</li><li>تحتاج موارد: CPU، ذاكرة، I/O، ملفات، بيانات تهيئة. تُستعاد عند انتهائها.</li><li><b>Single-threaded</b>: program counter واحد. <b>Multi-threaded</b>: program counter <b>لكل thread</b>.</li><li>تعمل عمليات كثيرة (للمستخدم والنظام) بالتزامن على CPU واحد أو أكثر.</li></ul><b>أنشطة النظام:</b> إنشاء وحذف عمليات المستخدم والنظام؛ <b>إيقاف واستئناف</b> العمليات؛ <b>التزامن (synchronization)</b>؛ <b>الاتصال (communication)</b>؛ <b>معالجة الجمود (deadlock)</b>.</div>
+<div class="card"><h3>إدارة الذاكرة (Memory management)</h3>لتنفيذ برنامج يجب أن تكون تعليماته وبياناته (كلها أو جزء منها) <b>في الذاكرة</b>. الهدف: تحسين استغلال الـ CPU وسرعة الاستجابة. الأنشطة:<ul><li>تتبّع أي أجزاء الذاكرة مستخدمة ومن يستخدمها</li><li>تحديد أي العمليات والبيانات <b>تدخل إلى الذاكرة وتخرج منها</b></li><li><b>حجز وتحرير</b> مساحة الذاكرة عند الحاجة</li></ul></div>
+<div class="card"><h3>نظام I/O الفرعي (I/O subsystem)</h3>من أهداف النظام <b>إخفاء خصوصيات الأجهزة</b> عن المستخدم. يتولى:<ul><li><b>Buffering</b> – تخزين البيانات مؤقتاً أثناء نقلها</li><li><b>Caching</b> – إبقاء جزء من البيانات في تخزين أسرع لتحسين الأداء</li><li><b>Spooling</b> – تداخل إخراج مهمة مع إدخال مهام أخرى</li></ul></div>`,
+sum:`<h2>9. ملخص الشابتر</h2><p class="lead">راجعه قبل الامتحان مباشرة.</p>
+<div class="card"><ul><li>الـ <b>OS</b> يدير العتاد ويقف بين المستخدم والعتاد؛ و<b>kernel</b> تعمل دائماً.</li><li>الـ CPUs والـ <b>device controllers</b> تتشارك الذاكرة عبر <b>bus</b>؛ و<b>drivers</b> (برمجية) تدير المتحكمات (عتاد).</li><li><b>Interrupts</b> تنبّه لوقوع حدث: حفظ الحالة ← إيجاد الـ ISR عبر <b>interrupt vector</b> ← تنفيذه ← المتابعة. والـ <b>trap</b> مقاطعة برمجية.</li><li><b>Bootstrap program</b> (firmware في ROM/EPROM) يحمّل النواة عند الإقلاع.</li><li>هرمية التخزين: الأسرع أغلى وأصغر. <b>Caching</b> ينسخ البيانات إلى تخزين أسرع.</li><li><b>DMA</b> تنقل الكتل مباشرة بين الجهاز والذاكرة: مقاطعة واحدة لكل كتلة.</li><li>أنواع الأنظمة: <b>Batch، Multiprogrammed، Time-sharing، Distributed، Network، Real-time، Multiprocessor</b>.</li><li><b>Dual-mode</b> (user/kernel وmode bit) و<b>timer</b> يحميان النظام.</li><li>النظام يدير <b>العمليات والذاكرة والـ I/O</b> (buffering، caching، spooling).</li></ul></div>
+<div class="card scroll"><h3>مقارنات سريعة</h3><table><tr><th>المفهوم أ</th><th>المفهوم ب</th></tr>
+<tr><td><b>Device controller</b>: عتاد، لديه local buffer</td><td><b>Device driver</b>: برمجية داخل النظام</td></tr>
+<tr><td><b>Program</b>: كيان سلبي</td><td><b>Process</b>: كيان نشط (برنامج قيد التنفيذ)</td></tr>
+<tr><td><b>Single-threaded</b>: program counter واحد</td><td><b>Multi-threaded</b>: program counter لكل thread</td></tr>
+<tr><td><b>Hard real-time</b>: صارم، لا يُسمح بأي تأخير</td><td><b>Soft real-time</b>: أقل صرامة</td></tr>
+<tr><td><b>Distributed OS</b>: عدة حواسيب، لكل منها CPU وذاكرة</td><td><b>Multiprocessor OS</b>: نظام واحد وعدة معالجات</td></tr>
+<tr><td><b>Interrupt</b>: إشارة من العتاد أو البرمجيات</td><td><b>Trap</b>: مولَّدة برمجياً (خطأ أو طلب مستخدم)</td></tr>
+<tr><td><b>Buffering</b>: تخزين مؤقت أثناء النقل</td><td><b>Caching</b>: نسخة في تخزين أسرع</td></tr></table></div>`};
+var AQ=[
+["ما هو نظام التشغيل؟","نظام التشغيل يدير عتاد الحاسوب ويوفّر أساساً لبرامج التطبيقات."],
+["النواة (kernel) هي البرنامج الوحيد الذي يعمل طوال الوقت على الحاسوب.","صح. النواة هي قلب نظام التشغيل وتعمل دائماً."],
+["أيٌّ مما يلي ليس هدفاً لنظام التشغيل؟","الأهداف: تشغيل البرامج، الراحة في الاستخدام، والكفاءة. التكلفة ليست هدفاً."],
+["الـ device controller هو ____ والـ device driver هو ____.","المتحكم عتاد وله local buffer؛ والمشغّل برمجية في النظام تديره."],
+["يمكن لأجهزة I/O والـ CPU أن تعمل بالتزامن.","صح. كلاهما يعمل في نفس الوقت ويتنافسان على دورات الذاكرة."],
+["أثناء I/O، تنتقل البيانات أولاً من الجهاز إلى…","I/O يتم من الجهاز إلى الـ local buffer للمتحكم؛ ثم ينقلها الـ CPU من/إلى الذاكرة الرئيسية."],
+["كيف يُعلِم متحكم الجهاز الـ CPU أنه أنهى عمله؟","يُعلمه عبر توليد مقاطعة (interrupt)."],
+["الـ interrupt vector يحتوي على…","هو جدول عناوين روتينات الخدمة (ISRs)."],
+["الـ trap (exception) هي مقاطعة تولّدها العتاديات.","غلط. الـ trap مقاطعة مولَّدة برمجياً بسبب خطأ أو طلب من المستخدم."],
+["ماذا يجب أن تحفظ بنية المقاطعات؟","تحفظ عنوان التعليمة المقاطَعة لكي يتمكن البرنامج من المتابعة لاحقاً."],
+["نظام التشغيل هو…","أنظمة التشغيل الحديثة مُوجَّهة بالمقاطعات (interrupt driven)."],
+["ما أول ما يفعله النظام عند معالجة مقاطعة؟","تُحفظ الحالة (المسجلات والـ program counter) ليتمكن البرنامج المقاطَع من المتابعة بشكل صحيح."],
+["أين يُخزَّن برنامج الإقلاع (bootstrap) عادةً؟","يُخزَّن في ROM/EPROM ويسمى firmware لكي يكون متاحاً عند التشغيل."],
+["ماذا يفعل برنامج الإقلاع؟","يهيّئ جميع أجزاء النظام ثم يحمّل النواة ويبدأ تنفيذها."],
+["أيّ ترتيب هو من الأسرع إلى الأبطأ؟","الأعلى في الهرم أسرع وأصغر وأغلى لكل بت."],
+["يمكن اعتبار الذاكرة الرئيسية cache للتخزين الثانوي.","صح. Caching يعني نسخ البيانات إلى تخزين أسرع؛ والـ RAM تحتفظ بنسخ من بيانات القرص."],
+["عند النزول في هرمية التخزين (من registers إلى tape) ماذا يحدث عموماً؟","المستويات الأدنى أبطأ وأرخص وذات سعة أكبر."],
+["أي تخزين يُعتبر متطايراً (volatile)؟","الـ RAM تفقد محتواها عند انقطاع الكهرباء."],
+["ما الغرض من DMA؟","تتجاوز DMA الـ CPU ليتمكن الجهاز السريع من نقل البيانات مباشرة إلى الذاكرة."],
+["مع DMA تُولَّد مقاطعة…","مقاطعة واحدة لكل كتلة بدلاً من واحدة لكل بايت."],
+["مع DMA يجب على الـ CPU نسخ كل بايت من الجهاز إلى الذاكرة.","غلط. متحكم الـ DMA ينقل البيانات دون تدخل الـ CPU."],
+["أيٌّ مما يلي مثال على Batch OS؟","أنظمة الرواتب وكشوف الحساب تعالج مهاماً متشابهة على دفعات دون تفاعل المستخدم."],
+["في multiprogrammed OS ماذا يحدث عندما تنتظر المهمة الجارية عملية I/O؟","التبديل إلى مهمة أخرى يُبقي الـ CPU مشغولاً."],
+["أنظمة time-sharing تسمى أيضاً multitasking، والوقت الذي تحصل عليه كل مهمة يسمى…","الشريحة الزمنية لكل مهمة تسمى quantum."],
+["في Distributed OS لكل نظام CPU وذاكرة خاصان به.","صح. عدة حواسيب مرتبطة عبر شبكة اتصال."],
+["أيٌّ مما يلي مثال على Network OS؟","تدعم مشاركة الملفات والطابعات وقواعد البيانات والتطبيقات."],
+["أي نظام يحتاج Hard real-time OS؟","لا تتحمل هذه الأنظمة أي تأخير ولو صغيراً (airbags، الباراشوت الآلي)."],
+["أنظمة soft real-time لها قيود زمنية صارمة لا يُقبل معها أي تأخير.","غلط. قيود soft real-time أقل صرامة؛ أما الصارمة فهي hard real-time."],
+["أيٌّ مما يلي عيب لـ multiprocessor OS؟","المزايا: التوازي والإنتاجية والموثوقية. العيوب: التكلفة وتعقيد الجدولة."],
+["ما الذي يميّز بين وضع المستخدم ووضع النواة؟","الـ mode bit الذي يوفره العتاد يحدد هل يعمل كود المستخدم أم كود النواة."],
+["ما الغرض من الـ timer؟","عندما يصل العدّاد إلى صفر تعيد المقاطعة التحكم إلى النظام."],
+["ضبط عدّاد الـ timer هو تعليمة privileged.","صح. النظام فقط (في kernel mode) يستطيع ضبطه، فلا يستطيع المستخدمون تعطيله."],
+["أي عبارة صحيحة؟","العملية (process) هي برنامج قيد التنفيذ."],
+["العملية multi-threaded لديها…","single-threaded لديها program counter واحد؛ و multi-threaded لكل thread واحد."],
+["أيٌّ مما يلي نشاط من أنشطة إدارة العمليات؟","وأيضاً: الإنشاء والحذف، التزامن، الاتصال، ومعالجة الجمود."],
+["أيٌّ مما يلي نشاط من أنشطة إدارة الذاكرة؟","يتتبع النظام الذاكرة المستخدمة، ويقرر ما يدخل ويخرج، ويحجز المساحة."],
+["الـ Spooling تعني…","Buffering = تخزين مؤقت؛ Caching = نسخة في تخزين أسرع؛ Spooling = تداخل إخراج مهمة مع إدخال مهام أخرى."]
+];
+Object.keys(AR).forEach(function(k){var w=document.querySelector("#"+k+" .wrap"),d=document.createElement("div");d.className="arx";d.lang="ar";d.dir="rtl";d.innerHTML=AR[k];w.appendChild(d)});
+var ais=document.querySelectorAll("#aisteps li"),aic=-1;function aish(){ais.forEach(function(l,i){l.classList.toggle("a",i==aic)})}
+$("#ainext").onclick=function(){aic=(aic+1)%ais.length;aish()};$("#aireset").onclick=function(){aic=-1;aish()};
+function amset(k){$("#amb").className="mode"+(k?" k":"");$("#amb").textContent=k?"KERNEL MODE · bit 0":"USER MODE · bit 1";$("#amtxt").textContent=k?"حوّل الـ trap الـ mode bit إلى kernel. يستطيع النظام الآن تنفيذ التعليمات privileged لخدمة الطلب.":"برنامج مستخدم قيد التشغيل. لا يستطيع تنفيذ التعليمات الحساسة (privileged) مباشرة."}
+$("#amsys").onclick=function(){amset(true)};$("#amret").onclick=function(){amset(false)};
+var atm=null;$("#atgo").onclick=function(){clearInterval(atm);var n=5;$("#atb").className="mode";$("#atb").textContent="العدّاد: "+n;$("#attxt").textContent="ضبط النظام العدّاد (privileged). الساعة تُنقصه الآن…";
+atm=setInterval(function(){n--;$("#atb").textContent="العدّاد: "+n;if(n<=0){clearInterval(atm);$("#atb").className="mode k";$("#attxt").textContent="وصل العدّاد إلى صفر ← مقاطعة! يستعيد النظام التحكم ويمكنه تبديل العملية أو إنهاؤها."}},800)};
+var NA=["ما هو نظام التشغيل","التنظيم","المقاطعات","الإقلاع والتخزين","DMA","أنواع الأنظمة","الوضعان والمؤقّت","إدارة الموارد","الملخص","الاختبار"];
+var NE=[].map.call(document.querySelectorAll("nav a"),function(a){return a.textContent});
+var H1=$(".hero h1"),HP=$(".hero p"),HB=document.querySelectorAll(".hero .btn"),H0=[H1.innerHTML,HP.textContent,HB[0].textContent,HB[1].textContent];
+var QE=[$("#quiz h2").textContent,$("#quiz .lead").textContent,$("#shuf").textContent,$("#rst").textContent,$("footer").textContent];
+$("#lang").onclick=function(){ar=!ar;document.body.classList.toggle("ar",ar);
+document.querySelectorAll("nav a").forEach(function(a,i){a.textContent=ar?NA[i]:NE[i]});
+H1.innerHTML=ar?"نظم التشغيل<br>الشابتر 1: المقدمة":H0[0];HP.textContent=ar?"دليل دراسة كامل وسهل: كل مفهوم من السلايدات مشروح، مع تجارب تفاعلية وملخص واختبار يخبرك فوراً إن كانت إجابتك صح أو غلط.":H0[1];HB[0].textContent=ar?"ابدأ الدراسة":H0[2];HB[1].textContent=ar?"اذهب للاختبار":H0[3];
+$("#lang").textContent=ar?"English":"العربية";
+$("#quiz h2").textContent=ar?"10. الاختبار التفاعلي":QE[0];$("#quiz .lead").textContent=ar?"اضغط على إجابة. الأخضر يعني صح، والأحمر غلط، ويظهر شرح الإجابة الصحيحة دائماً.":QE[1];
+$("#shuf").textContent=ar?"خلط وإعادة":QE[2];$("#rst").textContent=ar?"إعادة":QE[3];$("footer").textContent=ar?"مبني على سلايدات الشابتر 1: المقدمة · نظم التشغيل (501471)":QE[4];
+$("#quiz .wrap").dir=ar?"rtl":"ltr";build(false)};
+build(false);
+})();
+</script>
+</body>
+</html>
