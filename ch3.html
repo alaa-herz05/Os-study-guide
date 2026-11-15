@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Operating Systems – Chapter 3 Study Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0612;--panel:#140c22;--panel2:#1b1030;--line:#3a2461;--g:#c9a2ff;--g2:#9b5cff;--gd:#5a35a6;--am:#ffb454;--txt:#efe6fb;--mut:#a794c4;--bad:#ff6b8a;--ok:#4ade80;
+box-sizing:border-box;color-scheme:dark;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(108px + env(safe-area-inset-top,0px))}
+body{margin:0;background:var(--bg);color:var(--txt);font:16px/1.65 "IBM Plex Sans",system-ui,sans-serif;
+background-image:radial-gradient(rgba(201,162,255,.09) 1px,transparent 1px);background-size:26px 26px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:30}
+#bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.55}
+main,header{position:relative;z-index:1}
+h1,h2,h3,summary{font-family:"Space Grotesk",system-ui,sans-serif;line-height:1.2;margin:0}
+.wrap{max-width:980px;margin:0 auto;padding:0 18px}
+.cbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:22;height:42px;background:#06030c;border-bottom:1px solid var(--gd)}
+.cbar .wrap{display:flex;gap:6px;align-items:center;height:42px;overflow-x:auto;scrollbar-width:none}
+.cbar a{color:var(--mut);text-decoration:none;padding:4px 14px;border-radius:6px;font:600 14px "Space Grotesk",sans-serif;white-space:nowrap;border:1px solid transparent}
+.cbar a:hover,.cbar a:focus-visible{color:var(--g);border-color:var(--gd);outline:none}.cbar a.cur{background:var(--g);color:#14052b}
+nav{position:sticky;top:calc(42px + env(safe-area-inset-top,0px));z-index:20;background:rgba(10,6,18,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;gap:6px;overflow-x:auto;padding:10px 18px;scrollbar-width:none;align-items:center}
+nav a{color:var(--mut);text-decoration:none;white-space:nowrap;padding:6px 12px;border-radius:99px;font-size:14px;border:1px solid transparent}
+nav a:hover,nav a:focus-visible{color:var(--g);border-color:var(--gd);outline:none}
+.hero{display:grid;grid-template-columns:1.1fr 1fr;gap:28px;align-items:center;padding:54px 0 40px}
+.hero h1{font-size:clamp(34px,6vw,56px);color:var(--g);text-shadow:0 0 30px rgba(155,92,255,.5)}
+.hero p{color:var(--mut);max-width:46ch}
+.btn{display:inline-block;background:var(--g);color:#14052b;border:0;border-radius:8px;padding:11px 20px;cursor:pointer;font:600 15px "IBM Plex Sans",sans-serif;text-decoration:none;margin:4px 8px 4px 0}
+.btn.o{background:transparent;color:var(--g);border:1px solid var(--gd)}
+.btn.s{padding:7px 12px;font-size:13.5px;margin:3px 6px 3px 0}
+.btn:hover{box-shadow:0 0 18px rgba(155,92,255,.55)}
+.btn:focus-visible,summary:focus-visible,.opt:focus-visible,input:focus-visible{outline:2px solid var(--g);outline-offset:2px}
+.life{background:#07030f;border:1px solid var(--g2);border-radius:14px;box-shadow:0 0 44px rgba(155,92,255,.3);padding:16px}
+.life .lt{font:12px "JetBrains Mono",monospace;color:var(--mut);margin-bottom:12px}
+.lg,.sg4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;align-items:center}
+.chp{padding:10px 4px;text-align:center;border:1px solid var(--gd);border-radius:10px;background:#0f0720;font:600 13px "Space Grotesk",sans-serif;color:var(--mut);transition:.35s}
+.chp.on{background:var(--g);color:#14052b;box-shadow:0 0 22px var(--g);border-color:var(--g)}
+.chp.w{grid-column:2/4}
+.lc{margin-top:12px;min-height:26px;font:13px "JetBrains Mono",monospace;color:var(--am)}
+section{padding:44px 0 8px}
+section>.wrap>h2,.arx>h2{font-size:clamp(23px,3.6vw,32px);color:var(--g);margin-bottom:6px}
+.lead{color:var(--mut);margin:0 0 20px}
+.card{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:14px 0}
+.card h3{font-size:17px;color:var(--g);margin-bottom:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.grid .card{margin:0}
+ul{margin:6px 0;padding-left:20px}li{margin:4px 0}
+b,strong{color:var(--g)}
+code{font-family:"JetBrains Mono",monospace;font-size:.9em;background:#07030f;border:1px solid var(--line);border-radius:5px;padding:1px 6px;color:var(--am);direction:ltr;unicode-bidi:isolate}
+.tip{border-left:3px solid var(--am);background:rgba(255,180,84,.07);padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:15px}
+.scroll{overflow-x:auto}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;margin:14px 0}
+.flow span{padding:9px 14px;border:1px solid var(--gd);border-radius:8px;background:#0f0720;font-size:14px;transition:.3s;text-align:center}
+.flow i{color:var(--gd);font-style:normal}
+.flow span.a{background:var(--g);color:#14052b;box-shadow:0 0 18px var(--g);border-color:var(--g)}
+.steps{list-style:none;padding:0;counter-reset:s}
+.steps li{counter-increment:s;padding:9px 12px 9px 44px;position:relative;border:1px solid var(--line);border-radius:8px;margin:6px 0;color:var(--mut);transition:.3s}
+.steps li::before{content:counter(s);position:absolute;left:10px;top:8px;width:24px;height:24px;border-radius:50%;background:#0f0720;border:1px solid var(--gd);text-align:center;line-height:22px;font-size:13px}
+.steps li.a{color:var(--txt);border-color:var(--g);background:rgba(201,162,255,.1);box-shadow:0 0 16px rgba(155,92,255,.3)}
+.steps li.a::before{background:var(--g);color:#14052b}
+.mem{display:flex;flex-direction:column;height:300px;max-width:340px;margin:12px auto;border:2px solid var(--gd);border-radius:10px;overflow:hidden}
+.mem div{display:flex;align-items:center;justify-content:center;font:600 13px "Space Grotesk",sans-serif;text-align:center;transition:flex .4s;min-height:0;overflow:hidden;padding:0 6px}
+.mem .k{background:#2a1552}.mem .hp{background:#3b1f73}.mem .gp{background:repeating-linear-gradient(45deg,#0a0612 0 8px,#120a22 8px 16px);color:var(--mut)}.mem .dt{background:#4c2a94;flex:none;height:42px}.mem .tx{background:#5b34b0;flex:none;height:42px}
+.slots{display:flex;gap:8px;justify-content:center;margin:14px 0;flex-wrap:wrap}
+.slots span{width:46px;height:46px;border:2px solid var(--gd);border-radius:8px;display:grid;place-items:center;font:700 13px "JetBrains Mono",monospace;color:var(--mut);transition:.25s}
+.slots span.f{background:var(--g);color:#14052b;border-color:var(--g);box-shadow:0 0 14px var(--g)}
+.msg{min-height:44px}
+.calc{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:10px 0}
+.calc label{display:block;font-size:14px;color:var(--mut)}
+.calc input{width:100%;margin-top:4px;padding:8px 10px;border-radius:8px;border:1px solid var(--gd);background:#07030f;color:var(--txt);font:600 16px "JetBrains Mono",monospace}
+.res{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.res div{border:1px solid var(--g2);border-radius:10px;padding:10px 12px;background:#0f0720;font-size:14px}
+.res b{display:block;font:700 26px "JetBrains Mono",monospace}
+details{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:12px;margin:10px 0;overflow:hidden}
+summary{cursor:pointer;padding:14px 18px;font-size:16px;font-weight:700;color:var(--g);list-style:none}
+summary::before{content:"▸ ";color:var(--am)}details[open] summary::before{content:"▾ "}
+details>div{padding:0 20px 16px}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:14.5px}
+th,td{border:1px solid var(--line);padding:8px 12px;text-align:left;vertical-align:top}
+th{background:#251247;color:var(--g)}
+#bar{height:8px;background:#0f0720;border-radius:9px;overflow:hidden;margin:10px 0}
+#bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--g2),var(--g));transition:width .4s}
+.q{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0}
+.q p{margin:0 0 10px;font-weight:600}.q small{color:var(--mut);font-weight:400}
+.opt{display:block;width:100%;text-align:start;margin:6px 0;padding:10px 14px;border-radius:8px;border:1px solid var(--line);background:#0d0619;color:var(--txt);font:inherit;cursor:pointer;transition:.2s}
+.opt:hover:not(:disabled){border-color:var(--g);background:#1a0c33}
+.opt.ok{background:rgba(74,222,128,.2);border-color:var(--ok);color:#fff}
+.opt.no{background:rgba(255,107,138,.18);border-color:var(--bad);color:#ffd6e0}
+.opt:disabled{cursor:default}
+.fb{display:none;margin-top:8px;padding:10px 14px;border-radius:8px;font-size:15px}
+.fb.show{display:block}.fb.ok{background:rgba(74,222,128,.1);border-left:3px solid var(--ok)}.fb.no{background:rgba(255,107,138,.1);border-left:3px solid var(--bad)}
+#score{font:700 21px "Space Grotesk",sans-serif;color:var(--g)}
+footer{padding:40px 18px 60px;text-align:center;color:var(--mut)}
+.arx{direction:rtl;text-align:start}body:not(.ar) .arx{display:none}
+body.ar section:not(#quiz) .wrap>*:not(.arx){display:none}
+body.ar{font-family:"Tajawal","IBM Plex Sans",sans-serif;font-size:17px}body.ar .btn{font-family:"Tajawal",sans-serif}
+body.ar h1,body.ar h2,body.ar h3,body.ar summary,body.ar #score,body.ar .chp{font-family:"Tajawal",sans-serif}
+.arx ul{padding:0 20px 0 0}.arx .steps{padding:0}.arx .steps li{padding:9px 44px 9px 12px}.arx .steps li::before{left:auto;right:10px}
+.arx .tip{border-left:0;border-right:3px solid var(--am);border-radius:8px 0 0 8px}
+.arx th,.arx td{text-align:start}
+#lang{flex:none;padding:6px 16px;margin:0 8px 0 0;font-size:14px}
+@media(max-width:760px){.hero{grid-template-columns:1fr;padding-top:34px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<canvas id="bg" aria-hidden="true"></canvas>
+<div class="cbar"><div class="wrap"><a href="index.html">⌂ Home</a><a href="ch1.html">Ch 1</a><a href="ch2.html">Ch 2</a><a href="ch3.html" class="cur">Ch 3</a><a href="ch4.html">Ch 4</a><a href="ch5.html">Ch 5</a><a href="ch8.html">Ch 8</a></div></div>
+<nav><div class="wrap">
+<button class="btn" id="lang" type="button">العربية</button><a href="#con">Process Concept</a><a href="#stt">States &amp; PCB</a><a href="#sch">Scheduling</a><a href="#ops">Operations</a><a href="#shm">Shared Memory</a><a href="#msg">Message Passing</a><a href="#sum">Summary</a><a href="#quiz">Quiz</a>
+</div></nav>
+
+<header><div class="wrap hero">
+<div>
+<h1>Operating Systems<br>Chapter 3: Processes</h1>
+<p>A complete, easy-to-follow study guide: process concept, states, PCB, scheduling, fork/exec/wait and interprocess communication explained in plain English, with interactive demos, a summary, and a quiz that tells you instantly if you are right or wrong.</p>
+<a class="btn" href="#con">Start studying</a><a class="btn o" href="#quiz">Jump to quiz</a>
+</div>
+<div class="life" aria-hidden="true"><div class="lt">$ process lifecycle</div>
+<div class="lg"><span class="chp" data-s="new">New</span><span class="chp" data-s="ready">Ready</span><span class="chp" data-s="run">Running</span><span class="chp" data-s="term">Terminated</span><span class="chp w" data-s="wait">Waiting</span></div>
+<div class="lc" id="lc"></div></div>
+</div></header>
+
+<main>
+<section id="con"><div class="wrap">
+<h2>1. Process Concept</h2>
+<p class="lead">What a process is, and how it looks inside memory.</p>
+<div class="card"><h3>Definition</h3>A <b>process</b> is a <b>program in execution</b>. Its execution must progress in <b>sequential fashion</b>: there is no parallel execution of the instructions of a single process.
+<ul><li>A <b>program</b> is a <b>passive</b> entity stored on disk (an executable file); a <b>process</b> is <b>active</b>.</li><li>A program <b>becomes a process</b> when an executable file is <b>loaded into memory</b>.</li><li><b>One program can be several processes</b> (e.g. many users running the same program).</li></ul>
+<div class="tip">Two processes of the same program are still <b>two separate execution sequences</b>: several users running copies of the mail program, or one user opening many web-browser windows. A process may also <b>spawn many processes</b> as it runs.</div></div>
+<div class="grid">
+<div class="card"><h3>Current activity</h3>The status of a process’s current activity is represented by the value of the <b>program counter</b> and the contents of the <b>processor’s registers</b>.</div>
+<div class="card"><h3>Memory layout (4 sections)</h3><ul><li><b>Text</b> – the executable code</li><li><b>Data</b> – global and static variables</li><li><b>Heap</b> – memory dynamically allocated at run time</li><li><b>Stack</b> – temporary data: function parameters, return address, local variables</li></ul></div>
+</div>
+<div class="card" data-ml><h3>Interactive: stack and heap grow toward each other</h3>
+<div class="mem"><div class="k" style="flex:2">Stack ↓</div><div class="gp" style="flex:4">free space</div><div class="hp" style="flex:2">Heap ↑</div><div class="dt">Data</div><div class="tx">Text</div></div>
+<div style="text-align:center"><button class="btn s sg">Call function (push)</button><button class="btn s o sr">Return (pop)</button><button class="btn s hg">malloc (grow heap)</button><button class="btn s o hr">free (shrink heap)</button></div>
+<div class="tip msg mlm" data-clash="Stack and heap collided! The OS must make sure they never overlap." data-ok="Text and data have a fixed size. Only the stack and heap grow and shrink.">Text and data have a fixed size. Only the stack and heap grow and shrink.</div></div>
+<div class="card"><h3>Stack and heap behavior</h3><ul><li>Each function call pushes an <b>activation record</b> (parameters, local variables, return address) onto the stack; on return it is <b>popped</b>.</li><li>The heap <b>grows</b> when memory is dynamically allocated and <b>shrinks</b> when memory is returned to the system.</li><li>The <b>text and data sizes are fixed</b>; stack and heap change dynamically. The OS must ensure they <b>do not overlap</b>.</li></ul></div>
+</div></section>
+
+<section id="stt"><div class="wrap">
+<h2>2. Process State and PCB</h2>
+<p class="lead">The five states and the record the OS keeps for each process.</p>
+<div class="card"><h3>The five states</h3>As a process executes, it changes state:<ul><li><b>New</b> – the process is being created</li><li><b>Ready</b> – waiting to be assigned to a processor</li><li><b>Running</b> – instructions are being executed</li><li><b>Waiting</b> – waiting for some event to occur (e.g. I/O)</li><li><b>Terminated</b> – the process has finished execution</li></ul></div>
+<div class="card" data-sm><h3>Interactive: drive the process through its states</h3>
+<div class="lg" style="margin:10px 0"><span class="chp" data-s="new">New</span><span class="chp" data-s="ready">Ready</span><span class="chp" data-s="run">Running</span><span class="chp" data-s="term">Terminated</span><span class="chp w" data-s="wait">Waiting</span></div>
+<div><button class="btn s" data-t="new>ready" data-m="Admitted: the process is created and moved to the ready queue.">Admit</button><button class="btn s" data-t="ready>run" data-m="Scheduler dispatch: the CPU is assigned to the process.">Scheduler dispatch</button><button class="btn s" data-t="run>ready" data-m="Interrupt: the time slice ended, back to ready.">Interrupt (timeout)</button><button class="btn s" data-t="run>wait" data-m="The process requested I/O or waits for an event.">I/O or event wait</button><button class="btn s" data-t="wait>ready" data-m="I/O or event completion: back to the ready queue.">I/O or event completion</button><button class="btn s" data-t="run>term" data-m="Exit: the process finished execution.">Exit</button><button class="btn s o" data-t="reset">Reset</button></div>
+<div class="tip msg smm" data-bad="Not allowed from the current state.">Press a transition button. Only valid transitions will work.</div></div>
+<div class="card"><h3>Process Control Block (PCB)</h3>A data structure the OS maintains <b>for every process</b>, identified by an integer <b>process ID (PID)</b>. It keeps all the information needed to track the process:
+<ul><li><b>Process state</b> – running, waiting, etc.</li><li><b>Program counter</b> – location of the next instruction</li><li><b>CPU registers</b> – contents of all process-centric registers</li><li><b>CPU-scheduling information</b> – priorities, scheduling-queue pointers</li><li><b>Memory-management information</b> – memory allocated to the process</li><li><b>Accounting information</b> – CPU used, clock time elapsed, time limits</li><li><b>I/O status information</b> – devices allocated, list of open files</li></ul>
+<div class="tip">The PCB layout depends completely on the OS. It is kept <b>throughout the process’s lifetime</b> and <b>deleted once the process terminates</b>.</div></div>
+</div></section>
+
+<section id="sch"><div class="wrap">
+<h2>3. Process Scheduling</h2>
+<p class="lead">Queues, scheduling times, and context switching.</p>
+<div class="card"><h3>The scheduler</h3>The <b>process scheduler</b> selects among available processes for the next execution on a CPU core. <b>Goal: maximize CPU use and switch processes onto the CPU core quickly.</b> Processes <b>migrate among the various queues</b>.</div>
+<div class="grid">
+<div class="card"><h3>Job queue</h3>At the start, <b>all processes</b> are stored in the job queue.</div>
+<div class="card"><h3>Ready queue</h3>Set of all processes residing in <b>main (primary) memory</b>, ready and waiting to execute.</div>
+<div class="card"><h3>Wait queues</h3>Processes waiting for an event (e.g. I/O). When a running process needs I/O, the OS changes its state from <b>running to waiting</b>.</div>
+</div>
+<div class="card"><h3>Times related to a process</h3><ul>
+<li><b>Arrival time</b> – when the process enters the ready queue</li>
+<li><b>Completion time</b> – when the process completes its execution</li>
+<li><b>Turnaround time</b> – total time from arrival to completion (<code>completion − arrival</code>)</li>
+<li><b>Burst time</b> – total CPU time required to execute the whole process, <b>not including waiting time</b>. It is hard to know before running, so scheduling based on burst time cannot be implemented exactly in reality</li>
+<li><b>Waiting time</b> – total time the process waits for the CPU (<code>turnaround − burst</code>)</li>
+<li><b>Response time</b> – difference between arrival and the time it <b>first gets the CPU</b> (<code>first CPU − arrival</code>)</li></ul></div>
+<div class="card" data-calc><h3>Interactive: calculate the times</h3>Change the numbers (formulas assume the CPU time is the only work, no I/O).
+<div class="calc"><label>Arrival<input class="a" type="number" value="0"></label><label>First gets CPU<input class="f" type="number" value="2"></label><label>Burst<input class="b" type="number" value="5"></label><label>Completion<input class="c" type="number" value="9"></label></div>
+<div class="res"><div>Turnaround<b class="tat">9</b></div><div>Waiting<b class="wt">4</b></div><div>Response<b class="rt">2</b></div></div></div>
+<div class="card" data-st><h3>Context switch</h3>Switching the CPU to another process requires a <b>state save</b> of the current process and a <b>state restore</b> of a different one. The kernel saves the old context <b>in its PCB</b> and loads the saved context of the new process. <b>Context-switch time is pure overhead</b>: the system does no useful work while switching, and the time depends on hardware support.
+<div class="flow"><span>P0 running</span><i>→</i><span>Save state → PCB0</span><i>→</i><span>Load state ← PCB1</span><i>→</i><span>P1 running</span></div>
+<ol class="steps"><li data-b="0">Process P0 is executing on the CPU.</li><li data-b="1">An interrupt or system call occurs; the kernel <b>saves P0’s context in PCB0</b>. (Idle: no useful work.)</li><li data-b="2">The kernel <b>loads the saved context of P1 from PCB1</b>. (Still overhead.)</li><li data-b="3">Process P1 now executes on the CPU.</li></ol>
+<button class="btn nx">Next step</button><button class="btn o rs">Reset</button></div>
+</div></section>
+
+<section id="ops"><div class="wrap">
+<h2>4. Operations on Processes</h2>
+<p class="lead">Creating and terminating processes.</p>
+<div class="card"><h3>Process creation</h3>Processes can execute concurrently and are <b>created and deleted dynamically</b>. A creating process is the <b>parent</b>; the new ones are its <b>children</b>. Children can create more processes, forming a <b>tree of processes</b>. Each process has a unique integer <b>pid</b>.
+<ul><li>A child needs resources (CPU time, memory, files, I/O devices). It may get them <b>directly from the OS</b> or be <b>limited to a subset of the parent’s</b> resources. The parent may <b>partition</b> or <b>share</b> some resources among children.</li><li>Restricting children to a subset of the parent’s resources <b>prevents any process from overloading the system</b> by creating too many children.</li></ul></div>
+<div class="grid">
+<div class="card"><h3>Two execution possibilities</h3><ol style="padding-left:20px"><li>The parent <b>continues concurrently</b> with its children.</li><li>The parent <b>waits</b> until some or all children terminate.</li></ol></div>
+<div class="card"><h3>Two address-space possibilities</h3><ol style="padding-left:20px"><li>The child is a <b>duplicate</b> of the parent (same program and data).</li><li>The child has a <b>new program loaded</b> into it.</li></ol></div>
+</div>
+<div class="card" data-st><h3>UNIX: <code>fork()</code>, <code>exec()</code>, <code>wait()</code></h3>A new process is created by <code>fork()</code>. After it, one of the two processes typically calls <code>exec()</code> to <b>replace its memory space with a new program</b> (it loads a binary file and starts executing it). The parent can create more children or call <code>wait()</code> to <b>move itself off the ready queue</b> until the child terminates.
+<div class="flow"><span>Parent running</span><i>→</i><span>Child = copy</span><i>→</i><span>Child runs new program</span><i>→</i><span>Parent resumes</span></div>
+<ol class="steps"><li data-b="0">The parent process is running.</li><li data-b="1">The parent calls <code>fork()</code>: a <b>child is created as a duplicate</b> (same program and data) with a new PID.</li><li data-b="2">The child calls <code>exec()</code>: its memory is replaced by a <b>new program</b>.</li><li data-b="0">The parent calls <code>wait()</code> and leaves the ready queue until the child ends.</li><li data-b="2">The child finishes and calls <code>exit()</code>; its resources are deallocated.</li><li data-b="3">The parent wakes up and <b>continues</b>.</li></ol>
+<button class="btn nx">Next step</button><button class="btn o rs">Reset</button></div>
+<div class="card"><h3>Process termination</h3><ul><li>A process terminates when it finishes its last statement and calls <code>exit()</code>. The OS <b>deallocates and reclaims all resources</b>: physical and virtual memory, open files, I/O buffers.</li><li>A process can terminate another via a system call (e.g. <code>TerminateProcess()</code> in Windows). The parent must know its children’s identities, so the <b>new process’s identity is passed to the parent</b>.</li><li>A parent may terminate a child if the child <b>exceeded its resource usage</b>, or if the <b>parent is exiting</b> and the OS does not allow children to continue.</li><li><b>Cascading termination</b>: if a process terminates (normally or abnormally), <b>all its children must also be terminated</b>. Normally initiated by the OS.</li><li>A parent waits for a child using <code>wait()</code>.</li><li>A <b>zombie process</b> has terminated, but its <b>parent has not yet called <code>wait()</code></b>.</li></ul></div>
+</div></section>
+
+<section id="shm"><div class="wrap">
+<h2>5. IPC: Shared Memory</h2>
+<p class="lead">Interprocess communication (IPC) and the producer-consumer problem.</p>
+<div class="card"><h3>Independent vs cooperating processes</h3>Processes can be <b>independent</b> or <b>cooperating</b>. A cooperating process <b>can affect or be affected by</b> other processes, including by sharing data (a reason: <b>information sharing</b>). Cooperating processes need <b>IPC</b>. Two models: <b>shared memory</b> and <b>message passing</b>.</div>
+<div class="card"><h3>Shared-memory model</h3><ul><li>An <b>area of memory shared</b> among the communicating processes.</li><li>Communication is under the control of the <b>user processes, not the OS</b>.</li><li>Major issue: a mechanism that lets user processes <b>synchronize their actions</b> when accessing shared memory.</li></ul></div>
+<div class="card"><h3>Producer-consumer problem</h3>A paradigm for cooperating processes: a <b>producer</b> produces information consumed by a <b>consumer</b>. Two variations:
+<div class="grid" style="margin-top:10px"><div class="card"><h3>Unbounded buffer</h3>No practical limit on buffer size. <b>Producer never waits</b>; consumer waits if there is nothing to consume.</div><div class="card"><h3>Bounded buffer</h3>Fixed buffer size. <b>Producer must wait if all buffers are full</b>; consumer waits if there is nothing to consume.</div></div></div>
+<div class="card" data-pc><h3>Interactive: bounded buffer (5 slots)</h3>
+<div class="slots"><span></span><span></span><span></span><span></span><span></span></div>
+<div style="text-align:center"><button class="btn s pr">Produce an item</button><button class="btn s o co">Consume an item</button></div>
+<div class="tip msg pcm" data-full="Buffer is FULL: the producer must wait." data-empty="Buffer is EMPTY: the consumer must wait." data-p="Producer added an item." data-c="Consumer removed an item.">Add and remove items. Try to overfill or over-consume.</div></div>
+</div></section>
+
+<section id="msg"><div class="wrap">
+<h2>6. IPC: Message Passing</h2>
+<p class="lead">Communicating without sharing the same address space.</p>
+<div class="card"><h3>Basics</h3>Message passing lets processes <b>communicate and synchronize without sharing the same address space</b> or shared variables. It is especially useful in a <b>distributed environment</b> (processes on different computers connected by a network), e.g. an Internet chat program.
+<ul><li>Two operations: <code>send(message)</code> and <code>receive(message)</code>. Message size is <b>fixed or variable</b>.</li><li>For P and Q to communicate they must <b>establish a communication link</b> and <b>exchange messages</b> via send/receive.</li></ul></div>
+<div class="grid">
+<div class="card"><h3>1. Direct communication</h3>Processes <b>name each other explicitly</b>: <code>send(P, message)</code>, <code>receive(Q, message)</code>.<ul><li>Links are established <b>automatically</b></li><li>A link belongs to <b>exactly one pair</b> of processes</li><li>Exactly <b>one link</b> per pair</li><li>May be unidirectional, usually <b>bi-directional</b></li></ul></div>
+<div class="card"><h3>2. Indirect communication</h3>Messages go to and from <b>mailboxes (ports)</b>, each with a <b>unique id</b>. Processes communicate only if they <b>share a mailbox</b>.<ul><li>A link may be associated with <b>many processes</b></li><li>A pair may share <b>several links</b></li><li>Unidirectional or bi-directional</li></ul>Operations: create a mailbox, send/receive through it, delete it. <code>send(A, message)</code>, <code>receive(A, message)</code>.</div>
+</div>
+<div class="card"><h3>Mailbox sharing problem</h3>P1, P2 and P3 share mailbox A. P1 sends; P2 and P3 receive. <b>Who gets the message?</b> Solutions: allow a link with <b>at most two processes</b>; allow <b>only one process at a time</b> to execute receive; or let the system <b>select the receiver arbitrarily</b> and notify the sender.</div>
+<div class="card"><h3>3. Buffering</h3>A <b>queue of messages</b> attached to the link, implemented in three ways:
+<ul><li><b>Zero capacity</b> – no messages queued. Sender must wait for the receiver (<b>rendezvous</b>).</li><li><b>Bounded capacity</b> – finite length of n messages. Sender must wait if the link is full.</li><li><b>Unbounded capacity</b> – infinite length. Sender never waits.</li></ul>
+<div class="tip">Your slides end at buffering. “Examples of IPC systems” and “client-server communication” are in the outline but not in the slides.</div></div>
+</div></section>
+
+<section id="sum"><div class="wrap">
+<h2>7. Chapter Summary</h2>
+<p class="lead">Review this right before the exam.</p>
+<div class="card"><ul>
+<li><b>Process</b> = program in execution (active); program = passive file on disk. One program can be many processes.</li>
+<li>Memory layout: <b>text, data, heap, stack</b>. Text/data fixed; heap and stack grow toward each other.</li>
+<li>States: <b>New, Ready, Running, Waiting, Terminated</b>. The <b>PCB</b> (PID, state, PC, registers, scheduling, memory, accounting, I/O) is kept for each process.</li>
+<li>Queues: <b>job, ready (in main memory), wait</b>. The scheduler maximizes CPU use.</li>
+<li>Times: arrival, completion, turnaround, burst, waiting, response.</li>
+<li><b>Context switch</b>: save old state in its PCB, load new state. Pure overhead.</li>
+<li><b>fork()</b> creates, <b>exec()</b> replaces the program, <b>wait()</b> waits for a child, <b>exit()</b> terminates. Cascading termination; zombie = terminated but not yet waited for.</li>
+<li><b>IPC</b>: shared memory (user-controlled, needs synchronization; producer-consumer) vs message passing (send/receive; direct, indirect via mailboxes; zero/bounded/unbounded buffering).</li></ul></div>
+<div class="card scroll"><h3>Quick comparisons</h3>
+<table><tr><th>Concept A</th><th>Concept B</th></tr>
+<tr><td><b>Program</b>: passive, on disk</td><td><b>Process</b>: active, in memory</td></tr>
+<tr><td><b>Shared memory</b>: controlled by user processes, needs synchronization</td><td><b>Message passing</b>: send/receive, no shared address space, good for distributed systems</td></tr>
+<tr><td><b>Direct</b>: name the process (P, Q); one link per pair</td><td><b>Indirect</b>: use mailboxes (ports); many processes per link</td></tr>
+<tr><td><b>Unbounded buffer</b>: producer never waits</td><td><b>Bounded buffer</b>: producer waits when full</td></tr>
+<tr><td><b>Turnaround</b> = completion − arrival</td><td><b>Response</b> = first CPU − arrival</td></tr>
+<tr><td><b>Zero capacity</b>: sender waits (rendezvous)</td><td><b>Unbounded capacity</b>: sender never waits</td></tr>
+<tr><td><b>Ready queue</b>: waiting for the CPU</td><td><b>Wait queue</b>: waiting for an event (I/O)</td></tr></table></div>
+</div></section>
+
+<section id="quiz"><div class="wrap">
+<h2>8. Interactive Quiz</h2>
+<p class="lead">Tap an answer. Green means correct, red means wrong, and the right answer is always explained.</p>
+<div class="card"><span id="score">Score: 0 / 0</span> <span style="color:var(--mut)" id="prog"></span><div id="bar"><i></i></div>
+<button class="btn" id="shuf">Shuffle &amp; restart</button><button class="btn o" id="rst">Restart</button></div>
+<div id="qs"></div>
+<div class="card" id="final" style="display:none"></div>
+</div></section>
+</main>
+<footer>Based on the slides of Chapter 3: Processes · Operating Systems (501471)</footer>
+
+<script>
+(function(){
+var $=function(s){return document.querySelector(s)};
+var rm=matchMedia("(prefers-reduced-motion:reduce)").matches;
+/* process-tree background */
+var cv=$("#bg"),cx=cv.getContext("2d"),W,H,nodes=[],pid=100;
+function rs(){W=cv.width=innerWidth;H=cv.height=innerHeight}rs();addEventListener("resize",rs);
+function spawn(){if(nodes.length>34)return;var p=nodes.length&&Math.random()<.88?nodes[Math.floor(Math.random()*nodes.length)]:null;
+if(p&&p.e)p=null;var x=p?p.x+(Math.random()-.5)*190:Math.random()*W,y=p?p.y+(Math.random()-.5)*190:Math.random()*H;
+nodes.push({x:Math.max(24,Math.min(W-24,x)),y:Math.max(24,Math.min(H-24,y)),p:p,id:pid++,a:0,k:0,e:false,life:500+Math.random()*900})}
+function fr(){cx.clearRect(0,0,W,H);cx.font="11px monospace";
+nodes.forEach(function(n){n.a++;if(!n.e&&(n.a>n.life||(n.p&&n.p.e)))n.e=true;if(n.e)n.k++});
+nodes=nodes.filter(function(n){return n.k<45});
+nodes.forEach(function(n){var al=Math.min(1,n.a/40)*(1-n.k/45);
+if(n.p){cx.strokeStyle="rgba(155,92,255,"+(al*.8)+")";cx.lineWidth=1.5;cx.beginPath();cx.moveTo(n.p.x,n.p.y);cx.lineTo(n.x,n.y);cx.stroke()}});
+nodes.forEach(function(n){var al=Math.min(1,n.a/40)*(1-n.k/45);cx.fillStyle="rgba(201,162,255,"+al+")";cx.beginPath();cx.arc(n.x,n.y,5,0,6.3);cx.fill();cx.fillStyle="rgba(255,180,84,"+al+")";cx.fillText(n.id,n.x+9,n.y+4)});
+if(!rm)requestAnimationFrame(fr)}
+for(var i=0;i<14;i++){spawn();nodes[i].a=60}
+fr();if(!rm)setInterval(spawn,450);
+/* hero lifecycle */
+var seq=[["new",""],["ready","admitted → ready queue"],["run","scheduler dispatch"],["wait","I/O or event wait"],["ready","I/O or event completion"],["run","scheduler dispatch"],["term","exit"]],si=0;
+var hc=document.querySelectorAll(".life .chp"),lc=$("#lc");
+function hs(){var s=seq[si];hc.forEach(function(c){c.classList.toggle("on",c.dataset.s==s[0])});lc.textContent=s[1]?"→ "+s[1]:"$ fork()";si=(si+1)%seq.length}
+hs();if(!rm)setInterval(hs,1300);
+/* generic controls */
+function st(card){var lis=card.querySelectorAll(".steps li"),bx=card.querySelectorAll(".flow span"),c=-1;
+function sh(){lis.forEach(function(l,i){l.classList.toggle("a",i==c)});bx.forEach(function(b,i){b.classList.toggle("a",c>=0&&i==+lis[c].dataset.b)})}
+card.querySelector(".nx").onclick=function(){c=(c+1)%lis.length;sh()};card.querySelector(".rs").onclick=function(){c=-1;sh()}}
+function sm(r){var cur="new",chips=r.querySelectorAll(".chp"),m=r.querySelector(".smm"),m0=m.textContent;
+function sh(){chips.forEach(function(c){c.classList.toggle("on",c.dataset.s==cur)})}sh();
+r.querySelectorAll("[data-t]").forEach(function(b){b.onclick=function(){var t=b.dataset.t;if(t=="reset"){cur="new";m.textContent=m0;sh();return}
+var p=t.split(">");if(cur==p[0]){cur=p[1];m.textContent=b.dataset.m}else m.textContent=m.dataset.bad;sh()}})}
+function pc(r){var n=0,sl=r.querySelectorAll(".slots span"),m=r.querySelector(".pcm");
+function sh(){sl.forEach(function(s,i){s.classList.toggle("f",i<n);s.textContent=i<n?"■":""})}
+r.querySelector(".pr").onclick=function(){if(n>=sl.length)m.textContent=m.dataset.full;else{n++;m.textContent=m.dataset.p}sh()};
+r.querySelector(".co").onclick=function(){if(n<=0)m.textContent=m.dataset.empty;else{n--;m.textContent=m.dataset.c}sh()};sh()}
+function ml(r){var s=2,h=2,e=r.querySelectorAll(".mem div"),m=r.querySelector(".mlm");
+function sh(){e[0].style.flex=s;e[1].style.flex=8-s-h;e[2].style.flex=h}
+r.querySelector(".sg").onclick=function(){if(8-s-h<=0)m.textContent=m.dataset.clash;else{s++;m.textContent=m.dataset.ok}sh()};
+r.querySelector(".sr").onclick=function(){if(s>1)s--;m.textContent=m.dataset.ok;sh()};
+r.querySelector(".hg").onclick=function(){if(8-s-h<=0)m.textContent=m.dataset.clash;else{h++;m.textContent=m.dataset.ok}sh()};
+r.querySelector(".hr").onclick=function(){if(h>1)h--;m.textContent=m.dataset.ok;sh()};sh()}
+function calc(r){var g=function(c){return +r.querySelector(c).value||0};
+function up(){var a=g(".a"),f=g(".f"),b=g(".b"),c=g(".c"),t=c-a;r.querySelector(".tat").textContent=t;r.querySelector(".wt").textContent=t-b;r.querySelector(".rt").textContent=f-a}
+r.querySelectorAll("input").forEach(function(i){i.oninput=up});up()}
+function init(){document.querySelectorAll("[data-st]").forEach(st);document.querySelectorAll("[data-sm]").forEach(sm);document.querySelectorAll("[data-pc]").forEach(pc);document.querySelectorAll("[data-ml]").forEach(ml);document.querySelectorAll("[data-calc]").forEach(calc)}
+/* quiz data */
+var TF=["True","False"];
+var Q=[
+["What is a process?",["A program in execution","A file stored on disk","A type of CPU","A compiler"],0,"A process is a program in execution, and it progresses sequentially."],
+["A program is a passive entity, while a process is an active entity.",TF,0,"True. A program is an executable file on disk; a process is active in memory."],
+["A program becomes a process when…",["An executable file is loaded into memory","It is saved to disk","It is printed","It is compiled"],0,"Loading the executable into memory creates the process."],
+["One program can be several processes (for example, many users running the same program).",TF,0,"True. Each one is a separate execution sequence."],
+["Which memory section holds global and static variables?",["Data section","Text section","Heap","Stack"],0,"The data section contains global and static variables."],
+["The text section contains…",["The executable code","Local variables","Dynamic memory","Return addresses"],0,"Text = the executable code."],
+["The heap is…",["Memory dynamically allocated during run time","Memory for the executable code","Memory for global variables","Disk space"],0,"The heap grows when memory is allocated and shrinks when returned."],
+["The stack contains…",["Function parameters, return address and local variables","Executable code","Global variables","Dynamic memory"],0,"Each function call pushes an activation record onto the stack."],
+["The sizes of the text and data sections change during program run time.",TF,1,"False. They are fixed. Only the stack and heap grow and shrink."],
+["Which is NOT a process state?",["Compiling","New","Ready","Terminated"],0,"The states are New, Ready, Running, Waiting, Terminated."],
+["In which state is a process waiting to be assigned to a processor?",["Ready","Waiting","Running","Terminated"],0,"Ready = waiting for the CPU. Waiting = waiting for an event."],
+["A running process that needs I/O moves to which state?",["Waiting","Ready","New","Terminated"],0,"The OS changes it from running to waiting until the I/O event completes."],
+["What does the PCB hold for a process?",["All information needed to keep track of the process","Only the program’s source code","Only the user’s password","Only the heap"],0,"State, PC, registers, scheduling, memory, accounting and I/O information."],
+["Which is NOT stored in the PCB?",["The compiler’s symbol table","Program counter","CPU registers","I/O status information"],0,"The PCB holds runtime tracking info, not compiler data."],
+["The PCB is identified by…",["An integer process ID (PID)","The file name","The user name","The CPU brand"],0,"Each PCB is identified by its PID."],
+["When is the PCB deleted?",["Once the process terminates","When the process starts","Never","When the CPU restarts"],0,"It is maintained throughout the process’s lifetime and deleted at termination."],
+["The ready queue is maintained in…",["Primary (main) memory","The hard disk only","The GPU","The keyboard buffer"],0,"The ready queue holds processes in main memory that are ready to execute."],
+["Where are all processes stored at the very start?",["The job queue","The ready queue only","The wait queue","The stack"],0,"In the beginning, all processes are stored in the job queue."],
+["What is the goal of the process scheduler?",["Maximize CPU use and switch processes onto the CPU quickly","Increase disk space","Delete processes","Reduce the screen brightness"],0,"The scheduler selects the next process for the CPU core."],
+["Arrival time is…",["When the process enters the ready queue","When it finishes","When it first gets the CPU","The total CPU time needed"],0,"Arrival time = entering the ready queue."],
+["Turnaround time is…",["The total time from arrival to completion","The CPU time only","The time until the first CPU access","Only the waiting time"],0,"Turnaround = completion − arrival."],
+["Burst time is…",["The total CPU time required to execute the whole process, excluding waiting","The time spent waiting","The arrival time","The completion time"],0,"Burst time does not include waiting time."],
+["Response time is…",["The difference between arrival and the time the process first gets the CPU","The total time to finish","Time spent in I/O","The CPU time"],0,"Response = first CPU − arrival."],
+["Scheduling based on burst time is easy to implement exactly in reality.",TF,1,"False. It is hard to know the execution time before running the process."],
+["A context switch requires…",["Saving the state of the old process and loading the state of the new one","Deleting both processes","Rebooting the system","Allocating new memory only"],0,"The old context is saved in its PCB; the new one is loaded."],
+["Where is the context of the old process saved during a context switch?",["In its PCB","In the heap","On the screen","In the compiler"],0,"The context of a process is represented in its PCB."],
+["Context-switch time is useful work done for the user.",TF,1,"False. It is pure overhead; the system does no useful work while switching."],
+["Which UNIX system call creates a new process?",["fork()","exec()","wait()","exit()"],0,"A new process is created by fork()."],
+["What does exec() do?",["Replaces the process’s memory space with a new program","Creates a child process","Waits for a child","Terminates a process"],0,"exec() loads a binary file into memory and starts its execution."],
+["What does the wait() system call do for a parent?",["Moves it off the ready queue until the child terminates","Creates a child","Deletes the child","Loads a new program"],0,"The parent waits for the child to finish."],
+["A process asks the OS to delete it by calling…",["exit()","fork()","exec()","wait()"],0,"exit() ends the process and the OS reclaims its resources."],
+["Cascading termination means…",["If a process terminates, all its children must also be terminated","Children can outlive the parent","The parent waits forever","Only one process exists"],0,"It is normally initiated by the OS."],
+["A zombie process is…",["Terminated, but its parent has not yet called wait()","A process that never started","A process in the ready queue","A process with a large heap"],0,"The terminated process stays until the parent calls wait()."],
+["Restricting a child to a subset of the parent’s resources prevents overloading the system by creating too many children.",TF,0,"True."],
+["What are the two models of IPC?",["Shared memory and message passing","Stack and heap","Ready and waiting","Fork and exec"],0,"Cooperating processes use one of these two models."],
+["In shared-memory IPC, communication is controlled by…",["The user processes, not the OS","The OS only","The hard disk","The compiler"],0,"The major issue is synchronizing the processes’ actions."],
+["In the unbounded-buffer producer-consumer problem, who never waits?",["The producer","The consumer","Both","Neither"],0,"The consumer waits only if there is nothing to consume."],
+["In the bounded-buffer problem, the producer must wait when…",["All buffers are full","The buffer is empty","The consumer is slow","The OS is idle"],0,"The consumer waits when the buffer is empty."],
+["Message passing is particularly useful in…",["A distributed environment","A single-user calculator","Compilers only","Memory layout"],0,"Communicating processes may be on different computers connected by a network."],
+["Which two operations does a message-passing facility provide?",["send(message) and receive(message)","fork() and exec()","push and pop","open and close"],0,"Message size may be fixed or variable."],
+["In direct communication, processes must…",["Name each other explicitly","Share a mailbox","Share memory","Avoid communication"],0,"For example send(P, message) and receive(Q, message)."],
+["In indirect communication, messages are sent to…",["Mailboxes (ports)","The stack","The PCB","The heap"],0,"Each mailbox has a unique id; processes must share a mailbox."],
+["Which is a solution to “who gets the message” when several processes share a mailbox?",["Allow only one process at a time to execute receive","Delete the mailbox","Remove the sender","Use bigger messages"],0,"Others: at most two processes per link, or the system selects the receiver arbitrarily."],
+["With zero-capacity buffering…",["The sender must wait for the receiver (rendezvous)","The sender never waits","Messages queue forever","Messages are encrypted"],0,"No messages are queued on the link."],
+["With bounded-capacity buffering, the sender must wait if…",["The link is full","The link is empty","The receiver is slow always","There is no message"],0,"A bounded link holds a finite n messages."]
+];
+var AQ=[
+["ما هي العملية (process)؟","العملية هي برنامج قيد التنفيذ، ويتقدم تنفيذها بشكل تسلسلي."],
+["البرنامج كيان سلبي (passive) بينما العملية كيان نشط (active).","صح. البرنامج ملف تنفيذي على القرص والعملية نشطة في الذاكرة."],
+["يصبح البرنامج عملية عندما…","تحميل الملف التنفيذي إلى الذاكرة ينشئ العملية."],
+["البرنامج الواحد قد يكون عدة عمليات (مثلاً عدة مستخدمين يشغّلون نفس البرنامج).","صح. كل واحدة تسلسل تنفيذ منفصل."],
+["أي قسم في الذاكرة يحمل المتغيرات العامة والساكنة (global/static)؟","قسم البيانات (data) يحتوي المتغيرات العامة والساكنة."],
+["قسم النص (text) يحتوي…","Text = الكود التنفيذي."],
+["الـ heap هو…","يكبر الـ heap عند التخصيص الديناميكي ويصغر عند إعادة الذاكرة."],
+["الـ stack يحتوي…","كل استدعاء دالة يدفع activation record إلى الـ stack."],
+["حجما قسمي text وdata يتغيران أثناء التشغيل.","غلط. حجمهما ثابت، والذي يكبر ويصغر هو الـ stack والـ heap."],
+["أيٌّ مما يلي ليس حالة عملية؟","الحالات: New وReady وRunning وWaiting وTerminated."],
+["في أي حالة تنتظر العملية تخصيص المعالج لها؟","Ready = تنتظر الـ CPU. Waiting = تنتظر حدثاً."],
+["العملية الجارية التي تحتاج I/O تنتقل إلى أي حالة؟","يغيّر النظام حالتها من running إلى waiting حتى يكتمل الحدث."],
+["ماذا يحتوي الـ PCB عن العملية؟","حالة العملية وPC والمسجلات ومعلومات الجدولة والذاكرة والمحاسبة والـ I/O."],
+["أيٌّ مما يلي لا يُخزَّن في الـ PCB؟","الـ PCB يحتوي معلومات التتبع أثناء التشغيل وليس بيانات المترجم."],
+["يتم تعريف الـ PCB بواسطة…","كل PCB له رقم عملية PID."],
+["متى يُحذف الـ PCB؟","يبقى طوال حياة العملية ويُحذف عند انتهائها."],
+["يُحفظ الـ ready queue في…","يحتوي العمليات الموجودة في الذاكرة الرئيسية والجاهزة للتنفيذ."],
+["أين تُخزَّن كل العمليات في البداية؟","في البداية تُخزَّن كل العمليات في الـ job queue."],
+["ما هدف مجدول العمليات (scheduler)؟","يختار المجدول العملية التالية للتنفيذ على نواة المعالج."],
+["وقت الوصول (Arrival time) هو…","Arrival time = دخول العملية إلى الـ ready queue."],
+["وقت الدوران (Turnaround time) هو…","Turnaround = completion − arrival."],
+["وقت الانفجار (Burst time) هو…","الـ burst time لا يشمل وقت الانتظار."],
+["وقت الاستجابة (Response time) هو…","Response = أول وصول للـ CPU − arrival."],
+["الجدولة المعتمدة على burst time سهلة التطبيق بدقة في الواقع.","غلط. من الصعب معرفة زمن التنفيذ قبل تشغيل العملية."],
+["تبديل السياق (context switch) يتطلب…","تُحفظ حالة العملية القديمة في الـ PCB الخاص بها ثم تُحمَّل حالة الجديدة."],
+["أين يُحفظ سياق العملية القديمة أثناء تبديل السياق؟","سياق العملية يُمثَّل في الـ PCB."],
+["وقت تبديل السياق عمل مفيد يُنجَز للمستخدم.","غلط. هو overhead خالص؛ لا يؤدي النظام عملاً مفيداً أثناء التبديل."],
+["أي system call في UNIX ينشئ عملية جديدة؟","تُنشأ العملية الجديدة بواسطة fork()."],
+["ماذا يفعل exec()؟","يحمّل exec() ملفاً ثنائياً في الذاكرة ويبدأ تنفيذه."],
+["ماذا يفعل wait() للعملية الأب؟","ينتظر الأب انتهاء الابن."],
+["تطلب العملية من النظام حذفها باستدعاء…","exit() ينهي العملية ويسترجع النظام مواردها."],
+["معنى الإنهاء المتسلسل (cascading termination)…","يبدؤه النظام عادةً."],
+["العملية الزومبي (zombie) هي…","تبقى العملية المنتهية حتى يستدعي الأب wait()."],
+["تقييد الابن بجزء من موارد الأب يمنع إغراق النظام بإنشاء عدد كبير من الأبناء.","صح."],
+["ما نموذجا الـ IPC؟","تستخدم العمليات المتعاونة أحد هذين النموذجين."],
+["في IPC بالذاكرة المشتركة يتحكم بالاتصال…","المشكلة الرئيسية هي مزامنة أفعال العمليات."],
+["في مسألة المنتج والمستهلك ذات المخزن غير المحدود (unbounded) من لا ينتظر أبداً؟","المستهلك ينتظر فقط إن لم يوجد شيء ليستهلكه."],
+["في المخزن المحدود (bounded) يجب على المنتج الانتظار عندما…","المستهلك ينتظر عندما يكون المخزن فارغاً."],
+["تمرير الرسائل مفيد خصوصاً في…","قد تكون العمليات المتصلة على حواسيب مختلفة مرتبطة بشبكة."],
+["أي عمليتين يوفرهما نظام تمرير الرسائل؟","حجم الرسالة إما ثابت أو متغير."],
+["في الاتصال المباشر (direct) يجب على العمليات…","مثلاً send(P, message) وreceive(Q, message)."],
+["في الاتصال غير المباشر (indirect) تُرسَل الرسائل إلى…","لكل mailbox رقم فريد، ويجب أن تشترك العمليات في mailbox."],
+["أيٌّ مما يلي حل لمشكلة “من يستلم الرسالة” عند اشتراك عدة عمليات في mailbox؟","حلول أخرى: عمليتان على الأكثر لكل رابط، أو يختار النظام المستلم عشوائياً."],
+["مع سعة صفرية (zero capacity) للمخزن…","لا تُوضع رسائل في طابور على الرابط."],
+["مع السعة المحدودة (bounded) يجب على المرسل الانتظار إذا…","الرابط المحدود يحمل عدداً منتهياً n من الرسائل."]
+];
+var ar=false,order=[],ok=0,ans=0;
+function sh(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
+function build(s){order=Q.map(function(_,i){return i});if(s)sh(order);ok=0;ans=0;$("#final").style.display="none";var box=$("#qs");box.innerHTML="";
+order.forEach(function(qi,n){var q=Q[qi],d=document.createElement("div");d.className="q";
+var p=document.createElement("p");p.innerHTML="<small>"+(ar?"السؤال "+(n+1)+" من "+Q.length:"Question "+(n+1)+" of "+Q.length)+"</small><br>";p.appendChild(document.createTextNode(ar?AQ[qi][0]:q[0]));d.appendChild(p);
+var ix=q[1].map(function(_,i){return i});if(q[1]!==TF)sh(ix);
+var fb=document.createElement("div");fb.className="fb";var bs=[];
+ix.forEach(function(oi){var b=document.createElement("button");b.className="opt";b.textContent=(ar&&q[1]===TF)?(oi?"غلط":"صح"):q[1][oi];bs.push([b,oi]);
+b.onclick=function(){bs.forEach(function(x){x[0].disabled=true;if(x[1]==q[2])x[0].classList.add("ok")});
+var good=oi==q[2];if(!good)b.classList.add("no");ans++;if(good)ok++;
+fb.className="fb show "+(good?"ok":"no");var ra=(ar&&q[1]===TF)?(q[2]?"غلط":"صح"):q[1][q[2]];
+fb.innerHTML="<b>"+(good?(ar?"صح ✓":"Correct ✓"):(ar?"غلط ✗":"Wrong ✗"))+"</b> "+(good?"":(ar?"الإجابة الصحيحة: “"+ra+"”. ":"The right answer is “"+ra+"”. "));fb.appendChild(document.createTextNode(ar?AQ[qi][1]:q[3]));upd()};
+d.appendChild(b)});d.appendChild(fb);box.appendChild(d)});upd()}
+function upd(){$("#score").textContent=(ar?"النتيجة: ":"Score: ")+ok+" / "+ans;$("#prog").textContent=" · "+ans+(ar?" من "+Q.length+" تمت الإجابة":" of "+Q.length+" answered");$("#bar i").style.width=(ans/Q.length*100)+"%";
+if(ans==Q.length){var f=$("#final"),pc=Math.round(ok/Q.length*100);f.style.display="block";f.dir=ar?"rtl":"ltr";
+f.innerHTML="<h3>"+(ar?"انتهيت! ":"Finished! ")+ok+" / "+Q.length+" ("+pc+"%)</h3>"+(ar?(pc>=85?"عمل ممتاز، أنت جاهز للامتحان.":pc>=60?"جيد. راجع الأقسام التي أخطأت فيها ثم أعد المحاولة.":"أعد قراءة الدليل والملخص ثم اخلط الأسئلة وجرّب مرة أخرى."):(pc>=85?"Excellent work, you are ready for the exam.":pc>=60?"Good job. Review the sections you missed, then try again.":"Re-read the guide and the summary, then shuffle and try again."))}}
+$("#shuf").onclick=function(){build(true);scrollTo({top:$("#quiz").offsetTop})};$("#rst").onclick=function(){build(false);scrollTo({top:$("#quiz").offsetTop})};
+/* Arabic content */
+var CH='<span class="chp" data-s="new">New</span><span class="chp" data-s="ready">Ready</span><span class="chp" data-s="run">Running</span><span class="chp" data-s="term">Terminated</span><span class="chp w" data-s="wait">Waiting</span>';
+var AR={
+con:`<h2>1. مفهوم العملية (Process Concept)</h2><p class="lead">ما هي العملية وكيف تبدو داخل الذاكرة.</p>
+<div class="card"><h3>التعريف</h3>العملية (<b>process</b>) هي <b>برنامج قيد التنفيذ</b>. يجب أن يتقدم تنفيذها <b>بشكل تسلسلي</b>: لا يوجد تنفيذ متوازٍ لتعليمات عملية واحدة.
+<ul><li>البرنامج كيان <b>سلبي (passive)</b> مخزّن على القرص (ملف تنفيذي)؛ والعملية كيان <b>نشط (active)</b>.</li><li>يصبح البرنامج <b>عملية</b> عندما <b>يُحمَّل الملف التنفيذي في الذاكرة</b>.</li><li><b>البرنامج الواحد قد يكون عدة عمليات</b> (مثلاً عدة مستخدمين يشغّلون نفس البرنامج).</li></ul>
+<div class="tip">عمليتان لنفس البرنامج تبقيان <b>تسلسلَي تنفيذ منفصلين</b>: عدة مستخدمين يشغّلون نسخاً من برنامج البريد، أو مستخدم يفتح عدة نوافذ متصفح. وقد تنشئ العملية <b>عدة عمليات</b> أثناء تشغيلها.</div></div>
+<div class="grid">
+<div class="card"><h3>النشاط الحالي</h3>حالة نشاط العملية الحالي تُمثَّل بقيمة <b>عداد البرنامج (program counter)</b> ومحتويات <b>مسجلات المعالج</b>.</div>
+<div class="card"><h3>تخطيط الذاكرة (4 أقسام)</h3><ul><li><b>Text</b> – الكود التنفيذي</li><li><b>Data</b> – المتغيرات العامة والساكنة</li><li><b>Heap</b> – ذاكرة تُخصَّص ديناميكياً وقت التشغيل</li><li><b>Stack</b> – بيانات مؤقتة: معاملات الدوال وعنوان الرجوع والمتغيرات المحلية</li></ul></div>
+</div>
+<div class="card" data-ml><h3>تجربة تفاعلية: الـ stack والـ heap يكبران باتجاه بعضهما</h3>
+<div class="mem"><div class="k" style="flex:2">Stack ↓</div><div class="gp" style="flex:4">مساحة حرة</div><div class="hp" style="flex:2">Heap ↑</div><div class="dt">Data</div><div class="tx">Text</div></div>
+<div style="text-align:center"><button class="btn s sg">استدعاء دالة (push)</button><button class="btn s o sr">رجوع (pop)</button><button class="btn s hg">malloc (يكبر الـ heap)</button><button class="btn s o hr">free (يصغر الـ heap)</button></div>
+<div class="tip msg mlm" data-clash="تصادم الـ stack مع الـ heap! على النظام ضمان ألا يتداخلا أبداً." data-ok="حجم text وdata ثابت. الـ stack والـ heap فقط يكبران ويصغران.">حجم text وdata ثابت. الـ stack والـ heap فقط يكبران ويصغران.</div></div>
+<div class="card"><h3>سلوك الـ stack والـ heap</h3><ul><li>كل استدعاء دالة يدفع <b>activation record</b> (المعاملات والمتغيرات المحلية وعنوان الرجوع) إلى الـ stack، وعند الرجوع <b>يُنزَع (pop)</b>.</li><li>يكبر الـ heap عند <b>التخصيص الديناميكي</b> ويصغر عند <b>إعادة الذاكرة</b> للنظام.</li><li>حجما <b>text وdata ثابتان</b>؛ والـ stack والـ heap يتغيران ديناميكياً. وعلى النظام ضمان <b>عدم تداخلهما</b>.</li></ul></div>`,
+stt:`<h2>2. حالة العملية وكتلة التحكم (State and PCB)</h2><p class="lead">الحالات الخمس والسجل الذي يحتفظ به النظام لكل عملية.</p>
+<div class="card"><h3>الحالات الخمس</h3>أثناء التنفيذ تتغير حالة العملية:<ul><li><b>New</b> – العملية قيد الإنشاء</li><li><b>Ready</b> – تنتظر تخصيص المعالج لها</li><li><b>Running</b> – تُنفَّذ تعليماتها</li><li><b>Waiting</b> – تنتظر وقوع حدث (مثل I/O)</li><li><b>Terminated</b> – انتهى تنفيذها</li></ul></div>
+<div class="card" data-sm><h3>تجربة تفاعلية: حرّك العملية بين الحالات</h3>
+<div class="lg" style="margin:10px 0">${CH}</div>
+<div><button class="btn s" data-t="new>ready" data-m="Admitted: أُنشئت العملية ونُقلت إلى طابور الجاهزية.">Admit</button><button class="btn s" data-t="ready>run" data-m="Scheduler dispatch: خُصِّص المعالج للعملية.">Scheduler dispatch</button><button class="btn s" data-t="run>ready" data-m="Interrupt: انتهت الشريحة الزمنية، عادت إلى ready.">Interrupt (timeout)</button><button class="btn s" data-t="run>wait" data-m="طلبت العملية I/O أو تنتظر حدثاً.">I/O or event wait</button><button class="btn s" data-t="wait>ready" data-m="اكتمل الحدث: عادت إلى طابور الجاهزية.">I/O or event completion</button><button class="btn s" data-t="run>term" data-m="Exit: انتهى تنفيذ العملية.">Exit</button><button class="btn s o" data-t="reset">إعادة</button></div>
+<div class="tip msg smm" data-bad="هذا الانتقال غير مسموح من الحالة الحالية.">اضغط على زر انتقال. الانتقالات الصحيحة فقط ستعمل.</div></div>
+<div class="card"><h3>كتلة التحكم بالعملية (PCB)</h3>بنية بيانات يحتفظ بها النظام <b>لكل عملية</b>، وتُعرَّف برقم <b>PID</b> صحيح. تحوي كل المعلومات اللازمة لتتبع العملية:
+<ul><li><b>حالة العملية</b> – running وwaiting وغيرها</li><li><b>Program counter</b> – موقع التعليمة التالية</li><li><b>مسجلات الـ CPU</b> – محتوى كل المسجلات الخاصة بالعملية</li><li><b>معلومات جدولة الـ CPU</b> – الأولويات ومؤشرات الطوابير</li><li><b>معلومات إدارة الذاكرة</b> – الذاكرة المخصصة للعملية</li><li><b>معلومات المحاسبة</b> – الـ CPU المستخدم والوقت المنقضي وحدود الوقت</li><li><b>معلومات حالة I/O</b> – الأجهزة المخصصة وقائمة الملفات المفتوحة</li></ul>
+<div class="tip">بنية الـ PCB تعتمد كلياً على نظام التشغيل. وتُحفظ <b>طوال حياة العملية</b> و<b>تُحذف عند انتهائها</b>.</div></div>`,
+sch:`<h2>3. جدولة العمليات (Process Scheduling)</h2><p class="lead">الطوابير وأوقات الجدولة وتبديل السياق.</p>
+<div class="card"><h3>المجدول (Scheduler)</h3><b>مجدول العمليات</b> يختار من العمليات المتاحة العملية التالية للتنفيذ على نواة الـ CPU. <b>الهدف: تعظيم استخدام الـ CPU وتبديل العمليات عليه بسرعة.</b> وتنتقل العمليات <b>بين الطوابير المختلفة</b>.</div>
+<div class="grid">
+<div class="card"><h3>Job queue</h3>في البداية تُخزَّن <b>كل العمليات</b> في طابور المهام.</div>
+<div class="card"><h3>Ready queue</h3>مجموعة العمليات الموجودة في <b>الذاكرة الرئيسية</b> والجاهزة والمنتظرة للتنفيذ.</div>
+<div class="card"><h3>Wait queues</h3>عمليات تنتظر حدثاً (مثل I/O). عندما تحتاج العملية الجارية I/O يغيّر النظام حالتها من <b>running إلى waiting</b>.</div>
+</div>
+<div class="card"><h3>الأوقات المرتبطة بالعملية</h3><ul>
+<li><b>Arrival time</b> – وقت دخول العملية إلى الـ ready queue</li>
+<li><b>Completion time</b> – وقت اكتمال تنفيذ العملية</li>
+<li><b>Turnaround time</b> – الوقت الكلي من الوصول إلى الاكتمال (<code>completion − arrival</code>)</li>
+<li><b>Burst time</b> – إجمالي وقت الـ CPU اللازم لتنفيذ العملية كاملة، <b>بدون وقت الانتظار</b>. يصعب معرفته قبل التنفيذ فلا يمكن تطبيق الجدولة المعتمدة عليه بدقة في الواقع</li>
+<li><b>Waiting time</b> – إجمالي وقت انتظار العملية للـ CPU (<code>turnaround − burst</code>)</li>
+<li><b>Response time</b> – الفرق بين وقت الوصول ووقت <b>أول حصول على الـ CPU</b> (<code>first CPU − arrival</code>)</li></ul></div>
+<div class="card" data-calc><h3>تجربة تفاعلية: احسب الأوقات</h3>غيّر الأرقام (المعادلات تفترض أن عمل العملية هو وقت الـ CPU فقط بدون I/O).
+<div class="calc"><label>Arrival<input class="a" type="number" value="0"></label><label>أول وصول للـ CPU<input class="f" type="number" value="2"></label><label>Burst<input class="b" type="number" value="5"></label><label>Completion<input class="c" type="number" value="9"></label></div>
+<div class="res"><div>Turnaround<b class="tat">9</b></div><div>Waiting<b class="wt">4</b></div><div>Response<b class="rt">2</b></div></div></div>
+<div class="card" data-st><h3>تبديل السياق (Context switch)</h3>تحويل الـ CPU إلى عملية أخرى يتطلب <b>حفظ حالة</b> العملية الحالية و<b>استعادة حالة</b> عملية مختلفة. تحفظ النواة السياق القديم <b>في الـ PCB</b> وتحمّل السياق المحفوظ للعملية الجديدة. <b>زمن تبديل السياق overhead خالص</b>: لا يؤدي النظام عملاً مفيداً أثناءه، ويعتمد زمنه على دعم العتاد.
+<div class="flow"><span>P0 تعمل</span><i>←</i><span>حفظ الحالة → PCB0</span><i>←</i><span>تحميل الحالة ← PCB1</span><i>←</i><span>P1 تعمل</span></div>
+<ol class="steps"><li data-b="0">العملية P0 تُنفَّذ على الـ CPU.</li><li data-b="1">تحدث مقاطعة أو system call؛ تقوم النواة بـ<b>حفظ سياق P0 في PCB0</b>. (لا عمل مفيد.)</li><li data-b="2">تقوم النواة بـ<b>تحميل السياق المحفوظ لـ P1 من PCB1</b>. (ما زال overhead.)</li><li data-b="3">تُنفَّذ العملية P1 الآن على الـ CPU.</li></ol>
+<button class="btn nx">الخطوة التالية</button><button class="btn o rs">إعادة</button></div>`,
+ops:`<h2>4. العمليات على الـ Processes</h2><p class="lead">إنشاء العمليات وإنهاؤها.</p>
+<div class="card"><h3>إنشاء العملية (Process creation)</h3>تعمل العمليات بالتزامن و<b>تُنشأ وتُحذف ديناميكياً</b>. العملية المنشِئة هي <b>الأب (parent)</b> والجديدة هي <b>الأبناء (children)</b>. وقد ينشئ الأبناء عمليات أخرى فتتكوّن <b>شجرة عمليات</b>. لكل عملية رقم صحيح فريد <b>pid</b>.
+<ul><li>يحتاج الابن موارد (وقت CPU وذاكرة وملفات وأجهزة I/O). قد يحصل عليها <b>مباشرة من النظام</b> أو يُحصَر في <b>جزء من موارد الأب</b>. وقد <b>يقسّم</b> الأب موارده بين أبنائه أو <b>يشاركها</b>.</li><li>تقييد الابن بجزء من موارد الأب <b>يمنع أي عملية من إغراق النظام</b> بإنشاء أبناء كثيرين.</li></ul></div>
+<div class="grid">
+<div class="card"><h3>احتمالان للتنفيذ</h3><ol style="padding:0 20px 0 0"><li>يستمر الأب <b>بالتزامن</b> مع أبنائه.</li><li>ينتظر الأب حتى ينتهي <b>بعض أو كل</b> أبنائه.</li></ol></div>
+<div class="card"><h3>احتمالان لمساحة العنوان</h3><ol style="padding:0 20px 0 0"><li>الابن <b>نسخة</b> من الأب (نفس البرنامج والبيانات).</li><li>الابن يُحمَّل فيه <b>برنامج جديد</b>.</li></ol></div>
+</div>
+<div class="card" data-st><h3>UNIX: <code>fork()</code> و<code>exec()</code> و<code>wait()</code></h3>تُنشأ العملية الجديدة بواسطة <code>fork()</code>. بعدها تستدعي إحدى العمليتين عادةً <code>exec()</code> <b>لاستبدال مساحة ذاكرتها ببرنامج جديد</b> (تحمّل ملفاً ثنائياً وتبدأ تنفيذه). ويستطيع الأب إنشاء أبناء آخرين أو استدعاء <code>wait()</code> <b>ليخرج من الـ ready queue</b> حتى ينتهي الابن.
+<div class="flow"><span>الأب يعمل</span><i>←</i><span>الابن = نسخة</span><i>←</i><span>الابن يشغّل برنامجاً جديداً</span><i>←</i><span>الأب يستأنف</span></div>
+<ol class="steps"><li data-b="0">عملية الأب تعمل.</li><li data-b="1">يستدعي الأب <code>fork()</code>: يُنشأ <b>ابن كنسخة</b> (نفس البرنامج والبيانات) مع PID جديد.</li><li data-b="2">يستدعي الابن <code>exec()</code>: تُستبدل ذاكرته <b>ببرنامج جديد</b>.</li><li data-b="0">يستدعي الأب <code>wait()</code> ويخرج من الـ ready queue حتى ينتهي الابن.</li><li data-b="2">ينتهي الابن ويستدعي <code>exit()</code>؛ تُحرَّر موارده.</li><li data-b="3">يستيقظ الأب و<b>يتابع</b>.</li></ol>
+<button class="btn nx">الخطوة التالية</button><button class="btn o rs">إعادة</button></div>
+<div class="card"><h3>إنهاء العملية (Process termination)</h3><ul><li>تنتهي العملية عند إنهاء آخر تعليمة وتستدعي <code>exit()</code>. يقوم النظام <b>بتحرير واسترجاع كل مواردها</b>: الذاكرة الفيزيائية والافتراضية والملفات المفتوحة ومخازن I/O.</li><li>يمكن لعملية إنهاء أخرى عبر system call (مثل <code>TerminateProcess()</code> في ويندوز). ويجب أن يعرف الأب هوية أبنائه، لذلك <b>تُمرَّر هوية العملية الجديدة إلى الأب</b>.</li><li>قد ينهي الأب ابنه إذا <b>تجاوز استخدامه للموارد</b>، أو إذا كان <b>الأب ينتهي</b> والنظام لا يسمح باستمرار الأبناء.</li><li><b>الإنهاء المتسلسل (Cascading termination)</b>: إذا انتهت عملية (بشكل طبيعي أو غير طبيعي) <b>يجب إنهاء كل أبنائها</b>. يبدؤه النظام عادةً.</li><li>ينتظر الأب انتهاء الابن باستخدام <code>wait()</code>.</li><li><b>العملية الزومبي (zombie)</b> انتهت لكن <b>أباها لم يستدعِ <code>wait()</code> بعد</b>.</li></ul></div>`,
+shm:`<h2>5. الاتصال بين العمليات: الذاكرة المشتركة</h2><p class="lead">الـ IPC ومسألة المنتج والمستهلك.</p>
+<div class="card"><h3>عمليات مستقلة ومتعاونة</h3>قد تكون العمليات <b>مستقلة</b> أو <b>متعاونة</b>. العملية المتعاونة <b>تؤثر أو تتأثر</b> بالعمليات الأخرى ومنها بمشاركة البيانات (سبب: <b>مشاركة المعلومات</b>). تحتاج العمليات المتعاونة إلى <b>IPC</b>. نموذجان: <b>الذاكرة المشتركة</b> و<b>تمرير الرسائل</b>.</div>
+<div class="card"><h3>نموذج الذاكرة المشتركة</h3><ul><li><b>منطقة ذاكرة مشتركة</b> بين العمليات المتصلة.</li><li>الاتصال تحت سيطرة <b>عمليات المستخدم وليس النظام</b>.</li><li>المشكلة الرئيسية: آلية تتيح لعمليات المستخدم <b>مزامنة أفعالها</b> عند الوصول للذاكرة المشتركة.</li></ul></div>
+<div class="card"><h3>مسألة المنتج والمستهلك (Producer-consumer)</h3>نموذج للعمليات المتعاونة: <b>منتِج</b> ينتج معلومات يستهلكها <b>مستهلِك</b>. نوعان:
+<div class="grid" style="margin-top:10px"><div class="card"><h3>مخزن غير محدود (Unbounded)</h3>لا حد عملي لحجم المخزن. <b>المنتج لا ينتظر أبداً</b>؛ والمستهلك ينتظر إن لم يوجد ما يستهلكه.</div><div class="card"><h3>مخزن محدود (Bounded)</h3>حجم ثابت. <b>يجب على المنتج الانتظار إذا امتلأ المخزن</b>؛ والمستهلك ينتظر إن لم يوجد ما يستهلكه.</div></div></div>
+<div class="card" data-pc><h3>تجربة تفاعلية: مخزن محدود (5 خانات)</h3>
+<div class="slots"><span></span><span></span><span></span><span></span><span></span></div>
+<div style="text-align:center"><button class="btn s pr">أنتِج عنصراً</button><button class="btn s o co">استهلك عنصراً</button></div>
+<div class="tip msg pcm" data-full="المخزن ممتلئ: يجب على المنتج الانتظار." data-empty="المخزن فارغ: يجب على المستهلك الانتظار." data-p="أضاف المنتج عنصراً." data-c="أزال المستهلك عنصراً.">أضف وأزل عناصر. جرّب إفراط الملء أو الاستهلاك.</div></div>`,
+msg:`<h2>6. الاتصال بين العمليات: تمرير الرسائل</h2><p class="lead">التواصل دون مشاركة نفس مساحة العنوان.</p>
+<div class="card"><h3>الأساسيات</h3>يتيح تمرير الرسائل للعمليات <b>التواصل والمزامنة دون مشاركة نفس مساحة العنوان</b> أو متغيرات مشتركة. وهو مفيد خصوصاً في <b>البيئة الموزعة</b> (عمليات على حواسيب مختلفة مرتبطة بشبكة)، مثل برنامج دردشة على الإنترنت.
+<ul><li>عمليتان: <code>send(message)</code> و<code>receive(message)</code>. حجم الرسالة <b>ثابت أو متغير</b>.</li><li>لكي تتواصل P وQ يجب <b>إنشاء رابط اتصال</b> و<b>تبادل الرسائل</b> عبر send/receive.</li></ul></div>
+<div class="grid">
+<div class="card"><h3>1. الاتصال المباشر (Direct)</h3>تسمّي العمليات <b>بعضها صراحةً</b>: <code>send(P, message)</code> و<code>receive(Q, message)</code>.<ul><li>تُنشأ الروابط <b>تلقائياً</b></li><li>الرابط يخص <b>زوجاً واحداً</b> من العمليات</li><li><b>رابط واحد</b> بالضبط لكل زوج</li><li>قد يكون أحادي الاتجاه لكنه غالباً <b>ثنائي الاتجاه</b></li></ul></div>
+<div class="card"><h3>2. الاتصال غير المباشر (Indirect)</h3>تُرسَل وتُستقبَل الرسائل عبر <b>صناديق بريد (mailboxes / ports)</b> لكل منها <b>معرّف فريد</b>. تتواصل العمليات فقط إذا <b>تشارك mailbox</b>.<ul><li>الرابط قد يخص <b>عدة عمليات</b></li><li>الزوج قد يشترك في <b>عدة روابط</b></li><li>أحادي أو ثنائي الاتجاه</li></ul>العمليات: إنشاء mailbox وإرسال/استقبال عبرها وحذفها. <code>send(A, message)</code> و<code>receive(A, message)</code>.</div>
+</div>
+<div class="card"><h3>مشكلة مشاركة الـ mailbox</h3>P1 وP2 وP3 تشترك في mailbox A. P1 ترسل؛ وP2 وP3 تستقبلان. <b>من يستلم الرسالة؟</b> الحلول: السماح لرابط <b>بعمليتين على الأكثر</b>؛ السماح <b>لعملية واحدة فقط في الوقت</b> بتنفيذ receive؛ أو أن <b>يختار النظام المستلم عشوائياً</b> ويُبلغ المرسل.</div>
+<div class="card"><h3>3. التخزين المؤقت (Buffering)</h3><b>طابور رسائل</b> مرتبط بالرابط، ويُنفَّذ بثلاث طرق:
+<ul><li><b>سعة صفرية (Zero capacity)</b> – لا رسائل في الطابور. على المرسل انتظار المستقبل (<b>rendezvous</b>).</li><li><b>سعة محدودة (Bounded)</b> – طول منتهٍ n رسالة. على المرسل الانتظار إذا امتلأ الرابط.</li><li><b>سعة غير محدودة (Unbounded)</b> – طول لا نهائي. المرسل لا ينتظر أبداً.</li></ul>
+<div class="tip">سلايداتك تنتهي عند الـ buffering. موضوعا “Examples of IPC systems” و“client-server communication” موجودان في الفهرس لكن ليسا في السلايدات.</div></div>`,
+sum:`<h2>7. ملخص الشابتر</h2><p class="lead">راجعه قبل الامتحان مباشرة.</p>
+<div class="card"><ul>
+<li><b>Process</b> = برنامج قيد التنفيذ (نشط)؛ البرنامج = ملف سلبي على القرص. البرنامج الواحد قد يكون عدة عمليات.</li>
+<li>تخطيط الذاكرة: <b>text وdata وheap وstack</b>. text/data ثابتان؛ والـ heap والـ stack يكبران باتجاه بعضهما.</li>
+<li>الحالات: <b>New وReady وRunning وWaiting وTerminated</b>. والـ <b>PCB</b> (PID وحالة وPC ومسجلات وجدولة وذاكرة ومحاسبة وI/O) يُحفظ لكل عملية.</li>
+<li>الطوابير: <b>job وready (في الذاكرة الرئيسية) وwait</b>. المجدول يعظّم استخدام الـ CPU.</li>
+<li>الأوقات: arrival وcompletion وturnaround وburst وwaiting وresponse.</li>
+<li><b>Context switch</b>: حفظ الحالة القديمة في PCB وتحميل الجديدة. overhead خالص.</li>
+<li><b>fork()</b> ينشئ، <b>exec()</b> يستبدل البرنامج، <b>wait()</b> ينتظر الابن، <b>exit()</b> ينهي. إنهاء متسلسل؛ والزومبي = منتهية لكن الأب لم ينتظرها.</li>
+<li><b>IPC</b>: ذاكرة مشتركة (يتحكم بها المستخدم وتحتاج مزامنة؛ المنتج والمستهلك) مقابل تمرير رسائل (send/receive؛ مباشر وغير مباشر عبر mailboxes؛ سعة صفرية/محدودة/غير محدودة).</li></ul></div>
+<div class="card scroll"><h3>مقارنات سريعة</h3>
+<table><tr><th>المفهوم أ</th><th>المفهوم ب</th></tr>
+<tr><td><b>Program</b>: سلبي على القرص</td><td><b>Process</b>: نشطة في الذاكرة</td></tr>
+<tr><td><b>Shared memory</b>: يتحكم بها المستخدم وتحتاج مزامنة</td><td><b>Message passing</b>: send/receive بدون مساحة عنوان مشتركة، مناسب للأنظمة الموزعة</td></tr>
+<tr><td><b>Direct</b>: تسمية العملية (P, Q)؛ رابط واحد لكل زوج</td><td><b>Indirect</b>: mailboxes (ports)؛ عدة عمليات لكل رابط</td></tr>
+<tr><td><b>Unbounded buffer</b>: المنتج لا ينتظر</td><td><b>Bounded buffer</b>: المنتج ينتظر عند الامتلاء</td></tr>
+<tr><td><b>Turnaround</b> = completion − arrival</td><td><b>Response</b> = first CPU − arrival</td></tr>
+<tr><td><b>Zero capacity</b>: المرسل ينتظر (rendezvous)</td><td><b>Unbounded capacity</b>: المرسل لا ينتظر</td></tr>
+<tr><td><b>Ready queue</b>: ينتظر الـ CPU</td><td><b>Wait queue</b>: ينتظر حدثاً (I/O)</td></tr></table></div>`};
+Object.keys(AR).forEach(function(k){var w=document.querySelector("#"+k+" .wrap"),d=document.createElement("div");d.className="arx";d.lang="ar";d.dir="rtl";d.innerHTML=AR[k];w.appendChild(d)});
+init();
+/* language toggle */
+var NA=["مفهوم العملية","الحالات وPCB","الجدولة","العمليات عليها","الذاكرة المشتركة","تمرير الرسائل","الملخص","الاختبار"];
+var NE=[].map.call(document.querySelectorAll("nav a"),function(a){return a.textContent});
+var H1=$(".hero h1"),HP=$(".hero p"),HB=document.querySelectorAll(".hero .btn"),H0=[H1.innerHTML,HP.textContent,HB[0].textContent,HB[1].textContent];
+var QE=[$("#quiz h2").textContent,$("#quiz .lead").textContent,$("#shuf").textContent,$("#rst").textContent,$("footer").textContent];
+$("#lang").onclick=function(){ar=!ar;document.body.classList.toggle("ar",ar);
+document.querySelectorAll("nav a").forEach(function(a,i){a.textContent=ar?NA[i]:NE[i]});
+H1.innerHTML=ar?"نظم التشغيل<br>الشابتر 3: العمليات":H0[0];HP.textContent=ar?"دليل دراسة كامل وسهل: مفهوم العملية وحالاتها والـ PCB والجدولة وfork/exec/wait والاتصال بين العمليات، مع تجارب تفاعلية وملخص واختبار يخبرك فوراً إن كانت إجابتك صح أو غلط.":H0[1];
+HB[0].textContent=ar?"ابدأ الدراسة":H0[2];HB[1].textContent=ar?"اذهب للاختبار":H0[3];$("#lang").textContent=ar?"English":"العربية";
+$("#quiz h2").textContent=ar?"8. الاختبار التفاعلي":QE[0];$("#quiz .lead").textContent=ar?"اضغط على إجابة. الأخضر يعني صح، والأحمر غلط، ويظهر شرح الإجابة الصحيحة دائماً.":QE[1];
+$("#shuf").textContent=ar?"خلط وإعادة":QE[2];$("#rst").textContent=ar?"إعادة":QE[3];$("footer").textContent=ar?"مبني على سلايدات الشابتر 3: العمليات · نظم التشغيل (501471)":QE[4];
+$("#quiz .wrap").dir=ar?"rtl":"ltr";build(false)};
+build(false);
+})();
+</script>
+</body>
+</html>
