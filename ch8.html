@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Operating Systems – Chapter 8 Study Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=JetBrains+Mono:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a0c;--panel:#141416;--panel2:#1c1c20;--line:#3a3830;--g:#ffd60a;--g2:#ffb703;--gd:#8a6d00;--am:#6fd3ff;--cd:#fff2b0;--txt:#f7f4e8;--mut:#b1ab94;--bad:#ff4d4d;--ok:#4ade80;
+--hz:repeating-linear-gradient(135deg,#ffd60a 0 9px,#0a0a0c 9px 18px);
+box-sizing:border-box;color-scheme:dark;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(112px + env(safe-area-inset-top,0px))}
+body{margin:0;background:var(--bg);color:var(--txt);font:16px/1.65 "IBM Plex Sans",system-ui,sans-serif;
+background-image:repeating-linear-gradient(135deg,rgba(255,214,10,.035) 0 2px,transparent 2px 26px)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:30}
+#bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.55}
+main,header{position:relative;z-index:1}
+h1,h2,h3,h4,summary{font-family:"Barlow Condensed",system-ui,sans-serif;line-height:1.15;margin:0;letter-spacing:.3px}
+.wrap{max-width:980px;margin:0 auto;padding:0 18px}
+.cbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:22;height:42px;background:#050506;border-bottom:3px solid transparent;border-image:var(--hz) 3}
+.cbar .wrap{display:flex;gap:6px;align-items:center;height:39px;overflow-x:auto;scrollbar-width:none}
+.cbar a{color:var(--mut);text-decoration:none;padding:3px 14px;border-radius:6px;font:700 16px "Barlow Condensed",sans-serif;white-space:nowrap;border:1px solid transparent}
+.cbar a:hover,.cbar a:focus-visible{color:var(--g);border-color:var(--gd);outline:none}.cbar a.cur{background:var(--g);color:#14110a}
+nav{position:sticky;top:calc(42px + env(safe-area-inset-top,0px));z-index:20;background:rgba(10,10,12,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;gap:6px;overflow-x:auto;padding:10px 18px;scrollbar-width:none;align-items:center}
+nav a{color:var(--mut);text-decoration:none;white-space:nowrap;padding:6px 12px;border-radius:99px;font-size:14px;border:1px solid transparent}
+nav a:hover,nav a:focus-visible{color:var(--g);border-color:var(--gd);outline:none}
+.hero{display:grid;grid-template-columns:1.1fr 1fr;gap:28px;align-items:center;padding:54px 0 40px}
+.hero h1{font-size:clamp(40px,7vw,68px);color:var(--g);text-shadow:0 0 30px rgba(255,214,10,.35)}
+.hero p{color:var(--mut);max-width:46ch}
+.btn{display:inline-block;background:var(--g);color:#14110a;border:0;border-radius:8px;padding:11px 20px;cursor:pointer;font:600 15px "IBM Plex Sans",sans-serif;text-decoration:none;margin:4px 8px 4px 0}
+.btn.o{background:transparent;color:var(--g);border:1px solid var(--gd)}
+.btn.o.on{background:var(--g);color:#14110a}
+.btn.s{padding:7px 12px;font-size:13.5px;margin:3px 6px 3px 0}
+.btn:hover{box-shadow:0 0 18px rgba(255,214,10,.45)}
+.btn:focus-visible,summary:focus-visible,.opt:focus-visible,input:focus-visible,select:focus-visible,svg g:focus-visible{outline:2px solid var(--g);outline-offset:2px}
+.dl{background:#050506;border:2px solid var(--g);border-radius:14px;box-shadow:0 0 44px rgba(255,214,10,.22);padding:12px;position:relative;overflow:hidden}
+.dl::before{content:"";position:absolute;left:0;right:0;top:0;height:8px;background:var(--hz)}
+.dl .pt{font:12px "JetBrains Mono",monospace;color:var(--mut);margin:8px 0 0 4px}
+svg.ph{width:100%;max-width:300px;display:block;margin:0 auto}
+svg.ph text{font:700 15px "Barlow Condensed",sans-serif;text-anchor:middle;fill:#fff;pointer-events:none}
+svg.ph g{cursor:pointer}
+.dl .st{text-align:center;font:700 22px "Barlow Condensed",sans-serif;min-height:30px;color:var(--bad)}
+section{padding:44px 0 8px}
+section>.wrap>h2,.arx>h2{font-size:clamp(28px,4.2vw,38px);color:var(--g);margin-bottom:6px}
+section>.wrap>h2::after,.arx>h2::after{content:"";display:block;height:6px;margin-top:8px;width:130px;background:var(--hz)}
+.lead{color:var(--mut);margin:14px 0 20px}
+.card{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:14px 0}
+.card h3{font-size:22px;color:var(--g);margin-bottom:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.grid .card{margin:0}
+.grid.s .card h3::before{content:attr(data-n);display:inline-block;background:var(--g);color:#14110a;border-radius:5px;padding:0 8px;margin-inline-end:8px;font-size:16px}
+ul,ol{margin:6px 0;padding-left:20px}li{margin:4px 0}
+b,strong{color:var(--g)}
+code{font-family:"JetBrains Mono",monospace;font-size:.88em;background:#050506;border:1px solid var(--line);border-radius:5px;padding:1px 6px;color:var(--cd);direction:ltr;unicode-bidi:isolate}
+.tip{border-left:3px solid var(--am);background:rgba(111,211,255,.07);padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:15px}
+.tip.bad{border-color:var(--bad);background:rgba(255,77,77,.09)}.tip.good{border-color:var(--ok);background:rgba(74,222,128,.09)}
+.scroll{overflow-x:auto}
+.msg{min-height:44px}
+.cds{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:10px 0}
+.cd{padding:12px;border-radius:10px;border:2px solid var(--g);background:rgba(255,214,10,.12);color:var(--txt);font:700 18px "Barlow Condensed",sans-serif;cursor:pointer;text-align:center;transition:.25s}
+.cd.off{border-color:var(--line);background:#101012;color:var(--mut);text-decoration:line-through}
+.zones{display:flex;gap:0;margin:12px 0;border-radius:10px;overflow:hidden;border:1px solid var(--line);font:700 16px "Barlow Condensed",sans-serif;text-align:center}
+.zones div{padding:16px 8px}
+.zones .z1{flex:3;background:rgba(74,222,128,.2);color:var(--ok)}.zones .z2{flex:3;background:rgba(255,183,3,.2);color:var(--g2)}.zones .z3{flex:2;background:rgba(255,77,77,.25);color:var(--bad)}
+.zones small{display:block;font:400 12.5px "IBM Plex Sans",sans-serif;color:var(--mut)}
+svg.rg{width:100%;max-width:560px;display:block;margin:10px auto;background:#070708;border:1px solid var(--line);border-radius:10px}
+svg.rg text{font:700 14px "JetBrains Mono",monospace;text-anchor:middle;fill:#fff;pointer-events:none}
+.tbl{border-collapse:collapse;margin:8px 0}
+.tbl th,.tbl td{border:1px solid var(--line);padding:4px 6px;text-align:center;font-size:14px}
+.tbl th{background:#2a2410;color:var(--g)}
+.tbl input,.qin,select{width:46px;padding:5px 4px;border-radius:7px;border:1px solid var(--gd);background:#050506;color:var(--txt);font:600 15px "JetBrains Mono",monospace;text-align:center}
+select{width:auto;padding:5px 8px}
+.tbl .nd{font:600 14px "JetBrains Mono",monospace;color:var(--am)}
+.steps2{font:13.5px/1.7 "JetBrains Mono",monospace;direction:ltr;text-align:left;background:#050506;border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:8px 0}
+.steps2 div{border-bottom:1px dashed #26241c;padding:2px 0}
+details{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:12px;margin:10px 0;overflow:hidden}
+summary{cursor:pointer;padding:14px 18px;font-size:20px;font-weight:700;color:var(--g);list-style:none}
+summary::before{content:"▸ ";color:var(--am)}details[open] summary::before{content:"▾ "}
+details>div{padding:0 20px 16px}
+table.t{border-collapse:collapse;width:100%;min-width:520px;font-size:14.5px}
+table.t th,table.t td{border:1px solid var(--line);padding:8px 12px;text-align:left;vertical-align:top}
+table.t th{background:#2a2410;color:var(--g)}
+#bar{height:8px;background:#101012;border-radius:9px;overflow:hidden;margin:10px 0}
+#bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--g2),var(--g));transition:width .4s}
+.q{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0}
+.q p{margin:0 0 10px;font-weight:600}.q small{color:var(--mut);font-weight:400}
+.opt{display:block;width:100%;text-align:start;margin:6px 0;padding:10px 14px;border-radius:8px;border:1px solid var(--line);background:#101012;color:var(--txt);font:inherit;cursor:pointer;transition:.2s}
+.opt:hover:not(:disabled){border-color:var(--g);background:#1f1c0e}
+.opt.ok{background:rgba(74,222,128,.2);border-color:var(--ok);color:#fff}
+.opt.no{background:rgba(255,77,77,.18);border-color:var(--bad);color:#ffd6d6}
+.opt:disabled{cursor:default}
+.fb{display:none;margin-top:8px;padding:10px 14px;border-radius:8px;font-size:15px}
+.fb.show{display:block}.fb.ok{background:rgba(74,222,128,.1);border-left:3px solid var(--ok)}.fb.no{background:rgba(255,77,77,.1);border-left:3px solid var(--bad)}
+#score{font:700 26px "Barlow Condensed",sans-serif;color:var(--g)}
+footer{padding:40px 18px 60px;text-align:center;color:var(--mut)}
+.arx{direction:rtl;text-align:start}body:not(.ar) .arx{display:none}
+body.ar section:not(#quiz) .wrap>*:not(.arx){display:none}
+body.ar{font-family:"Tajawal","IBM Plex Sans",sans-serif;font-size:17px}body.ar .btn{font-family:"Tajawal",sans-serif}
+body.ar h1,body.ar h2,body.ar h3,body.ar h4,body.ar summary,body.ar #score,body.ar .cd,body.ar .zones,body.ar .dl .st{font-family:"Tajawal",sans-serif}
+.arx ul,.arx ol{padding:0 20px 0 0}
+.arx .tip{border-left:0;border-right:3px solid var(--am);border-radius:8px 0 0 8px}.arx .tip.bad{border-color:var(--bad)}.arx .tip.good{border-color:var(--ok)}
+.arx table.t th,.arx table.t td{text-align:start}
+#lang{flex:none;padding:6px 16px;margin:0 8px 0 0;font-size:14px}
+@media(max-width:760px){.hero{grid-template-columns:1fr;padding-top:34px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<canvas id="bg" aria-hidden="true"></canvas>
+<div class="cbar"><div class="wrap"><a href="index.html">⌂ Home</a><a href="ch1.html">Ch 1</a><a href="ch2.html">Ch 2</a><a href="ch3.html">Ch 3</a><a href="ch4.html">Ch 4</a><a href="ch5.html">Ch 5</a><a href="ch8.html" class="cur">Ch 8</a></div></div>
+<nav><div class="wrap">
+<button class="btn" id="lang" type="button">العربية</button><a href="#mod">System Model</a><a href="#cnd">Four Conditions</a><a href="#rag">Resource-Allocation Graph</a><a href="#han">Handling Deadlocks</a><a href="#prv">Prevention</a><a href="#avd">Avoidance &amp; Banker’s</a><a href="#sum">Summary</a><a href="#quiz">Quiz</a>
+</div></nav>
+
+<header><div class="wrap hero">
+<div>
+<h1>Operating Systems<br>Chapter 8: Deadlocks</h1>
+<p>A complete, easy-to-follow study guide: the system model, the four necessary conditions, resource-allocation graphs, prevention, avoidance and the banker’s algorithm in plain English, with live demos, a summary, and a quiz that tells you instantly if you are right or wrong.</p>
+<a class="btn" href="#mod">Start studying</a><a class="btn o" href="#avd">Try the banker’s algorithm</a>
+</div>
+<div class="dl" aria-hidden="true"><div class="pt">$ dining philosophers · everyone grabs the left chopstick</div><svg class="ph" id="hph" viewBox="0 0 300 300"></svg><div class="st" id="hst"></div></div>
+</div></header>
+
+<main>
+<section id="mod"><div class="wrap">
+<h2>1. System Model and Deadlock</h2>
+<p class="lead">What resources are, how threads use them, and what “deadlocked” means.</p>
+<div class="card"><h3>Resources</h3>A system has a <b>finite number of resources</b> to be distributed among competing threads. Resources are partitioned into <b>types (classes)</b>, each with some number of <b>identical instances</b>.
+<ul><li>Examples of resource types: <b>CPU cycles, files, I/O devices</b> (network interfaces, DVD drives).</li><li>A system with four CPUs: the resource type CPU has <b>four instances</b>.</li><li>If a thread requests an instance of a type, <b>any instance</b> should satisfy it. If not, the instances are <b>not identical</b> and the classes <b>were not defined properly</b>.</li></ul></div>
+<div class="card"><h3>Request – Use – Release</h3>A thread must <b>request</b> a resource before using it and <b>release</b> it after. Normal sequence: <b>1. Request → 2. Use → 3. Release</b>. The number requested <b>may not exceed the total available</b>: a thread can’t request two network interfaces if the system has only one. A <b>system table</b> records whether each resource is <b>free or allocated</b>.</div>
+<div class="card"><h3>Definition of deadlock</h3>A set of threads is in a <b>deadlocked state</b> when <b>every thread in the set is waiting for an event that can be caused only by another thread in the set</b>. The events here are mainly <b>resource acquisition and release</b>.
+<div class="tip bad">In a deadlock, processes <b>never finish executing</b>, and system resources are <b>tied up</b>, preventing other jobs from starting.</div>
+<div class="tip">Chapter objective: illustrate how deadlock can occur when <b>mutex locks</b> are used (for example two threads each holding one lock and waiting for the other’s).</div></div>
+<div class="card" data-ph data-dl="DEADLOCK! All 5 philosophers hold their left chopstick and wait for the right one forever." data-cnt="philosophers hold their left chopstick. Tap more!"><h3>Dining philosophers: tap a philosopher to grab the left chopstick</h3>Resources are <b>chopsticks</b>. If all philosophers get hungry at the same time and each <b>grabs the chopstick on her left</b>, no chopsticks remain. Each is <b>blocked waiting for her right chopstick</b>.
+<svg class="ph" viewBox="0 0 300 300" role="group" aria-label="Dining philosophers"></svg>
+<div class="tip msg pm"></div><button class="btn s o pr">Reset</button></div>
+</div></section>
+
+<section id="cnd"><div class="wrap">
+<h2>2. The Four Necessary Conditions</h2>
+<p class="lead">A deadlock can arise only if all four hold <b>simultaneously</b>.</p>
+<div class="grid s">
+<div class="card"><h3 data-n="1">Mutual exclusion</h3>At least one resource is held in a <b>non-sharable mode</b>: only one thread at a time can use it. A requesting thread must be <b>delayed</b> until it is released.</div>
+<div class="card"><h3 data-n="2">Hold and wait</h3>A thread is <b>holding at least one resource</b> and <b>waiting to acquire additional resources</b> currently held by other threads.</div>
+<div class="card"><h3 data-n="3">No preemption</h3>Resources <b>cannot be preempted</b>: a resource can be released <b>only voluntarily</b> by the thread holding it, after it has completed its task.</div>
+<div class="card"><h3 data-n="4">Circular wait</h3>A set {T0, T1, …, Tn} of waiting threads exists such that <b>T0 waits for a resource held by T1, T1 for T2, …, Tn−1 for Tn, and Tn for T0</b>.</div>
+</div>
+<div class="card" data-cond data-all="All four conditions hold → deadlock CAN occur." data-c0="Mutual exclusion broken (only sharable resources) → sharable resources can’t be involved in a deadlock." data-c1="Hold and wait broken (request everything first, or release before requesting more) → no deadlock." data-c2="No preemption broken (a waiting process’s held resources are preempted) → no deadlock." data-c3="Circular wait broken (request resources in increasing order of enumeration) → no deadlock."><h3>Interactive: break a condition</h3>Tap a condition to switch it off. All four must be <b>ON</b> for a deadlock to be possible. This is the idea behind <b>deadlock prevention</b>.
+<div class="cds"><button class="cd">Mutual exclusion</button><button class="cd">Hold and wait</button><button class="cd">No preemption</button><button class="cd">Circular wait</button></div>
+<div class="tip bad msg cm"></div></div>
+</div></section>
+
+<section id="rag"><div class="wrap">
+<h2>3. Resource-Allocation Graph</h2>
+<p class="lead">A directed graph that describes deadlocks precisely.</p>
+<div class="card"><h3>The graph</h3>A <b>system resource-allocation graph</b> has a set of vertices <b>V</b> and a set of edges <b>E</b>. V is split into <b>P = {P1, …, Pn}</b> (all active processes) and <b>R = {R1, …, Rm}</b> (all resource types).
+<ul><li><b>Request edge</b> <code>Pi → Rj</code>: Pi has requested an instance of Rj and is <b>currently waiting</b> for it.</li><li><b>Assignment edge</b> <code>Rj → Pi</code>: an instance of Rj has been <b>allocated</b> to Pi.</li><li>Drawing: each <b>process = circle</b>; each <b>resource type = rectangle</b>, with <b>one dot per instance</b>.</li><li>When Pi requests an instance, a request edge is inserted. When it can be fulfilled, the request edge is <b>instantly transformed</b> into an assignment edge. When Pi releases the resource, the assignment edge is <b>deleted</b>.</li></ul></div>
+<div class="card"><h3>Reading the slide example</h3><code>P = {P1, P2, P3}</code> · <code>R = {R1, R2, R3, R4}</code> · <code>E = {P1→R1, P2→R3, R1→P2, R2→P2, R2→P1, R3→P3}</code><br>Instances: R1 ×1, R2 ×2, R3 ×1, R4 ×3.
+<ul><li><b>P1</b> holds an instance of R2 and waits for R1.</li><li><b>P2</b> holds an instance of R1 and of R2 and waits for R3.</li><li><b>P3</b> holds an instance of R3.</li></ul></div>
+<div class="card"><h3>Cycles and deadlock</h3><ul><li><b>No cycle</b> → <b>no process is deadlocked</b>.</li><li>Cycle and <b>every resource type has exactly one instance</b> → <b>deadlock has occurred</b> (cycle is necessary and sufficient).</li><li>Cycle and resource types have <b>several instances</b> → <b>maybe</b>: a cycle is necessary but <b>not sufficient</b>.</li></ul></div>
+<div class="card" data-rag data-va="No cycle in the graph → no process is deadlocked (this is the slide example)." data-vb="Cycle P1→R1→P2→R3→P3→R2→P1 (and P2→R3→P3→R2→P2): P1, P2, P3 are all waiting, so they are DEADLOCKED." data-vc="There is a cycle, but NO deadlock: P4 (or P3) can finish and release its instance, which breaks the cycle."><h3>Interactive: three graphs</h3>
+<div><button class="btn s o on" data-g="a">Slide example (no cycle)</button><button class="btn s o" data-g="b">With a deadlock</button><button class="btn s o" data-g="c">Cycle, no deadlock</button></div>
+<svg class="rg" viewBox="0 0 400 230" role="img" aria-label="Resource-allocation graph"></svg>
+<div class="tip msg gm"></div><div style="color:var(--mut);font-size:13.5px">Dashed yellow = request edge · solid white = assignment edge · red = cycle</div></div>
+</div></section>
+
+<section id="han"><div class="wrap">
+<h2>4. Methods for Handling Deadlocks</h2>
+<p class="lead">Three general ways to deal with the problem.</p>
+<div class="grid s">
+<div class="card"><h3 data-n="1">Ignore it</h3>Ignore the problem altogether and <b>pretend that deadlocks never occur</b> in the system.</div>
+<div class="card"><h3 data-n="2">Prevent or avoid</h3>Use a protocol so the system <b>never enters a deadlocked state</b>: deadlock <b>prevention</b> or deadlock <b>avoidance</b>.</div>
+<div class="card"><h3 data-n="3">Detect and recover</h3>Allow the system to <b>enter a deadlocked state</b>, <b>detect</b> it, and <b>recover</b>. The system provides an algorithm that examines the state to see whether a deadlock has occurred, and an algorithm to recover.</div>
+</div>
+<div class="grid" style="margin-top:14px">
+<div class="card"><h3>Deadlock prevention</h3>A set of methods to ensure that <b>at least one of the necessary conditions cannot hold</b>.</div>
+<div class="card"><h3>Deadlock avoidance</h3>The OS is given <b>additional information in advance</b> about which resources a process will request and use during its lifetime.</div>
+</div>
+<div class="tip">Your slides stop at the banker’s algorithm. The <b>detection algorithm</b> and <b>recovery from deadlock</b> are in the chapter objectives but not in the slides.</div>
+</div></section>
+
+<section id="prv"><div class="wrap">
+<h2>5. Deadlock Prevention</h2>
+<p class="lead">Make sure at least one of the four conditions can never hold. Tap to open each.</p>
+<details open><summary>1. Mutual exclusion</summary><div>The mutual exclusion condition <b>must hold</b> for some resources: at least one resource must be <b>non-sharable</b>. <b>Sharable resources</b> (such as read-only files) do <b>not require mutually exclusive access</b> and so <b>cannot be involved in a deadlock</b>. We usually cannot prevent deadlocks by denying this condition, because some resources are inherently non-sharable.</div></details>
+<details><summary>2. Hold and wait</summary><div>Ensure a process <b>never holds a resource while waiting for another</b>:<ul><li><b>Protocol 1:</b> a process <b>requests and is allocated all its resources before it begins execution</b>.</li><li><b>Protocol 2:</b> a process <b>requests resources only when it has none</b>. It may request some and use them; before requesting any additional ones, it must <b>release all it currently holds</b>.</li></ul></div></details>
+<details><summary>3. No preemption</summary><div>Protocol: if a process is holding some resources and requests another that <b>cannot be immediately allocated</b> (it must wait), then <b>all the resources it currently holds are preempted</b>. The process is <b>restarted only when it can regain its old resources as well as the new ones</b> it is requesting.</div></details>
+<details><summary>4. Circular wait</summary><div>Impose a <b>total ordering of all resource types</b> and require that each process requests resources <b>in an increasing order of enumeration</b>. With this protocol a circular wait can never form.</div></details>
+<div class="card scroll"><h3>Condition → how to prevent it</h3><table class="t"><tr><th>Condition</th><th>Prevention idea</th></tr>
+<tr><td>Mutual exclusion</td><td>Use sharable resources (they can’t cause deadlock)</td></tr>
+<tr><td>Hold and wait</td><td>Request all resources first, or request only when holding none</td></tr>
+<tr><td>No preemption</td><td>Preempt all held resources when a request must wait</td></tr>
+<tr><td>Circular wait</td><td>Total ordering of resource types; request in increasing order</td></tr></table></div>
+</div></section>
+
+<section id="avd"><div class="wrap">
+<h2>6. Deadlock Avoidance and the Banker’s Algorithm</h2>
+<p class="lead">Decide dynamically whether granting a request keeps the system safe.</p>
+<div class="card"><h3>Avoidance</h3>Requires the OS to have <b>a priori information</b> about how each process will use resources. For every request, the system considers the resources <b>currently available</b>, the resources <b>currently allocated</b> to each process, and the <b>future requests and releases</b> of each process.
+<ul><li>Simplest and most useful: each process <b>declares the maximum number of resources of each type</b> it may need.</li><li>The algorithm <b>dynamically examines the resource-allocation state</b> to ensure a circular-wait condition can never exist. The state is defined by the <b>available</b> and <b>allocated</b> resources and the <b>maximum demands</b> of the processes.</li></ul></div>
+<div class="card"><h3>Safe state</h3>A state is <b>safe</b> if the system can allocate resources to each process (up to its maximum) <b>in some order</b> and still avoid deadlock. Formally: a system is safe only if there exists a <b>safe sequence</b>.
+<div class="zones"><div class="z1">SAFE<small>safe sequence exists</small></div><div class="z2">UNSAFE<small>may lead to deadlock</small></div><div class="z3">DEADLOCK<small>always unsafe</small></div></div>
+<ul><li>A safe state is <b>not</b> a deadlocked state; a deadlocked state is an <b>unsafe</b> state.</li><li><b>Not all unsafe states are deadlocks</b>; an unsafe state <b>may lead</b> to a deadlock.</li><li>As long as the state is safe, the OS can avoid unsafe (and deadlocked) states.</li></ul></div>
+<div class="card"><h3>Banker’s algorithm</h3>Named because it could be used in a bank to ensure it never allocates its cash so that it can no longer satisfy all customers’ needs. A new process must <b>declare the maximum instances of each resource type</b> it may need. When a process requests resources, the system checks whether allocating them <b>leaves the system in a safe state</b>. If yes, they are allocated; otherwise the process <b>must wait</b> until others release enough.
+<p style="margin:10px 0 4px"><b>Data structures</b> (n processes, m resource types):</p>
+<ul><li><b>Available</b> – vector of length m: Available[j] = k means k instances of Rj are available.</li><li><b>Max</b> – n × m matrix: Max[i][j] = k means Pi may request at most k instances of Rj.</li><li><b>Allocation</b> – n × m matrix: Allocation[i][j] = k means Pi currently holds k instances of Rj.</li><li><b>Need</b> – n × m matrix of remaining needs: <code>Need[i][j] = Max[i][j] − Allocation[i][j]</code></li></ul>
+<div class="tip">Vector comparison: <code>X ≤ Y</code> iff <code>X[i] ≤ Y[i]</code> for all i. Example: X = (1,7,3,2), Y = (0,3,2,1) → <b>Y ≤ X</b>.</div></div>
+<div class="card"><h3>Safety algorithm and resource-request algorithm</h3><b>Safety:</b> Work = Available; Finish[i] = false. Find a process i with Finish[i] = false and <code>Need[i] ≤ Work</code>; then <code>Work = Work + Allocation[i]</code> and Finish[i] = true. Repeat. If all Finish are true → <b>safe</b> (the order found is a safe sequence).<br><b>Request (Requesti):</b> (1) if Request ≤ Need, continue, else <b>error</b> (exceeded maximum claim). (2) If Request ≤ Available, continue, else Pi <b>must wait</b>. (3) <b>Pretend</b> to allocate: Available −= Request, Allocation += Request, Need −= Request, then run the safety algorithm: <b>safe → grant</b>; <b>unsafe → Pi waits</b> and the old state is restored.</div>
+<div class="card"><h3>Slide example</h3>Resource type A has 10 instances, B has 5, C has 7. Suppose P0 requests (7,4,3). The matrices are in images in your slides, so I used the standard textbook state (loaded below). You can edit every number.</div>
+<div class="card" data-bank data-lpr="Process" data-lal="Allocation" data-lmx="Max" data-lnd="Need" data-lav="Available" data-ltot="Total instances" data-sf="Check safety" data-req="Request by" data-tr="Test request" data-l1="Load slide example (P0 requests 7,4,3)" data-l2="Load example 2 (P1 requests 1,0,2)" data-wk="Work" data-nw="Need" data-fin="finishes" data-safe="SAFE state. A safe sequence:" data-unsafe="UNSAFE state: no process can finish with the current Work, so no safe sequence exists." data-bad="Invalid data: some Allocation is greater than Max." data-r1="ERROR: the request exceeds the process’s maximum claim (Need)." data-r2="Request exceeds Available → the process must WAIT." data-r3="Pretend-allocating leaves the system SAFE → request GRANTED. Safe sequence:" data-r4="Pretend-allocating would leave the system UNSAFE → the process must WAIT (old state restored)." data-r0="Request ≤ Need ✓" data-r5="Request ≤ Available ✓"><h3>Interactive banker’s algorithm</h3>Edit the matrices (3 resource types A, B, C and 5 processes), then check safety or test a request.
+<div class="scroll bk"></div>
+<div style="margin:6px 0"><button class="btn s sfy">Check safety</button><button class="btn s o l1">Load slide example (P0 requests 7,4,3)</button><button class="btn s o l2">Load example 2 (P1 requests 1,0,2)</button></div>
+<div>Request by <select class="rp"></select> = (<input class="qin rq" type="number" min="0" value="7"> , <input class="qin rq" type="number" min="0" value="4"> , <input class="qin rq" type="number" min="0" value="3">) <button class="btn s rtest">Test request</button></div>
+<div class="bo"></div></div>
+</div></section>
+
+<section id="sum"><div class="wrap">
+<h2>7. Chapter Summary</h2>
+<p class="lead">Review this right before the exam.</p>
+<div class="card"><ul>
+<li><b>Deadlock</b> = every thread in a set waits for an event only another thread in the set can cause. Threads use resources by <b>request → use → release</b>.</li>
+<li>Four necessary conditions (<b>all</b> must hold): <b>mutual exclusion, hold and wait, no preemption, circular wait</b>.</li>
+<li><b>Resource-allocation graph</b>: request edge Pi→Rj, assignment edge Rj→Pi. <b>No cycle = no deadlock</b>; cycle + single instances = deadlock; cycle + multiple instances = maybe.</li>
+<li>Handling: <b>ignore</b>, <b>prevent/avoid</b>, or <b>detect and recover</b>.</li>
+<li><b>Prevention</b> breaks one condition: sharable resources; request all first / release before requesting; preempt held resources; total ordering of resources.</li>
+<li><b>Avoidance</b> needs max claims in advance; keeps the system in a <b>safe state</b> (a safe sequence exists). Deadlock ⊂ unsafe; unsafe ≠ always deadlock.</li>
+<li><b>Banker’s algorithm</b>: Available, Max, Allocation, Need = Max − Allocation. Grant a request only if it leaves the system safe.</li></ul></div>
+<div class="card scroll"><h3>Quick comparisons</h3>
+<table class="t"><tr><th>Concept A</th><th>Concept B</th></tr>
+<tr><td><b>Prevention</b>: make at least one condition impossible</td><td><b>Avoidance</b>: use advance information; grant only if the state stays safe</td></tr>
+<tr><td><b>Request edge</b> Pi → Rj: waiting</td><td><b>Assignment edge</b> Rj → Pi: allocated</td></tr>
+<tr><td><b>Safe state</b>: a safe sequence exists</td><td><b>Unsafe state</b>: may lead to deadlock</td></tr>
+<tr><td><b>Cycle, single instances</b>: deadlock</td><td><b>Cycle, multiple instances</b>: maybe deadlock</td></tr>
+<tr><td><b>Max</b>: maximum demand</td><td><b>Need</b> = Max − Allocation: remaining demand</td></tr></table></div>
+</div></section>
+
+<section id="quiz"><div class="wrap">
+<h2>8. Interactive Quiz</h2>
+<p class="lead">Tap an answer. Green means correct, red means wrong, and the right answer is always explained.</p>
+<div class="card"><span id="score">Score: 0 / 0</span> <span style="color:var(--mut)" id="prog"></span><div id="bar"><i></i></div>
+<button class="btn" id="shuf">Shuffle &amp; restart</button><button class="btn o" id="rst">Restart</button></div>
+<div id="qs"></div>
+<div class="card" id="final" style="display:none"></div>
+</div></section>
+</main>
+<footer>Based on the slides of Chapter 8: Deadlocks · Operating Systems (501471)</footer>
+
+<script>
+(function(){
+var $=function(s){return document.querySelector(s)};
+var rm=matchMedia("(prefers-reduced-motion:reduce)").matches;
+/* circular-wait rings background */
+var cv=$("#bg"),cx=cv.getContext("2d"),W,H,t=0,rings=[];
+function rs(){W=cv.width=innerWidth;H=cv.height=innerHeight;rings=[];for(var k=0;k<5;k++)rings.push({x:Math.random()*W,y:Math.random()*H,r:70+Math.random()*90,n:3+Math.floor(Math.random()*4),v:(Math.random()<.5?-1:1)*(.004+Math.random()*.006)})}
+rs();addEventListener("resize",rs);
+function fr(){cx.clearRect(0,0,W,H);
+rings.forEach(function(g){cx.strokeStyle="rgba(255,214,10,.3)";cx.lineWidth=1.5;cx.setLineDash([8,8]);cx.lineDashOffset=-t*30*Math.sign(g.v);cx.beginPath();cx.arc(g.x,g.y,g.r,0,6.3);cx.stroke();cx.setLineDash([]);
+for(var i=0;i<g.n;i++){var a=t*g.v*60+i*6.2832/g.n,x=g.x+g.r*Math.cos(a),y=g.y+g.r*Math.sin(a);cx.fillStyle="rgba(255,214,10,.75)";cx.beginPath();cx.arc(x,y,6,0,6.3);cx.fill();
+cx.fillStyle="rgba(255,255,255,.55)";cx.font="10px monospace";cx.fillText("T"+i,x-5,y-10)}});
+t+=.016;if(!rm)requestAnimationFrame(fr)}
+fr();
+/* dining philosophers */
+function ph(r,auto){var held=[0,0,0,0,0],sv=r.querySelector("svg"),m=r.querySelector(".pm"),d=r.dataset;
+function pos(rad,deg){var a=deg*Math.PI/180;return[150+rad*Math.cos(a),150+rad*Math.sin(a)]}
+function draw(){var all=held.every(Boolean),n=held.filter(Boolean).length,h='<circle cx="150" cy="150" r="64" fill="#1c1c20" stroke="#3a3830" stroke-width="2"/>';
+for(var i=0;i<5;i++){var a=-90+72*i+36,p1=held[i]?pos(60,a):pos(50,a),p2=held[i]?pos(98,-90+72*i+16):pos(74,a);
+h+='<line x1="'+p1[0]+'" y1="'+p1[1]+'" x2="'+p2[0]+'" y2="'+p2[1]+'" stroke="'+(all?"#ff4d4d":held[i]?"#ffd60a":"#8a8570")+'" stroke-width="'+(held[i]?5:4)+'" stroke-linecap="round"/>'}
+for(i=0;i<5;i++){var q=pos(114,-90+72*i);h+='<g data-i="'+i+'"'+(auto?'':' tabindex="0" role="button"')+'><circle cx="'+q[0]+'" cy="'+q[1]+'" r="23" fill="'+(all?"#5a1414":held[i]?"#4a3b00":"#1c1c20")+'" stroke="'+(all?"#ff4d4d":held[i]?"#ffd60a":"#3a3830")+'" stroke-width="3"/><text x="'+q[0]+'" y="'+(q[1]+5)+'">P'+(i+1)+'</text></g>'}
+sv.innerHTML=h;
+if(m)m.textContent=all?d.dl:(n+" / 5 "+d.cnt);if(m)m.className="tip msg pm"+(all?" bad":"");
+if(!auto)sv.querySelectorAll("g").forEach(function(g){var f=function(){var i=+g.dataset.i;held[i]=held[i]?0:1;draw()};g.onclick=f;g.onkeydown=function(e){if(e.key=="Enter"||e.key==" "){e.preventDefault();f()}}});
+return all}
+if(auto){var k=0,st=$("#hst");function step(){if(k<5){held[k]=1;k++}else if(k<8)k++;else{held=[0,0,0,0,0];k=0}
+var all=draw();st.textContent=all?"DEADLOCK":""}
+if(rm){held=[1,1,1,1,1];draw();st.textContent="DEADLOCK"}else{draw();setInterval(step,850)}}
+else{r.querySelector(".pr").onclick=function(){held=[0,0,0,0,0];draw()};draw()}}
+/* four conditions */
+function cond(r){var bs=r.querySelectorAll(".cd"),m=r.querySelector(".cm"),d=r.dataset;
+function up(){var off=[];bs.forEach(function(b,i){if(b.classList.contains("off"))off.push(i)});
+if(!off.length){m.textContent=d.all;m.className="tip bad msg cm"}else{m.textContent=off.map(function(i){return d["c"+i]}).join(" ");m.className="tip good msg cm"}}
+bs.forEach(function(b){b.onclick=function(){b.classList.toggle("off");up()}});up()}
+/* resource-allocation graph */
+var RN={a:{n:[["P1","p",50,70],["P2","p",250,70],["P3","p",350,170],["R1","r",150,70,1],["R3","r",350,70,1],["R2","r",150,170,2],["R4","r",50,170,3]],e:[["P1","R1"],["R1","P2"],["P2","R3"],["R3","P3"],["R2","P1"],["R2","P2"]],c:[]},
+b:{n:[["P1","p",50,70],["P2","p",250,70],["P3","p",350,170],["R1","r",150,70,1],["R3","r",350,70,1],["R2","r",150,170,2],["R4","r",50,170,3]],e:[["P1","R1"],["R1","P2"],["P2","R3"],["R3","P3"],["R2","P1"],["R2","P2"],["P3","R2"]],c:["P1>R1","R1>P2","P2>R3","R3>P3","P3>R2","R2>P1"]},
+c:{n:[["P1","p",50,120],["P2","p",290,120],["P3","p",350,40],["P4","p",350,200],["R1","r",170,50,2],["R2","r",170,190,2]],e:[["P1","R1"],["R1","P2"],["R1","P3"],["P2","R2"],["R2","P1"],["R2","P4"]],c:["P1>R1","R1>P2","P2>R2","R2>P1"]}};
+var UID=0;
+function rag(r){var u=++UID,sv=r.querySelector("svg"),m=r.querySelector(".gm"),d=r.dataset,cur="a";
+function draw(){var G=RN[cur],P={},h='<defs><marker id="w'+u+'" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" fill="#e8e3cc"/></marker><marker id="y'+u+'" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" fill="#ffd60a"/></marker><marker id="x'+u+'" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" fill="#ff4d4d"/></marker></defs>';
+G.n.forEach(function(n){P[n[0]]=n});
+G.e.forEach(function(e){var a=P[e[0]],b=P[e[1]],dx=b[2]-a[2],dy=b[3]-a[3],L=Math.sqrt(dx*dx+dy*dy),ux=dx/L,uy=dy/L,req=a[1]=="p",cyc=G.c.indexOf(e[0]+">"+e[1])>-1,col=cyc?"#ff4d4d":req?"#ffd60a":"#e8e3cc";
+var x1=a[2]+ux*(a[1]=="p"?21:30),y1=a[3]+uy*(a[1]=="p"?21:20),x2=b[2]-ux*(b[1]=="p"?25:34),y2=b[3]-uy*(b[1]=="p"?25:24);
+h+='<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+col+'" stroke-width="2.2"'+(req?' stroke-dasharray="6 4"':'')+' marker-end="url(#'+(cyc?"x":req?"y":"w")+u+')"/>'});
+G.n.forEach(function(n){if(n[1]=="p")h+='<circle cx="'+n[2]+'" cy="'+n[3]+'" r="19" fill="#1c1c20" stroke="#ffd60a" stroke-width="2.5"/><text x="'+n[2]+'" y="'+(n[3]+5)+'">'+n[0]+'</text>';
+else{h+='<rect x="'+(n[2]-30)+'" y="'+(n[3]-20)+'" width="60" height="40" rx="5" fill="#1c1c20" stroke="#6fd3ff" stroke-width="2.5"/><text x="'+n[2]+'" y="'+(n[3]-6)+'" style="font-size:12px">'+n[0]+'</text>';
+for(var k=0;k<n[4];k++)h+='<circle cx="'+(n[2]+(k-(n[4]-1)/2)*14)+'" cy="'+(n[3]+9)+'" r="4.5" fill="#6fd3ff"/>'}});
+sv.innerHTML=h;m.textContent=d["v"+cur];m.className="tip msg gm"+(cur=="b"?" bad":cur=="c"?"":" good")}
+r.querySelectorAll("[data-g]").forEach(function(b){b.onclick=function(){cur=b.dataset.g;r.querySelectorAll("[data-g]").forEach(function(x){x.classList.toggle("on",x==b)});draw()}});draw()}
+/* banker's algorithm */
+var S1={A:[[0,1,0],[2,0,0],[3,0,2],[2,1,1],[0,0,2]],X:[[7,5,3],[3,2,2],[9,0,2],[2,2,2],[4,3,3]],V:[3,3,2]};
+function bank(r){var d=r.dataset,N=5,M=3,bk=r.querySelector(".bk"),bo=r.querySelector(".bo"),rp=r.querySelector(".rp"),rq=r.querySelectorAll(".rq"),L="ABC";
+var h='<table class="tbl"><tr><th rowspan="2">'+d.lpr+'</th><th colspan="3">'+d.lal+'</th><th colspan="3">'+d.lmx+'</th><th colspan="3">'+d.lnd+'</th></tr><tr>';
+for(var k=0;k<3;k++)for(var j=0;j<M;j++)h+='<th>'+L[j]+'</th>';h+='</tr>';
+for(var i=0;i<N;i++){h+='<tr><td>P'+i+'</td>';for(j=0;j<M;j++)h+='<td><input class="a" type="number" min="0" value="0"></td>';for(j=0;j<M;j++)h+='<td><input class="x" type="number" min="0" value="0"></td>';for(j=0;j<M;j++)h+='<td class="nd">0</td>';h+='</tr>'}
+h+='</table><div>'+d.lav+': ';for(j=0;j<M;j++)h+=L[j]+' <input class="v" type="number" min="0" value="0"> ';h+=' &nbsp; <span class="tot" style="color:var(--mut)"></span></div>';bk.innerHTML=h;
+for(i=0;i<N;i++)rp.innerHTML+='<option value="'+i+'">P'+i+'</option>';
+var ai=bk.querySelectorAll(".a"),xi=bk.querySelectorAll(".x"),nd=bk.querySelectorAll(".nd"),vi=bk.querySelectorAll(".v"),tot=bk.querySelector(".tot");
+function rd(){var A=[],X=[],V=[];for(var i=0;i<N;i++){A.push([]);X.push([]);for(var j=0;j<M;j++){A[i].push(+ai[i*M+j].value||0);X[i].push(+xi[i*M+j].value||0)}}for(j=0;j<M;j++)V.push(+vi[j].value||0);return{A:A,X:X,V:V}}
+function nm(A,X,i){return X[i].map(function(x,j){return x-A[i][j]})}
+function le(a,b){return a.every(function(x,j){return x<=b[j]})}
+function f(a){return"("+a.join(",")+")"}
+function up(){var s=rd(),T=[0,0,0];for(var i=0;i<N;i++){var n=nm(s.A,s.X,i);for(var j=0;j<M;j++){nd[i*M+j].textContent=n[j];T[j]+=s.A[i][j]}}
+tot.textContent=d.ltot+": "+L.split("").map(function(c,j){return c+"="+(T[j]+s.V[j])}).join(" ")}
+function safety(A,X,V){var W=V.slice(),F=[],seq=[],steps=[],p=true;
+while(p){p=false;for(var i=0;i<N;i++){var n=nm(A,X,i);if(!F[i]&&le(n,W)){steps.push("P"+i+": "+d.nw+" "+f(n)+" ≤ "+d.wk+" "+f(W)+" → "+d.fin);W=W.map(function(w,j){return w+A[i][j]});steps[steps.length-1]+=", "+d.wk+" = "+f(W);F[i]=1;seq.push(i);p=true;break}}}
+return{ok:seq.length==N,seq:seq,steps:steps}}
+function sq(s){return s.map(function(i){return"P"+i}).join(" → ")}
+function neg(s){for(var i=0;i<N;i++)if(nm(s.A,s.X,i).some(function(v){return v<0}))return true;return false}
+function chk(){var s=rd();if(neg(s)){bo.innerHTML='<div class="tip bad">'+d.bad+'</div>';return}var x=safety(s.A,s.X,s.V);
+bo.innerHTML='<div class="steps2">'+x.steps.map(function(l){return"<div>"+l+"</div>"}).join("")+'</div><div class="tip '+(x.ok?"good":"bad")+'">'+(x.ok?d.safe+" <code>&lt;"+sq(x.seq)+"&gt;</code>":d.unsafe)+'</div>'}
+function tst(){var s=rd(),i=+rp.value,q=[].map.call(rq,function(e){return+e.value||0});if(neg(s)){bo.innerHTML='<div class="tip bad">'+d.bad+'</div>';return}
+var n=nm(s.A,s.X,i),o='<div class="steps2"><div>Request'+i+" = "+f(q)+"; "+d.nw+" = "+f(n)+"; "+d.lav+" = "+f(s.V)+"</div>";
+if(!le(q,n)){bo.innerHTML=o+'</div><div class="tip bad">'+d.r1+'</div>';return}o+="<div>"+d.r0+"</div>";
+if(!le(q,s.V)){bo.innerHTML=o+'</div><div class="tip bad">'+d.r2+'</div>';return}o+="<div>"+d.r5+"</div>";
+var A2=s.A.map(function(a){return a.slice()}),V2=s.V.map(function(v,j){return v-q[j]});A2[i]=A2[i].map(function(a,j){return a+q[j]});
+var x=safety(A2,s.X,V2);o+="<div>→ "+d.lav+" = "+f(V2)+"; "+d.lal+" P"+i+" = "+f(A2[i])+"</div>"+x.steps.map(function(l){return"<div>"+l+"</div>"}).join("")+"</div>";
+bo.innerHTML=o+'<div class="tip '+(x.ok?"good":"bad")+'">'+(x.ok?d.r3+" <code>&lt;"+sq(x.seq)+"&gt;</code>":d.r4)+'</div>'}
+function load(rr,pi,q){for(var i=0;i<N;i++)for(var j=0;j<M;j++){ai[i*M+j].value=S1.A[i][j];xi[i*M+j].value=S1.X[i][j]}for(j=0;j<M;j++)vi[j].value=S1.V[j];rp.value=pi;rq.forEach(function(e,j){e.value=q[j]});up();bo.innerHTML=""}
+bk.querySelectorAll("input").forEach(function(e){e.oninput=up});
+r.querySelector(".sfy").onclick=chk;r.querySelector(".rtest").onclick=tst;
+r.querySelector(".l1").onclick=function(){load(r,0,[7,4,3]);tst()};r.querySelector(".l2").onclick=function(){load(r,1,[1,0,2]);tst()};
+load(r,0,[7,4,3])}
+function init(){ph($("#hph").parentNode,true);document.querySelectorAll("[data-ph]").forEach(function(e){ph(e,false)});document.querySelectorAll("[data-cond]").forEach(cond);document.querySelectorAll("[data-rag]").forEach(rag);document.querySelectorAll("[data-bank]").forEach(bank)}
+/* quiz data */
+var TF=["True","False"];
+var Q=[
+["In the system model, resources are partitioned into…",["Types (classes), each with some number of identical instances","Only one type","Only CPUs","Only files"],0,"Examples of types: CPU cycles, files, I/O devices."],
+["If a system has four CPUs, the resource type CPU has…",["Four instances","One instance","Four types","No instances"],0,"Each CPU is an identical instance of the type."],
+["If allocating any instance of a type does not satisfy a request, then…",["The instances are not identical and the resource classes were not defined properly","The system has crashed","The thread is faster","There is a deadlock"],0,"Instances of a type must be interchangeable."],
+["Under normal operation a thread uses a resource in which sequence?",["Request, use, release","Use, request, release","Release, request, use","Request, release, use"],0,"A thread must request before using and release after using."],
+["A thread can request two network interfaces if the system has only one.",TF,1,"False. The number requested may not exceed the total available."],
+["The system table records…",["Whether each resource is free or allocated","The thread priorities","The disk size","The user names"],0,"It tracks the state of every resource."],
+["A set of threads is deadlocked when…",["Every thread in the set waits for an event that only another thread in the set can cause","One thread is slow","The CPU is idle","Memory is full"],0,"The events are mainly resource acquisition and release."],
+["In a deadlock, processes never finish executing and system resources are tied up.",TF,0,"True. This also prevents other jobs from starting."],
+["In the dining-philosophers problem the resources are represented by…",["Chopsticks","Plates","Tables","Philosophers"],0,"Each philosopher needs two chopsticks."],
+["In the dining philosophers, deadlock occurs when…",["All philosophers get hungry and each grabs the chopstick on her left","One philosopher eats","Two philosophers talk","The table is removed"],0,"No chopsticks remain; each waits for her right chopstick."],
+["How many necessary conditions characterize deadlock?",["Four","Two","Three","Five"],0,"Mutual exclusion, hold and wait, no preemption, circular wait."],
+["Mutual exclusion means…",["At least one resource is held in a non-sharable mode","All resources are shared","Resources are preempted","Threads never wait"],0,"Only one thread at a time can use it."],
+["Hold and wait means…",["A thread holds at least one resource and waits for additional ones held by others","A thread holds nothing","A thread releases everything","Threads share all resources"],0,"It holds some resources while waiting for more."],
+["No preemption means…",["A resource can be released only voluntarily by the thread holding it","Resources can be taken at any time","Threads can’t request resources","The CPU is never preempted"],0,"It is released after the thread completes its task."],
+["Circular wait means…",["T0 waits for T1, T1 for T2, …, and Tn waits for T0","Threads wait in a straight line","Threads never wait","Only one thread waits"],0,"A cycle of waiting threads exists."],
+["A deadlock can occur if only three of the four necessary conditions hold.",TF,1,"False. All four must hold simultaneously."],
+["The vertices of a resource-allocation graph are partitioned into…",["Processes P and resource types R","Threads and files","CPUs and disks","Users and groups"],0,"P = active processes, R = all resource types."],
+["A request edge Pi → Rj means…",["Pi has requested an instance of Rj and is waiting for it","Rj is allocated to Pi","Pi released Rj","Rj is deleted"],0,"The process is currently waiting."],
+["An assignment edge Rj → Pi means…",["An instance of Rj has been allocated to Pi","Pi is waiting for Rj","Pi finished","Rj is free"],0,"The resource is held by the process."],
+["In the graph drawing, each resource instance is shown as…",["A dot inside the rectangle","A circle","An arrow","A line"],0,"Processes are circles; resource types are rectangles."],
+["When a request can be fulfilled, the request edge is…",["Instantaneously transformed into an assignment edge","Deleted forever","Doubled","Colored red"],0,"When the process releases the resource, the assignment edge is deleted."],
+["If a resource-allocation graph contains no cycle, then…",["No process in the system is deadlocked","A deadlock exists","All processes are deadlocked","The graph is invalid"],0,"A cycle is necessary for deadlock."],
+["If every resource type has exactly one instance and the graph has a cycle, then…",["A deadlock has occurred","No deadlock exists","Maybe a deadlock","The system is safe"],0,"The cycle is both necessary and sufficient."],
+["If resource types have several instances and the graph has a cycle…",["A cycle is necessary but not sufficient for deadlock","A deadlock always exists","No deadlock is possible","The graph is a tree"],0,"A deadlock may or may not exist."],
+["A cycle in a resource-allocation graph always means a deadlock.",TF,1,"False. With multiple instances per type, a cycle doesn’t necessarily imply a deadlock."],
+["Which is one of the three ways to handle deadlocks?",["Allow the system to enter a deadlock, detect it, and recover","Delete all threads","Restart the OS every hour","Use only one thread"],0,"The others: ignore the problem, or prevent/avoid."],
+["Deadlock prevention provides methods to ensure that…",["At least one of the necessary conditions cannot hold","All conditions hold","No process starts","Resources are unlimited"],0,"Breaking any one condition prevents deadlock."],
+["Deadlock avoidance requires that the OS be given…",["Additional information in advance about which resources a process will request and use","No information","Only the process names","The user’s password"],0,"The system then decides each request dynamically."],
+["Why can sharable resources not be involved in a deadlock?",["They do not require mutually exclusive access","They are too fast","They are always preempted","They are never requested"],0,"Mutual exclusion is the condition they don’t satisfy."],
+["Hold-and-wait prevention, protocol 1:",["A process requests and is allocated all its resources before it begins execution","A process requests resources one at a time","A process never requests","A process holds nothing at the end"],0,"Then it never waits while holding resources."],
+["Hold-and-wait prevention, protocol 2:",["A process requests resources only when it has none; it must release all before requesting more","A process requests everything at once at start","A process never releases","A process waits forever"],0,"It releases what it holds before asking for additional resources."],
+["No-preemption prevention protocol:",["If a process holding resources must wait for another, all resources it holds are preempted","Resources are never taken","Only new resources are preempted","The waiting process is deleted"],0,"The process restarts only when it can regain old and new resources."],
+["Circular-wait prevention uses…",["A total ordering of all resource types and requests in increasing order","Random requests","Request in decreasing order only after release","No ordering"],0,"Each process can request resources only in increasing order of enumeration."],
+["The simplest and most useful avoidance algorithm requires each process to…",["Declare the maximum number of resources of each type it may need","Declare nothing","Release all resources","Request only one resource"],0,"This is a priori information."],
+["The resource-allocation state is defined by…",["Available and allocated resources and the maximum demands of the processes","Only the CPU speed","Only the allocated resources","The number of users"],0,"The algorithm examines it dynamically."],
+["A state is safe if…",["The system can allocate resources to each process (up to its max) in some order and still avoid deadlock","All processes are running","No resources are used","There is a cycle"],0,"That order is called a safe sequence."],
+["A system is in a safe state only if…",["There exists a safe sequence","There is a cycle","All threads wait","Max is zero"],0,"No safe sequence means the state is unsafe."],
+["A safe state is a deadlocked state.",TF,1,"False. A safe state is not deadlocked; a deadlocked state is unsafe."],
+["A deadlocked state is…",["An unsafe state","A safe state","Neither","A state with no processes"],0,"All deadlocked states are unsafe."],
+["All unsafe states are deadlocks.",TF,1,"False. An unsafe state may lead to a deadlock."],
+["Why is it called the banker’s algorithm?",["It could ensure a bank never allocates cash so that it can’t satisfy all customers’ needs","A banker invented the OS","It handles money","It uses bank accounts"],0,"The idea comes from a banking system."],
+["When a new process enters under the banker’s algorithm, it must…",["Declare the maximum instances of each resource type it may need","Release all resources","Wait forever","Request nothing"],0,"This is the advance information."],
+["When a process requests resources, the banker’s algorithm checks whether…",["The allocation leaves the system in a safe state","The process is old","The CPU is free","The disk is full"],0,"If it does, the resources are allocated; otherwise the process waits."],
+["In the banker’s algorithm, Max is…",["An n × m matrix of the maximum demand of each process","A vector of available resources","The sum of all resources","A single number"],0,"Max[i][j] = k means Pi may request at most k instances of Rj."],
+["Need[i][j] equals…",["Max[i][j] − Allocation[i][j]","Max[i][j] + Allocation[i][j]","Allocation[i][j] − Max[i][j]","Available[j]"],0,"Need is the remaining resource need."],
+["Available is…",["A vector of length m with the number of available instances of each type","An n × m matrix","The Need matrix","The Max matrix"],0,"Available[j] = k means k instances of Rj are available."],
+["For vectors X and Y, X ≤ Y iff…",["X[i] ≤ Y[i] for all i","X[i] ≤ Y[i] for some i","The sum of X is zero","X = Y"],0,"Every component must be less than or equal."],
+["If X = (1,7,3,2) and Y = (0,3,2,1), which is true?",["Y ≤ X","X ≤ Y","X = Y","Neither can be compared"],0,"Every component of Y is ≤ the matching component of X."],
+["Available = (3,3,2) (textbook example) and P0 requests (7,4,3) with Need(P0) = (7,4,3). The result is…",["The request is within Need but exceeds Available, so P0 must wait","The request is granted","An error: exceeds the maximum claim","The system deadlocks"],0,"Request ≤ Need passes, but Request ≤ Available fails."],
+["If Max of P0 is (7,5,3) and its Allocation is (0,1,0), then its Need is…",["(7,4,3)","(7,6,3)","(0,4,0)","(7,5,3)"],0,"Need = Max − Allocation = (7−0, 5−1, 3−0)."]
+];
+var AQ=[
+["في نموذج النظام تُقسَّم الموارد إلى…","أمثلة الأنواع: دورات CPU والملفات وأجهزة I/O."],
+["إذا كان النظام يملك أربع CPUs فإن نوع المورد CPU لديه…","كل CPU هي نسخة (instance) مطابقة من النوع."],
+["إذا كان تخصيص أي نسخة من النوع لا يلبّي الطلب فإن…","يجب أن تكون نسخ النوع قابلة للتبادل."],
+["في التشغيل العادي تستخدم الـ thread المورد بأي تسلسل؟","يجب أن تطلب قبل الاستخدام وتحرر بعده."],
+["يمكن لـ thread طلب واجهتي شبكة إذا كان النظام يملك واجهة واحدة فقط.","غلط. عدد المطلوب لا يجوز أن يتجاوز الإجمالي المتاح."],
+["جدول النظام يسجّل…","هو يتتبع حالة كل مورد."],
+["تكون مجموعة threads في حالة deadlock عندما…","الأحداث هي أساساً الحصول على الموارد وتحريرها."],
+["في الـ deadlock لا تنتهي العمليات من التنفيذ أبداً وتبقى موارد النظام محجوزة.","صح. وهذا يمنع أيضاً بدء مهام أخرى."],
+["في مسألة الفلاسفة الذين يتناولون الطعام تُمثَّل الموارد بـ…","كل فيلسوف يحتاج عودين."],
+["في مسألة الفلاسفة يحدث الـ deadlock عندما…","لا يبقى أي عود؛ وكل فيلسوف ينتظر عوده الأيمن."],
+["كم عدد الشروط الضرورية التي تميّز الـ deadlock؟","Mutual exclusion وhold and wait وno preemption وcircular wait."],
+["الاستبعاد المتبادل (mutual exclusion) يعني…","لا يستطيع استخدامه إلا thread واحد في الوقت."],
+["الاحتفاظ والانتظار (hold and wait) يعني…","تحتفظ ببعض الموارد وهي تنتظر المزيد."],
+["عدم الانتزاع (no preemption) يعني…","يُحرَّر بعد أن تنهي الـ thread مهمتها."],
+["الانتظار الدائري (circular wait) يعني…","توجد حلقة من الـ threads المنتظِرة."],
+["يمكن أن يحدث deadlock إذا تحقق ثلاثة فقط من الشروط الأربعة.","غلط. يجب أن تتحقق الأربعة معاً في نفس الوقت."],
+["تُقسَّم رؤوس مخطط تخصيص الموارد إلى…","P = العمليات النشطة، وR = كل أنواع الموارد."],
+["حافة الطلب (request edge) Pi → Rj تعني…","العملية تنتظر حالياً."],
+["حافة التخصيص (assignment edge) Rj → Pi تعني…","المورد محجوز عند العملية."],
+["في رسم المخطط تُمثَّل كل نسخة (instance) من المورد بـ…","العمليات دوائر وأنواع الموارد مستطيلات."],
+["عندما يمكن تلبية الطلب تتحول حافة الطلب…","وعندما تحرر العملية المورد تُحذف حافة التخصيص."],
+["إذا لم يحتوِ مخطط تخصيص الموارد على أي دورة (cycle) فإن…","وجود الدورة شرط ضروري للـ deadlock."],
+["إذا كان لكل نوع مورد نسخة واحدة بالضبط وفي المخطط دورة فإن…","الدورة شرط ضروري وكافٍ."],
+["إذا كان لأنواع الموارد عدة نسخ وفي المخطط دورة…","قد يوجد deadlock وقد لا يوجد."],
+["الدورة في مخطط تخصيص الموارد تعني دائماً وجود deadlock.","غلط. مع تعدد النسخ لا تعني الدورة بالضرورة deadlock."],
+["أي مما يلي إحدى الطرق الثلاث للتعامل مع الـ deadlock؟","والأخريان: تجاهل المشكلة، أو الوقاية/التجنب."],
+["تقدّم الوقاية (prevention) طرقاً لضمان أن…","كسر أي شرط واحد يمنع الـ deadlock."],
+["يتطلب التجنب (avoidance) أن يُعطى النظام…","ثم يقرر النظام كل طلب ديناميكياً."],
+["لماذا لا يمكن للموارد القابلة للمشاركة (sharable) أن تشارك في deadlock؟","هي لا تحقق شرط الاستبعاد المتبادل."],
+["الوقاية من hold and wait، البروتوكول 1:","فلا تنتظر أبداً وهي تحتفظ بموارد."],
+["الوقاية من hold and wait، البروتوكول 2:","تحرر ما تحتفظ به قبل طلب موارد إضافية."],
+["بروتوكول الوقاية من no preemption:","تُعاد العملية فقط عندما تستعيد مواردها القديمة والجديدة."],
+["تستخدم الوقاية من circular wait…","كل عملية تطلب الموارد فقط بترتيب تصاعدي للترقيم."],
+["أبسط وأنفع خوارزمية تجنب تتطلب من كل عملية أن…","هذه معلومات مسبقة (a priori)."],
+["حالة تخصيص الموارد تُعرَّف بـ…","تفحصها الخوارزمية ديناميكياً."],
+["تكون الحالة آمنة (safe) إذا…","هذا الترتيب يسمى safe sequence."],
+["يكون النظام في حالة آمنة فقط إذا…","عدم وجود safe sequence يعني أن الحالة غير آمنة."],
+["الحالة الآمنة هي حالة deadlock.","غلط. الحالة الآمنة ليست deadlock؛ وحالة الـ deadlock غير آمنة."],
+["حالة الـ deadlock هي…","كل حالات الـ deadlock غير آمنة."],
+["كل الحالات غير الآمنة هي deadlock.","غلط. الحالة غير الآمنة قد تؤدي إلى deadlock."],
+["لماذا سُميت خوارزمية المصرفي (banker’s)؟","الفكرة مأخوذة من نظام مصرفي."],
+["عند دخول عملية جديدة في خوارزمية المصرفي يجب أن…","هذه هي المعلومات المسبقة."],
+["عندما تطلب عملية موارد تتحقق خوارزمية المصرفي مما إذا…","إذا كانت كذلك تُخصَّص الموارد، وإلا تنتظر العملية."],
+["في خوارزمية المصرفي المصفوفة Max هي…","Max[i][j] = k تعني أن Pi قد تطلب k نسخة كحد أقصى من Rj."],
+["قيمة Need[i][j] تساوي…","Need هي الحاجة المتبقية من الموارد."],
+["المتجه Available هو…","Available[j] = k تعني أن k نسخة من Rj متاحة."],
+["بالنسبة للمتجهين X وY يكون X ≤ Y إذا وفقط إذا…","يجب أن يكون كل مكوّن أصغر من أو يساوي."],
+["إذا كان X = (1,7,3,2) وY = (0,3,2,1) فأيٌّ مما يلي صحيح؟","كل مكوّن في Y أصغر من أو يساوي المكوّن المقابل في X."],
+["Available = (3,3,2) (مثال الكتاب) وتطلب P0 القيمة (7,4,3) مع Need(P0) = (7,4,3). النتيجة…","شرط Request ≤ Need يتحقق، لكن Request ≤ Available يفشل."],
+["إذا كان Max للعملية P0 هو (7,5,3) وAllocation هو (0,1,0) فإن Need يساوي…","Need = Max − Allocation = (7−0, 5−1, 3−0)."]
+];
+var ar=false,order=[],ok=0,ans=0;
+function shf(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
+function build(s){order=Q.map(function(_,i){return i});if(s)shf(order);ok=0;ans=0;$("#final").style.display="none";var box=$("#qs");box.innerHTML="";
+order.forEach(function(qi,n){var q=Q[qi],d=document.createElement("div");d.className="q";
+var p=document.createElement("p");p.innerHTML="<small>"+(ar?"السؤال "+(n+1)+" من "+Q.length:"Question "+(n+1)+" of "+Q.length)+"</small><br>";p.appendChild(document.createTextNode(ar?AQ[qi][0]:q[0]));d.appendChild(p);
+var ix=q[1].map(function(_,i){return i});if(q[1]!==TF)shf(ix);
+var fb=document.createElement("div");fb.className="fb";var bs=[];
+ix.forEach(function(oi){var b=document.createElement("button");b.className="opt";b.textContent=(ar&&q[1]===TF)?(oi?"غلط":"صح"):q[1][oi];bs.push([b,oi]);
+b.onclick=function(){bs.forEach(function(x){x[0].disabled=true;if(x[1]==q[2])x[0].classList.add("ok")});
+var good=oi==q[2];if(!good)b.classList.add("no");ans++;if(good)ok++;
+fb.className="fb show "+(good?"ok":"no");var ra=(ar&&q[1]===TF)?(q[2]?"غلط":"صح"):q[1][q[2]];
+fb.innerHTML="<b>"+(good?(ar?"صح ✓":"Correct ✓"):(ar?"غلط ✗":"Wrong ✗"))+"</b> "+(good?"":(ar?"الإجابة الصحيحة: “"+ra+"”. ":"The right answer is “"+ra+"”. "));fb.appendChild(document.createTextNode(ar?AQ[qi][1]:q[3]));upd()};
+d.appendChild(b)});d.appendChild(fb);box.appendChild(d)});upd()}
+function upd(){$("#score").textContent=(ar?"النتيجة: ":"Score: ")+ok+" / "+ans;$("#prog").textContent=" · "+ans+(ar?" من "+Q.length+" تمت الإجابة":" of "+Q.length+" answered");$("#bar i").style.width=(ans/Q.length*100)+"%";
+if(ans==Q.length){var f=$("#final"),pc=Math.round(ok/Q.length*100);f.style.display="block";f.dir=ar?"rtl":"ltr";
+f.innerHTML="<h3>"+(ar?"انتهيت! ":"Finished! ")+ok+" / "+Q.length+" ("+pc+"%)</h3>"+(ar?(pc>=85?"عمل ممتاز، أنت جاهز للامتحان.":pc>=60?"جيد. راجع الأقسام التي أخطأت فيها ثم أعد المحاولة.":"أعد قراءة الدليل والملخص ثم اخلط الأسئلة وجرّب مرة أخرى."):(pc>=85?"Excellent work, you are ready for the exam.":pc>=60?"Good job. Review the sections you missed, then try again.":"Re-read the guide and the summary, then shuffle and try again."))}}
+$("#shuf").onclick=function(){build(true);scrollTo({top:$("#quiz").offsetTop})};$("#rst").onclick=function(){build(false);scrollTo({top:$("#quiz").offsetTop})};
+/* Arabic content */
+var PHS='<svg class="ph" viewBox="0 0 300 300" role="group" aria-label="Dining philosophers"></svg>',RGS='<svg class="rg" viewBox="0 0 400 230" role="img" aria-label="Resource-allocation graph"></svg>';
+var AR={
+mod:`<h2>1. نموذج النظام والـ Deadlock</h2><p class="lead">ما هي الموارد، وكيف تستخدمها الـ threads، وماذا يعني “deadlocked”.</p>
+<div class="card"><h3>الموارد</h3>يملك النظام <b>عدداً محدوداً من الموارد</b> يُوزَّع على threads متنافسة. تُقسَّم الموارد إلى <b>أنواع (classes)</b>، لكل نوع عدد من <b>النسخ المتطابقة (instances)</b>.
+<ul><li>أمثلة على أنواع الموارد: <b>دورات CPU والملفات وأجهزة I/O</b> (واجهات الشبكة، مشغّلات DVD).</li><li>نظام فيه أربع CPUs: نوع المورد CPU له <b>أربع نسخ</b>.</li><li>إذا طلبت thread نسخة من نوع، فيجب أن تلبّيها <b>أي نسخة</b>. وإلا فالنسخ <b>غير متطابقة</b> و<b>لم تُعرَّف الأنواع بشكل صحيح</b>.</li></ul></div>
+<div class="card"><h3>الطلب – الاستخدام – التحرير (Request – Use – Release)</h3>يجب أن <b>تطلب</b> الـ thread المورد قبل استخدامه و<b>تحرره</b> بعده. التسلسل العادي: <b>1. Request ← 2. Use ← 3. Release</b>. وعدد المطلوب <b>لا يتجاوز الإجمالي المتاح</b>: لا تستطيع thread طلب واجهتي شبكة إذا كان النظام يملك واحدة. و<b>جدول النظام</b> يسجل هل كل مورد <b>حرّ أم مخصَّص</b>.</div>
+<div class="card"><h3>تعريف الـ Deadlock</h3>تكون مجموعة threads في <b>حالة deadlock</b> عندما <b>تنتظر كل thread في المجموعة حدثاً لا تستطيع إحداثه إلا thread أخرى في المجموعة</b>. والأحداث هنا أساساً <b>الحصول على الموارد وتحريرها</b>.
+<div class="tip bad">في الـ deadlock <b>لا تنتهي العمليات من التنفيذ أبداً</b> وتبقى موارد النظام <b>محجوزة</b> فتمنع بدء مهام أخرى.</div>
+<div class="tip">هدف الشابتر: توضيح كيف يحدث الـ deadlock عند استخدام <b>mutex locks</b> (مثلاً thread تمسك قفلاً وتنتظر قفل الأخرى والعكس).</div></div>
+<div class="card" data-ph data-dl="DEADLOCK! الفلاسفة الخمسة يمسكون العود الأيسر وينتظرون الأيمن للأبد." data-cnt="فلاسفة يمسكون العود الأيسر. اضغط على المزيد!"><h3>الفلاسفة المتعشّون: اضغط على فيلسوف ليمسك العود الأيسر</h3>الموارد هي <b>الأعواد (chopsticks)</b>. إذا جاع كل الفلاسفة معاً وأمسك كل واحد <b>العود الذي على يساره</b> فلا يبقى أي عود، ويصبح كل منهم <b>محجوباً ينتظر عوده الأيمن</b>.
+${PHS}<div class="tip msg pm"></div><button class="btn s o pr">إعادة</button></div>`,
+cnd:`<h2>2. الشروط الأربعة الضرورية</h2><p class="lead">لا يحدث الـ deadlock إلا إذا تحققت الأربعة <b>معاً في نفس الوقت</b>.</p>
+<div class="grid s">
+<div class="card"><h3 data-n="1">الاستبعاد المتبادل (Mutual exclusion)</h3>مورد واحد على الأقل يُحتفظ به في <b>وضع غير قابل للمشاركة</b>: thread واحدة فقط في الوقت تستخدمه. والـ thread الطالبة <b>تتأخر</b> حتى يُحرَّر.</div>
+<div class="card"><h3 data-n="2">الاحتفاظ والانتظار (Hold and wait)</h3>thread <b>تحتفظ بمورد واحد على الأقل</b> و<b>تنتظر موارد إضافية</b> تحتفظ بها threads أخرى.</div>
+<div class="card"><h3 data-n="3">عدم الانتزاع (No preemption)</h3>الموارد <b>لا تُنتزع</b>: يمكن تحرير المورد <b>طوعاً فقط</b> من الـ thread التي تحتفظ به بعد إنهاء مهمتها.</div>
+<div class="card"><h3 data-n="4">الانتظار الدائري (Circular wait)</h3>توجد مجموعة {T0, T1, …, Tn} من threads منتظرة بحيث <b>T0 تنتظر مورداً عند T1، وT1 عند T2، …، وTn−1 عند Tn، وTn عند T0</b>.</div>
+</div>
+<div class="card" data-cond data-all="الشروط الأربعة كلها متحققة ← يمكن أن يحدث deadlock." data-c0="كُسر الاستبعاد المتبادل (موارد قابلة للمشاركة فقط) ← الموارد القابلة للمشاركة لا تدخل في deadlock." data-c1="كُسر hold and wait (طلب كل الموارد أولاً أو التحرير قبل طلب المزيد) ← لا deadlock." data-c2="كُسر no preemption (تُنتزع موارد العملية المنتظِرة) ← لا deadlock." data-c3="كُسر circular wait (طلب الموارد بترتيب تصاعدي للترقيم) ← لا deadlock."><h3>تجربة تفاعلية: اكسر شرطاً</h3>اضغط على شرط لإيقافه. يجب أن تكون الأربعة <b>مفعّلة</b> لكي يكون الـ deadlock ممكناً. وهذه هي فكرة <b>الوقاية (prevention)</b>.
+<div class="cds"><button class="cd">Mutual exclusion</button><button class="cd">Hold and wait</button><button class="cd">No preemption</button><button class="cd">Circular wait</button></div>
+<div class="tip bad msg cm"></div></div>`,
+rag:`<h2>3. مخطط تخصيص الموارد (Resource-Allocation Graph)</h2><p class="lead">مخطط موجَّه يصف الـ deadlock بدقة.</p>
+<div class="card"><h3>المخطط</h3>لمخطط تخصيص الموارد مجموعة رؤوس <b>V</b> ومجموعة حواف <b>E</b>. وتنقسم V إلى <b>P = {P1, …, Pn}</b> (كل العمليات النشطة) و<b>R = {R1, …, Rm}</b> (كل أنواع الموارد).
+<ul><li><b>حافة الطلب</b> <code>Pi → Rj</code>: طلبت Pi نسخة من Rj و<b>تنتظرها حالياً</b>.</li><li><b>حافة التخصيص</b> <code>Rj → Pi</code>: خُصِّصت نسخة من Rj لـ Pi.</li><li>الرسم: <b>العملية = دائرة</b>؛ و<b>نوع المورد = مستطيل</b> فيه <b>نقطة لكل نسخة</b>.</li><li>عندما تطلب Pi نسخة تُضاف حافة طلب. وعند إمكان تلبية الطلب <b>تتحول فوراً</b> إلى حافة تخصيص. وعندما تحرر Pi المورد <b>تُحذف</b> حافة التخصيص.</li></ul></div>
+<div class="card"><h3>قراءة مثال السلايد</h3><code>P = {P1, P2, P3}</code> · <code>R = {R1, R2, R3, R4}</code> · <code>E = {P1→R1, P2→R3, R1→P2, R2→P2, R2→P1, R3→P3}</code><br>النسخ: R1 ×1 وR2 ×2 وR3 ×1 وR4 ×3.
+<ul><li><b>P1</b> تحتفظ بنسخة من R2 وتنتظر R1.</li><li><b>P2</b> تحتفظ بنسخة من R1 ونسخة من R2 وتنتظر R3.</li><li><b>P3</b> تحتفظ بنسخة من R3.</li></ul></div>
+<div class="card"><h3>الدورات والـ deadlock</h3><ul><li><b>لا دورة</b> ← <b>لا عملية في deadlock</b>.</li><li>دورة و<b>لكل نوع مورد نسخة واحدة بالضبط</b> ← <b>حدث deadlock</b> (الدورة شرط ضروري وكافٍ).</li><li>دورة و<b>لأنواع الموارد عدة نسخ</b> ← <b>ربما</b>: الدورة شرط ضروري لكنه <b>غير كافٍ</b>.</li></ul></div>
+<div class="card" data-rag data-va="لا توجد دورة في المخطط ← لا عملية في deadlock (هذا مثال السلايد)." data-vb="الدورة P1→R1→P2→R3→P3→R2→P1 (وأيضاً P2→R3→P3→R2→P2): كل من P1 وP2 وP3 منتظِرة، فهي في DEADLOCK." data-vc="توجد دورة لكن لا يوجد deadlock: تستطيع P4 (أو P3) الانتهاء وتحرير نسختها فتنكسر الدورة."><h3>تجربة تفاعلية: ثلاثة مخططات</h3>
+<div><button class="btn s o on" data-g="a">مثال السلايد (بلا دورة)</button><button class="btn s o" data-g="b">مع deadlock</button><button class="btn s o" data-g="c">دورة بلا deadlock</button></div>
+${RGS}<div class="tip msg gm"></div><div style="color:var(--mut);font-size:13.5px">أصفر متقطع = حافة طلب · أبيض متصل = حافة تخصيص · أحمر = دورة</div></div>`,
+han:`<h2>4. طرق التعامل مع الـ Deadlocks</h2><p class="lead">ثلاث طرق عامة لمعالجة المشكلة.</p>
+<div class="grid s">
+<div class="card"><h3 data-n="1">تجاهلها</h3>تجاهل المشكلة تماماً و<b>التظاهر بأن الـ deadlock لا يحدث أبداً</b> في النظام.</div>
+<div class="card"><h3 data-n="2">الوقاية أو التجنب</h3>استخدام بروتوكول يضمن أن النظام <b>لا يدخل حالة deadlock أبداً</b>: <b>وقاية (prevention)</b> أو <b>تجنب (avoidance)</b>.</div>
+<div class="card"><h3 data-n="3">الكشف والتعافي</h3>السماح للنظام <b>بدخول حالة deadlock</b> ثم <b>كشفها</b> و<b>التعافي</b> منها. يوفر النظام خوارزمية تفحص الحالة لمعرفة هل حدث deadlock، وخوارزمية للتعافي.</div>
+</div>
+<div class="grid" style="margin-top:14px">
+<div class="card"><h3>الوقاية (Deadlock prevention)</h3>مجموعة طرق تضمن أن <b>شرطاً واحداً على الأقل من الشروط الضرورية لا يمكن أن يتحقق</b>.</div>
+<div class="card"><h3>التجنب (Deadlock avoidance)</h3>يُعطى النظام <b>معلومات إضافية مسبقاً</b> عن الموارد التي ستطلبها العملية وتستخدمها خلال حياتها.</div>
+</div>
+<div class="tip">سلايداتك تنتهي عند خوارزمية المصرفي. <b>خوارزمية الكشف</b> و<b>التعافي من الـ deadlock</b> موجودان في أهداف الشابتر لكن ليسا في السلايدات.</div>`,
+prv:`<h2>5. الوقاية من الـ Deadlock</h2><p class="lead">اضمن ألا يتحقق شرط واحد على الأقل من الأربعة. اضغط لفتح كل واحد.</p>
+<details open><summary>1. الاستبعاد المتبادل</summary><div>يجب أن يتحقق شرط الاستبعاد المتبادل <b>لبعض الموارد</b>: مورد واحد على الأقل <b>غير قابل للمشاركة</b>. أما <b>الموارد القابلة للمشاركة</b> (مثل الملفات للقراءة فقط) فلا تحتاج <b>وصولاً حصرياً</b> ولذلك <b>لا تدخل في deadlock</b>. وعادةً لا نستطيع الوقاية بإنكار هذا الشرط لأن بعض الموارد غير قابلة للمشاركة بطبيعتها.</div></details>
+<details><summary>2. الاحتفاظ والانتظار</summary><div>نضمن ألا تحتفظ العملية <b>بمورد وهي تنتظر آخر</b>:<ul><li><b>البروتوكول 1:</b> تطلب العملية <b>كل مواردها وتُخصَّص لها قبل أن تبدأ التنفيذ</b>.</li><li><b>البروتوكول 2:</b> تطلب العملية <b>موارد فقط عندما لا تملك أي مورد</b>. قد تطلب بعضها وتستخدمه؛ وقبل أن تطلب أي مورد إضافي يجب أن <b>تحرر كل ما تحتفظ به</b>.</li></ul></div></details>
+<details><summary>3. عدم الانتزاع</summary><div>البروتوكول: إذا كانت عملية تحتفظ بموارد وطلبت مورداً آخر <b>لا يمكن تخصيصه فوراً</b> (عليها الانتظار) فإن <b>كل الموارد التي تحتفظ بها تُنتزع</b>. وتُعاد العملية <b>فقط عندما تستطيع استعادة مواردها القديمة مع الجديدة</b> التي تطلبها.</div></details>
+<details><summary>4. الانتظار الدائري</summary><div>نفرض <b>ترتيباً كلياً لكل أنواع الموارد</b> ونشترط أن تطلب كل عملية الموارد <b>بترتيب تصاعدي للترقيم</b>. مع هذا البروتوكول لا يمكن أن تتشكل دورة انتظار.</div></details>
+<div class="card scroll"><h3>الشرط ← كيف نمنعه</h3><table class="t"><tr><th>الشرط</th><th>فكرة الوقاية</th></tr>
+<tr><td>Mutual exclusion</td><td>استخدام موارد قابلة للمشاركة (لا تسبب deadlock)</td></tr>
+<tr><td>Hold and wait</td><td>طلب كل الموارد أولاً، أو الطلب فقط عند عدم الاحتفاظ بشيء</td></tr>
+<tr><td>No preemption</td><td>انتزاع كل الموارد المحتفظ بها عندما يجب أن ينتظر الطلب</td></tr>
+<tr><td>Circular wait</td><td>ترتيب كلي لأنواع الموارد؛ والطلب بترتيب تصاعدي</td></tr></table></div>`,
+avd:`<h2>6. تجنب الـ Deadlock وخوارزمية المصرفي</h2><p class="lead">نقرر ديناميكياً هل منح الطلب يُبقي النظام آمناً.</p>
+<div class="card"><h3>التجنب (Avoidance)</h3>يتطلب أن يملك النظام <b>معلومات مسبقة (a priori)</b> عن كيفية استخدام كل عملية للموارد. ولكل طلب يأخذ النظام بالحسبان الموارد <b>المتاحة حالياً</b> والموارد <b>المخصصة حالياً</b> لكل عملية و<b>الطلبات والتحريرات المستقبلية</b> لكل عملية.
+<ul><li>الأبسط والأنفع: تعلن كل عملية <b>الحد الأقصى من الموارد من كل نوع</b> الذي قد تحتاجه.</li><li>تفحص الخوارزمية <b>حالة تخصيص الموارد ديناميكياً</b> لتضمن ألا يوجد circular wait. والحالة تُعرَّف بالموارد <b>المتاحة</b> و<b>المخصصة</b> و<b>الاحتياجات القصوى</b> للعمليات.</li></ul></div>
+<div class="card"><h3>الحالة الآمنة (Safe state)</h3>تكون الحالة <b>آمنة</b> إذا استطاع النظام تخصيص الموارد لكل عملية (حتى حدها الأقصى) <b>بترتيب ما</b> مع تفادي الـ deadlock. وبشكل رسمي: يكون النظام آمناً فقط إذا وُجد <b>safe sequence</b>.
+<div class="zones"><div class="z1">SAFE<small>يوجد safe sequence</small></div><div class="z2">UNSAFE<small>قد يؤدي إلى deadlock</small></div><div class="z3">DEADLOCK<small>دائماً unsafe</small></div></div>
+<ul><li>الحالة الآمنة <b>ليست</b> حالة deadlock؛ وحالة الـ deadlock هي حالة <b>غير آمنة</b>.</li><li><b>ليست كل الحالات غير الآمنة deadlock</b>؛ فالحالة غير الآمنة <b>قد تؤدي</b> إلى deadlock.</li><li>ما دامت الحالة آمنة يستطيع النظام تجنب الحالات غير الآمنة (والـ deadlock).</li></ul></div>
+<div class="card"><h3>خوارزمية المصرفي (Banker’s algorithm)</h3>سُميت لأنها تصلح في نظام مصرفي لضمان ألا يخصّص المصرف نقوده بحيث لا يعود قادراً على تلبية احتياجات كل عملائه. على العملية الجديدة أن <b>تعلن الحد الأقصى لنسخ كل نوع مورد</b> الذي قد تحتاجه. وعندما تطلب موارد يتحقق النظام هل التخصيص <b>يُبقي النظام في حالة آمنة</b>. إن كان كذلك تُخصَّص الموارد، وإلا <b>على العملية الانتظار</b> حتى تحرر عمليات أخرى ما يكفي.
+<p style="margin:10px 0 4px"><b>هياكل البيانات</b> (n عملية، m نوع مورد):</p>
+<ul><li><b>Available</b> – متجه بطول m: Available[j] = k تعني أن k نسخة من Rj متاحة.</li><li><b>Max</b> – مصفوفة n × m: Max[i][j] = k تعني أن Pi قد تطلب k نسخة كحد أقصى من Rj.</li><li><b>Allocation</b> – مصفوفة n × m: Allocation[i][j] = k تعني أن Pi تحتفظ حالياً بـ k نسخة من Rj.</li><li><b>Need</b> – مصفوفة n × m للحاجة المتبقية: <code>Need[i][j] = Max[i][j] − Allocation[i][j]</code></li></ul>
+<div class="tip">مقارنة المتجهات: <code>X ≤ Y</code> إذا وفقط إذا <code>X[i] ≤ Y[i]</code> لكل i. مثال: X = (1,7,3,2) وY = (0,3,2,1) ← <b>Y ≤ X</b>.</div></div>
+<div class="card"><h3>خوارزمية الأمان وخوارزمية الطلب</h3><b>الأمان (Safety):</b> Work = Available؛ Finish[i] = false. ابحث عن عملية i حيث Finish[i] = false و<code>Need[i] ≤ Work</code>؛ ثم <code>Work = Work + Allocation[i]</code> وFinish[i] = true. كرر. إذا أصبحت كل قيم Finish صحيحة ← الحالة <b>آمنة</b> (الترتيب الذي وُجد هو safe sequence).<br><b>الطلب (Requesti):</b> (1) إذا Request ≤ Need تابع، وإلا <b>خطأ</b> (تجاوز الحد الأقصى). (2) إذا Request ≤ Available تابع، وإلا <b>تنتظر</b> Pi. (3) <b>افترض</b> التخصيص: Available −= Request وAllocation += Request وNeed −= Request، ثم شغّل خوارزمية الأمان: <b>آمنة ← امنح</b>؛ <b>غير آمنة ← تنتظر Pi</b> وتُستعاد الحالة القديمة.</div>
+<div class="card"><h3>مثال السلايد</h3>نوع المورد A له 10 نسخ وB له 5 وC له 7. افترض أن P0 تطلب (7,4,3). المصفوفات في السلايدات كصور، لذلك استخدمت حالة الكتاب القياسية (محمّلة بالأسفل). ويمكنك تعديل كل رقم.</div>
+<div class="card" data-bank data-lpr="العملية" data-lal="Allocation" data-lmx="Max" data-lnd="Need" data-lav="Available" data-ltot="إجمالي النسخ" data-sf="فحص الأمان" data-req="طلب من" data-tr="اختبار الطلب" data-l1="" data-l2="" data-wk="Work" data-nw="Need" data-fin="تنتهي" data-safe="حالة آمنة (SAFE). safe sequence:" data-unsafe="حالة غير آمنة (UNSAFE): لا تستطيع أي عملية الانتهاء بقيمة Work الحالية، فلا يوجد safe sequence." data-bad="بيانات غير صالحة: قيمة Allocation أكبر من Max." data-r1="خطأ: الطلب يتجاوز الحد الأقصى للعملية (Need)." data-r2="الطلب أكبر من Available ← على العملية الانتظار (WAIT)." data-r3="التخصيص المفترض يُبقي النظام آمناً (SAFE) ← الطلب مقبول (GRANTED). safe sequence:" data-r4="التخصيص المفترض سيجعل النظام غير آمن (UNSAFE) ← على العملية الانتظار (تُستعاد الحالة القديمة)." data-r0="Request ≤ Need ✓" data-r5="Request ≤ Available ✓"><h3>تجربة تفاعلية: خوارزمية المصرفي</h3>عدّل المصفوفات (3 أنواع موارد A وB وC و5 عمليات)، ثم افحص الأمان أو اختبر طلباً.
+<div class="scroll bk"></div>
+<div style="margin:6px 0"><button class="btn s sfy">فحص الأمان</button><button class="btn s o l1">حمّل مثال السلايد (P0 تطلب 7,4,3)</button><button class="btn s o l2">حمّل مثالاً 2 (P1 تطلب 1,0,2)</button></div>
+<div>طلب من <select class="rp"></select> = (<input class="qin rq" type="number" min="0" value="7"> , <input class="qin rq" type="number" min="0" value="4"> , <input class="qin rq" type="number" min="0" value="3">) <button class="btn s rtest">اختبار الطلب</button></div>
+<div class="bo"></div></div>`,
+sum:`<h2>7. ملخص الشابتر</h2><p class="lead">راجعه قبل الامتحان مباشرة.</p>
+<div class="card"><ul>
+<li><b>Deadlock</b> = كل thread في مجموعة تنتظر حدثاً لا تحدثه إلا thread أخرى في المجموعة. تستخدم الـ threads الموارد بـ <b>request ← use ← release</b>.</li>
+<li>أربعة شروط ضرورية (يجب تحققها <b>كلها</b>): <b>mutual exclusion وhold and wait وno preemption وcircular wait</b>.</li>
+<li><b>مخطط تخصيص الموارد</b>: حافة طلب Pi→Rj وحافة تخصيص Rj→Pi. <b>لا دورة = لا deadlock</b>؛ دورة + نسخة واحدة = deadlock؛ دورة + عدة نسخ = ربما.</li>
+<li>التعامل: <b>تجاهل</b>، أو <b>وقاية/تجنب</b>، أو <b>كشف وتعافٍ</b>.</li>
+<li><b>الوقاية</b> تكسر شرطاً: موارد قابلة للمشاركة؛ طلب الكل أولاً / التحرير قبل الطلب؛ انتزاع الموارد؛ ترتيب كلي للموارد.</li>
+<li><b>التجنب</b> يحتاج الحدود القصوى مسبقاً؛ ويُبقي النظام في <b>حالة آمنة</b> (يوجد safe sequence). Deadlock ⊂ unsafe؛ وunsafe ليست دائماً deadlock.</li>
+<li><b>خوارزمية المصرفي</b>: Available وMax وAllocation وNeed = Max − Allocation. لا يُمنح الطلب إلا إذا أبقى النظام آمناً.</li></ul></div>
+<div class="card scroll"><h3>مقارنات سريعة</h3>
+<table class="t"><tr><th>المفهوم أ</th><th>المفهوم ب</th></tr>
+<tr><td><b>Prevention</b>: جعل شرط واحد على الأقل مستحيلاً</td><td><b>Avoidance</b>: استخدام معلومات مسبقة؛ لا يُمنح الطلب إلا إذا بقيت الحالة آمنة</td></tr>
+<tr><td><b>Request edge</b> Pi → Rj: انتظار</td><td><b>Assignment edge</b> Rj → Pi: مخصَّص</td></tr>
+<tr><td><b>Safe state</b>: يوجد safe sequence</td><td><b>Unsafe state</b>: قد تؤدي إلى deadlock</td></tr>
+<tr><td><b>دورة بنسخة واحدة</b>: deadlock</td><td><b>دورة بعدة نسخ</b>: ربما deadlock</td></tr>
+<tr><td><b>Max</b>: الحاجة القصوى</td><td><b>Need</b> = Max − Allocation: الحاجة المتبقية</td></tr></table></div>`};
+Object.keys(AR).forEach(function(k){var w=document.querySelector("#"+k+" .wrap"),d=document.createElement("div");d.className="arx";d.lang="ar";d.dir="rtl";d.innerHTML=AR[k];w.appendChild(d)});
+init();
+/* language toggle */
+var NA=["نموذج النظام","الشروط الأربعة","مخطط تخصيص الموارد","طرق التعامل","الوقاية","التجنب والمصرفي","الملخص","الاختبار"];
+var NE=[].map.call(document.querySelectorAll("nav a"),function(a){return a.textContent});
+var H1=$(".hero h1"),HP=$(".hero p"),HB=document.querySelectorAll(".hero .btn"),H0=[H1.innerHTML,HP.textContent,HB[0].textContent,HB[1].textContent];
+var QE=[$("#quiz h2").textContent,$("#quiz .lead").textContent,$("#shuf").textContent,$("#rst").textContent,$("footer").textContent];
+$("#lang").onclick=function(){ar=!ar;document.body.classList.toggle("ar",ar);
+document.querySelectorAll("nav a").forEach(function(a,i){a.textContent=ar?NA[i]:NE[i]});
+H1.innerHTML=ar?"نظم التشغيل<br>الشابتر 8: الـ Deadlocks":H0[0];HP.textContent=ar?"دليل دراسة كامل وسهل: نموذج النظام والشروط الأربعة ومخططات تخصيص الموارد والوقاية والتجنب وخوارزمية المصرفي، مع تجارب حية وملخص واختبار يخبرك فوراً إن كانت إجابتك صح أو غلط.":H0[1];
+HB[0].textContent=ar?"ابدأ الدراسة":H0[2];HB[1].textContent=ar?"جرّب خوارزمية المصرفي":H0[3];$("#lang").textContent=ar?"English":"العربية";
+$("#quiz h2").textContent=ar?"8. الاختبار التفاعلي":QE[0];$("#quiz .lead").textContent=ar?"اضغط على إجابة. الأخضر يعني صح، والأحمر غلط، ويظهر شرح الإجابة الصحيحة دائماً.":QE[1];
+$("#shuf").textContent=ar?"خلط وإعادة":QE[2];$("#rst").textContent=ar?"إعادة":QE[3];$("footer").textContent=ar?"مبني على سلايدات الشابتر 8: الـ Deadlocks · نظم التشغيل (501471)":QE[4];
+$("#quiz .wrap").dir=ar?"rtl":"ltr";build(false)};
+build(false);
+})();
+</script>
+</body>
+</html>
