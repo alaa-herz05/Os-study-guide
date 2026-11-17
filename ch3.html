@@ -104,9 +104,37 @@ body.ar h1,body.ar h2,body.ar h3,body.ar summary,body.ar #score,body.ar .chp{fon
 #lang{flex:none;padding:6px 16px;margin:0 8px 0 0;font-size:14px}
 @media(max-width:760px){.hero{grid-template-columns:1fr;padding-top:34px}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+
+#rp{position:fixed;top:0;left:0;height:3px;width:0;background:var(--g);z-index:40}
+nav a.cur2{color:var(--g);border-color:var(--gd);background:var(--panel2)}
+.btn:disabled{opacity:.35;cursor:not-allowed;box-shadow:none}
+.btn.av{box-shadow:0 0 0 2px var(--am)}
+.dg svg,.qs,.cs{width:100%;height:auto;direction:ltr;display:block}
+.dg text,.qs text,.cs text{fill:var(--txt);font:600 14px "IBM Plex Sans",sans-serif}
+.nd ellipse{fill:#0f0720;stroke:var(--gd);stroke-width:2;transition:.3s}
+.nd.on ellipse{fill:var(--g);stroke:var(--g);filter:drop-shadow(0 0 10px var(--g))}
+.nd.on text{fill:#14052b}
+.ed{cursor:pointer;outline:none}.ed path.l{stroke:var(--mut);stroke-width:2;fill:none}.ed path.h{stroke:transparent;stroke-width:20;fill:none}
+.dg .ed text{fill:var(--mut);font-size:13px}
+.ed.av path.l{stroke:var(--am);stroke-dasharray:6 5;animation:dsh 1s linear infinite}.ed.av text{fill:var(--am)!important}
+.ed.hot path.l{stroke:var(--g);stroke-width:3;stroke-dasharray:none;animation:none}
+.ed:focus-visible path.l{stroke:var(--g)}
+@keyframes dsh{to{stroke-dashoffset:-22}}
+.qs text{font-size:11.5px}.qs .ql{stroke:var(--mut);stroke-width:1.6;fill:none}
+.qb rect,.qb ellipse,.qb circle{fill:#0f0720;stroke:var(--gd);stroke-width:1.6;transition:.3s}
+.qb.on rect,.qb.on ellipse,.qb.on circle{fill:#3b1f73;stroke:var(--g);filter:drop-shadow(0 0 8px var(--g))}
+.tk{fill:var(--am);transition:transform .42s ease;filter:drop-shadow(0 0 6px var(--am))}
+.qst{margin:6px 0;color:var(--mut)}.qst b{color:var(--am)}
+.cs text{font-size:13px}.cs .ln{fill:var(--g);font-size:14px}
+.cs-e{opacity:0;transition:opacity .5s}.cs-e.v{opacity:1}.cs-e.ex{fill:var(--g)}
+.cs-e.id{fill:none;stroke:var(--gd);stroke-dasharray:4 4;stroke-width:1.5}
+.cs-e.ov rect{fill:#2a1552;stroke:var(--am);stroke-width:1.5}
+.cs-e.ar path{stroke:var(--am);stroke-width:2;fill:none}.cs-e.ar text{fill:var(--am);font-size:12px}
+.cs-e.cur{filter:drop-shadow(0 0 8px var(--am))}
 </style>
 </head>
 <body>
+<div id="rp"></div>
 <canvas id="bg" aria-hidden="true"></canvas>
 <div class="cbar"><div class="wrap"><a href="index.html">⌂ Home</a><a href="ch1.html">Ch 1</a><a href="ch2.html">Ch 2</a><a href="ch3.html" class="cur">Ch 3</a><a href="ch4.html">Ch 4</a><a href="ch5.html">Ch 5</a><a href="ch8.html">Ch 8</a></div></div>
 <nav><div class="wrap">
@@ -147,9 +175,9 @@ body.ar h1,body.ar h2,body.ar h3,body.ar summary,body.ar #score,body.ar .chp{fon
 <p class="lead">The five states and the record the OS keeps for each process.</p>
 <div class="card"><h3>The five states</h3>As a process executes, it changes state:<ul><li><b>New</b> – the process is being created</li><li><b>Ready</b> – waiting to be assigned to a processor</li><li><b>Running</b> – instructions are being executed</li><li><b>Waiting</b> – waiting for some event to occur (e.g. I/O)</li><li><b>Terminated</b> – the process has finished execution</li></ul></div>
 <div class="card" data-sm><h3>Interactive: drive the process through its states</h3>
-<div class="lg" style="margin:10px 0"><span class="chp" data-s="new">New</span><span class="chp" data-s="ready">Ready</span><span class="chp" data-s="run">Running</span><span class="chp" data-s="term">Terminated</span><span class="chp w" data-s="wait">Waiting</span></div>
+<div class="dg"></div>
 <div><button class="btn s" data-t="new>ready" data-m="Admitted: the process is created and moved to the ready queue.">Admit</button><button class="btn s" data-t="ready>run" data-m="Scheduler dispatch: the CPU is assigned to the process.">Scheduler dispatch</button><button class="btn s" data-t="run>ready" data-m="Interrupt: the time slice ended, back to ready.">Interrupt (timeout)</button><button class="btn s" data-t="run>wait" data-m="The process requested I/O or waits for an event.">I/O or event wait</button><button class="btn s" data-t="wait>ready" data-m="I/O or event completion: back to the ready queue.">I/O or event completion</button><button class="btn s" data-t="run>term" data-m="Exit: the process finished execution.">Exit</button><button class="btn s o" data-t="reset">Reset</button></div>
-<div class="tip msg smm" data-bad="Not allowed from the current state.">Press a transition button. Only valid transitions will work.</div></div>
+<div class="tip msg smm" data-bad="Not allowed from the current state.">Click an arrow label (or a button). Glowing dashed arrows are the transitions allowed from the current state.</div></div>
 <div class="card"><h3>Process Control Block (PCB)</h3>A data structure the OS maintains <b>for every process</b>, identified by an integer <b>process ID (PID)</b>. It keeps all the information needed to track the process:
 <ul><li><b>Process state</b> – running, waiting, etc.</li><li><b>Program counter</b> – location of the next instruction</li><li><b>CPU registers</b> – contents of all process-centric registers</li><li><b>CPU-scheduling information</b> – priorities, scheduling-queue pointers</li><li><b>Memory-management information</b> – memory allocated to the process</li><li><b>Accounting information</b> – CPU used, clock time elapsed, time limits</li><li><b>I/O status information</b> – devices allocated, list of open files</li></ul>
 <div class="tip">The PCB layout depends completely on the OS. It is kept <b>throughout the process’s lifetime</b> and <b>deleted once the process terminates</b>.</div></div>
@@ -164,6 +192,7 @@ body.ar h1,body.ar h2,body.ar h3,body.ar summary,body.ar #score,body.ar .chp{fon
 <div class="card"><h3>Ready queue</h3>Set of all processes residing in <b>main (primary) memory</b>, ready and waiting to execute.</div>
 <div class="card"><h3>Wait queues</h3>Processes waiting for an event (e.g. I/O). When a running process needs I/O, the OS changes its state from <b>running to waiting</b>.</div>
 </div>
+<div class="card" data-qd data-l="en"></div>
 <div class="card"><h3>Times related to a process</h3><ul>
 <li><b>Arrival time</b> – when the process enters the ready queue</li>
 <li><b>Completion time</b> – when the process completes its execution</li>
@@ -174,10 +203,8 @@ body.ar h1,body.ar h2,body.ar h3,body.ar summary,body.ar #score,body.ar .chp{fon
 <div class="card" data-calc><h3>Interactive: calculate the times</h3>Change the numbers (formulas assume the CPU time is the only work, no I/O).
 <div class="calc"><label>Arrival<input class="a" type="number" value="0"></label><label>First gets CPU<input class="f" type="number" value="2"></label><label>Burst<input class="b" type="number" value="5"></label><label>Completion<input class="c" type="number" value="9"></label></div>
 <div class="res"><div>Turnaround<b class="tat">9</b></div><div>Waiting<b class="wt">4</b></div><div>Response<b class="rt">2</b></div></div></div>
-<div class="card" data-st><h3>Context switch</h3>Switching the CPU to another process requires a <b>state save</b> of the current process and a <b>state restore</b> of a different one. The kernel saves the old context <b>in its PCB</b> and loads the saved context of the new process. <b>Context-switch time is pure overhead</b>: the system does no useful work while switching, and the time depends on hardware support.
-<div class="flow"><span>P0 running</span><i>→</i><span>Save state → PCB0</span><i>→</i><span>Load state ← PCB1</span><i>→</i><span>P1 running</span></div>
-<ol class="steps"><li data-b="0">Process P0 is executing on the CPU.</li><li data-b="1">An interrupt or system call occurs; the kernel <b>saves P0’s context in PCB0</b>. (Idle: no useful work.)</li><li data-b="2">The kernel <b>loads the saved context of P1 from PCB1</b>. (Still overhead.)</li><li data-b="3">Process P1 now executes on the CPU.</li></ol>
-<button class="btn nx">Next step</button><button class="btn o rs">Reset</button></div>
+<div class="card" data-cs data-l="en"><h3>Context switch</h3>Switching the CPU to another process requires a <b>state save</b> of the current process and a <b>state restore</b> of a different one. The kernel saves the old context <b>in its PCB</b> and loads the saved context of the new process. <b>Context-switch time is pure overhead</b>: the system does no useful work while switching, and the time depends on hardware support.
+<div class="cs-svg"></div><ol class="steps"></ol><button class="btn nx">Next step</button><button class="btn o ap">Auto-play</button><button class="btn o rs">Reset</button></div>
 </div></section>
 
 <section id="ops"><div class="wrap">
@@ -286,10 +313,9 @@ hs();if(!rm)setInterval(hs,1300);
 function st(card){var lis=card.querySelectorAll(".steps li"),bx=card.querySelectorAll(".flow span"),c=-1;
 function sh(){lis.forEach(function(l,i){l.classList.toggle("a",i==c)});bx.forEach(function(b,i){b.classList.toggle("a",c>=0&&i==+lis[c].dataset.b)})}
 card.querySelector(".nx").onclick=function(){c=(c+1)%lis.length;sh()};card.querySelector(".rs").onclick=function(){c=-1;sh()}}
-function sm(r){var cur="new",chips=r.querySelectorAll(".chp"),m=r.querySelector(".smm"),m0=m.textContent;
-function sh(){chips.forEach(function(c){c.classList.toggle("on",c.dataset.s==cur)})}sh();
-r.querySelectorAll("[data-t]").forEach(function(b){b.onclick=function(){var t=b.dataset.t;if(t=="reset"){cur="new";m.textContent=m0;sh();return}
-var p=t.split(">");if(cur==p[0]){cur=p[1];m.textContent=b.dataset.m}else m.textContent=m.dataset.bad;sh()}})}
+function sm(r){var cur="new",last="",nd=r.querySelectorAll("[data-s]"),ed=r.querySelectorAll("[data-t]"),m=r.querySelector(".smm"),m0=m.textContent;
+function sh(){nd.forEach(function(c){c.classList.toggle("on",c.dataset.s==cur)});ed.forEach(function(e){var t=e.dataset.t;e.classList.toggle("av",t.indexOf(cur+">")==0);e.classList.toggle("hot",t==last)})}sh();
+ed.forEach(function(b){var go=function(){var t=b.dataset.t;if(t=="reset"){cur="new";last="";m.textContent=m0;sh();return}var p=t.split(">");if(cur==p[0]){cur=p[1];last=t;m.textContent=b.dataset.m||r.querySelector(".btn[data-t='"+t+"']").dataset.m}else m.textContent=m.dataset.bad;sh()};b.onclick=go;b.onkeydown=function(e){if(e.key=="Enter"||e.key==" "){e.preventDefault();go()}}})}
 function pc(r){var n=0,sl=r.querySelectorAll(".slots span"),m=r.querySelector(".pcm");
 function sh(){sl.forEach(function(s,i){s.classList.toggle("f",i<n);s.textContent=i<n?"■":""})}
 r.querySelector(".pr").onclick=function(){if(n>=sl.length)m.textContent=m.dataset.full;else{n++;m.textContent=m.dataset.p}sh()};
@@ -303,7 +329,7 @@ r.querySelector(".hr").onclick=function(){if(h>1)h--;m.textContent=m.dataset.ok;
 function calc(r){var g=function(c){return +r.querySelector(c).value||0};
 function up(){var a=g(".a"),f=g(".f"),b=g(".b"),c=g(".c"),t=c-a;r.querySelector(".tat").textContent=t;r.querySelector(".wt").textContent=t-b;r.querySelector(".rt").textContent=f-a}
 r.querySelectorAll("input").forEach(function(i){i.oninput=up});up()}
-function init(){document.querySelectorAll("[data-st]").forEach(st);document.querySelectorAll("[data-sm]").forEach(sm);document.querySelectorAll("[data-pc]").forEach(pc);document.querySelectorAll("[data-ml]").forEach(ml);document.querySelectorAll("[data-calc]").forEach(calc)}
+function init(){document.querySelectorAll("[data-st]").forEach(st);document.querySelectorAll("[data-sm]").forEach(sm);document.querySelectorAll("[data-pc]").forEach(pc);document.querySelectorAll("[data-ml]").forEach(ml);document.querySelectorAll("[data-calc]").forEach(calc);document.querySelectorAll("[data-qd]").forEach(qd);document.querySelectorAll("[data-cs]").forEach(cs)}
 /* quiz data */
 var TF=["True","False"];
 var Q=[
@@ -352,6 +378,13 @@ var Q=[
 ["Which is a solution to “who gets the message” when several processes share a mailbox?",["Allow only one process at a time to execute receive","Delete the mailbox","Remove the sender","Use bigger messages"],0,"Others: at most two processes per link, or the system selects the receiver arbitrarily."],
 ["With zero-capacity buffering…",["The sender must wait for the receiver (rendezvous)","The sender never waits","Messages queue forever","Messages are encrypted"],0,"No messages are queued on the link."],
 ["With bounded-capacity buffering, the sender must wait if…",["The link is full","The link is empty","The receiver is slow always","There is no message"],0,"A bounded link holds a finite n messages."]
+,
+["Which transition is NOT allowed in the process state diagram?",["Waiting → Running","Running → Waiting","Ready → Running","Running → Ready"],0,"After its event finishes, a waiting process goes to Ready first. Only the scheduler dispatch moves it to Running."],
+["A running process whose time slice expires moves to…",["Ready","Waiting","Terminated","New"],0,"Interrupt (time slice ended): Running → Ready."],
+["In the queueing diagram, a process that makes an I/O request goes to…",["The I/O wait queue","The ready queue","The job queue","Directly to terminated"],0,"I/O request → I/O wait queue → I/O → back to the ready queue."],
+["A parent that creates a child and waits for it sits in the…",["Child-termination wait queue","Interrupt wait queue","I/O wait queue","Job queue"],0,"It stays there until the child terminates, then returns to the ready queue."],
+["During a context switch the kernel saves the old process’s state in…",["Its PCB","The ready queue","The heap","The disk"],0,"State save goes to the PCB; state restore loads from the new process’s PCB."],
+["While the OS performs a context switch, the CPU does useful work for the user processes.",TF,1,"False. Context switching is pure overhead: both processes are idle meanwhile."]
 ];
 var AQ=[
 ["ما هي العملية (process)؟","العملية هي برنامج قيد التنفيذ، ويتقدم تنفيذها بشكل تسلسلي."],
@@ -399,6 +432,13 @@ var AQ=[
 ["أيٌّ مما يلي حل لمشكلة “من يستلم الرسالة” عند اشتراك عدة عمليات في mailbox؟","حلول أخرى: عمليتان على الأكثر لكل رابط، أو يختار النظام المستلم عشوائياً."],
 ["مع سعة صفرية (zero capacity) للمخزن…","لا تُوضع رسائل في طابور على الرابط."],
 ["مع السعة المحدودة (bounded) يجب على المرسل الانتظار إذا…","الرابط المحدود يحمل عدداً منتهياً n من الرسائل."]
+,
+["أي انتقال غير مسموح في مخطط حالات العملية؟","بعد انتهاء الحدث تذهب العملية المنتظرة إلى Ready أولاً، والـ scheduler dispatch وحده ينقلها إلى Running."],
+["العملية الجارية التي تنتهي شريحتها الزمنية تنتقل إلى…","Interrupt (انتهاء الشريحة): من Running إلى Ready."],
+["في مخطط الطوابير، العملية التي تطلب I/O تذهب إلى…","طلب I/O ← طابور انتظار I/O ← الجهاز ← ثم العودة إلى الـ ready queue."],
+["الأب الذي أنشأ ابناً وينتظره يبقى في…","يبقى هناك حتى ينتهي الابن ثم يعود إلى الـ ready queue."],
+["أثناء الـ context switch تحفظ النواة حالة العملية القديمة في…","حفظ الحالة يكون في الـ PCB، والاستعادة من الـ PCB الخاص بالعملية الجديدة."],
+["أثناء تنفيذ النظام للـ context switch يؤدي الـ CPU عملاً مفيداً للعمليات.","غلط. تبديل السياق overhead خالص: العمليتان في حالة idle خلاله."]
 ];
 var ar=false,order=[],ok=0,ans=0;
 function sh(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
@@ -436,9 +476,9 @@ con:`<h2>1. مفهوم العملية (Process Concept)</h2><p class="lead">ما
 stt:`<h2>2. حالة العملية وكتلة التحكم (State and PCB)</h2><p class="lead">الحالات الخمس والسجل الذي يحتفظ به النظام لكل عملية.</p>
 <div class="card"><h3>الحالات الخمس</h3>أثناء التنفيذ تتغير حالة العملية:<ul><li><b>New</b> – العملية قيد الإنشاء</li><li><b>Ready</b> – تنتظر تخصيص المعالج لها</li><li><b>Running</b> – تُنفَّذ تعليماتها</li><li><b>Waiting</b> – تنتظر وقوع حدث (مثل I/O)</li><li><b>Terminated</b> – انتهى تنفيذها</li></ul></div>
 <div class="card" data-sm><h3>تجربة تفاعلية: حرّك العملية بين الحالات</h3>
-<div class="lg" style="margin:10px 0">${CH}</div>
+<div class="dg"></div>
 <div><button class="btn s" data-t="new>ready" data-m="Admitted: أُنشئت العملية ونُقلت إلى طابور الجاهزية.">Admit</button><button class="btn s" data-t="ready>run" data-m="Scheduler dispatch: خُصِّص المعالج للعملية.">Scheduler dispatch</button><button class="btn s" data-t="run>ready" data-m="Interrupt: انتهت الشريحة الزمنية، عادت إلى ready.">Interrupt (timeout)</button><button class="btn s" data-t="run>wait" data-m="طلبت العملية I/O أو تنتظر حدثاً.">I/O or event wait</button><button class="btn s" data-t="wait>ready" data-m="اكتمل الحدث: عادت إلى طابور الجاهزية.">I/O or event completion</button><button class="btn s" data-t="run>term" data-m="Exit: انتهى تنفيذ العملية.">Exit</button><button class="btn s o" data-t="reset">إعادة</button></div>
-<div class="tip msg smm" data-bad="هذا الانتقال غير مسموح من الحالة الحالية.">اضغط على زر انتقال. الانتقالات الصحيحة فقط ستعمل.</div></div>
+<div class="tip msg smm" data-bad="هذا الانتقال غير مسموح من الحالة الحالية.">اضغط على سهم (أو زر). الأسهم المتقطعة المتوهجة هي الانتقالات المسموحة من الحالة الحالية.</div></div>
 <div class="card"><h3>كتلة التحكم بالعملية (PCB)</h3>بنية بيانات يحتفظ بها النظام <b>لكل عملية</b>، وتُعرَّف برقم <b>PID</b> صحيح. تحوي كل المعلومات اللازمة لتتبع العملية:
 <ul><li><b>حالة العملية</b> – running وwaiting وغيرها</li><li><b>Program counter</b> – موقع التعليمة التالية</li><li><b>مسجلات الـ CPU</b> – محتوى كل المسجلات الخاصة بالعملية</li><li><b>معلومات جدولة الـ CPU</b> – الأولويات ومؤشرات الطوابير</li><li><b>معلومات إدارة الذاكرة</b> – الذاكرة المخصصة للعملية</li><li><b>معلومات المحاسبة</b> – الـ CPU المستخدم والوقت المنقضي وحدود الوقت</li><li><b>معلومات حالة I/O</b> – الأجهزة المخصصة وقائمة الملفات المفتوحة</li></ul>
 <div class="tip">بنية الـ PCB تعتمد كلياً على نظام التشغيل. وتُحفظ <b>طوال حياة العملية</b> و<b>تُحذف عند انتهائها</b>.</div></div>`,
@@ -449,6 +489,7 @@ sch:`<h2>3. جدولة العمليات (Process Scheduling)</h2><p class="lead"
 <div class="card"><h3>Ready queue</h3>مجموعة العمليات الموجودة في <b>الذاكرة الرئيسية</b> والجاهزة والمنتظرة للتنفيذ.</div>
 <div class="card"><h3>Wait queues</h3>عمليات تنتظر حدثاً (مثل I/O). عندما تحتاج العملية الجارية I/O يغيّر النظام حالتها من <b>running إلى waiting</b>.</div>
 </div>
+<div class="card" data-qd data-l="ar"></div>
 <div class="card"><h3>الأوقات المرتبطة بالعملية</h3><ul>
 <li><b>Arrival time</b> – وقت دخول العملية إلى الـ ready queue</li>
 <li><b>Completion time</b> – وقت اكتمال تنفيذ العملية</li>
@@ -459,10 +500,8 @@ sch:`<h2>3. جدولة العمليات (Process Scheduling)</h2><p class="lead"
 <div class="card" data-calc><h3>تجربة تفاعلية: احسب الأوقات</h3>غيّر الأرقام (المعادلات تفترض أن عمل العملية هو وقت الـ CPU فقط بدون I/O).
 <div class="calc"><label>Arrival<input class="a" type="number" value="0"></label><label>أول وصول للـ CPU<input class="f" type="number" value="2"></label><label>Burst<input class="b" type="number" value="5"></label><label>Completion<input class="c" type="number" value="9"></label></div>
 <div class="res"><div>Turnaround<b class="tat">9</b></div><div>Waiting<b class="wt">4</b></div><div>Response<b class="rt">2</b></div></div></div>
-<div class="card" data-st><h3>تبديل السياق (Context switch)</h3>تحويل الـ CPU إلى عملية أخرى يتطلب <b>حفظ حالة</b> العملية الحالية و<b>استعادة حالة</b> عملية مختلفة. تحفظ النواة السياق القديم <b>في الـ PCB</b> وتحمّل السياق المحفوظ للعملية الجديدة. <b>زمن تبديل السياق overhead خالص</b>: لا يؤدي النظام عملاً مفيداً أثناءه، ويعتمد زمنه على دعم العتاد.
-<div class="flow"><span>P0 تعمل</span><i>←</i><span>حفظ الحالة → PCB0</span><i>←</i><span>تحميل الحالة ← PCB1</span><i>←</i><span>P1 تعمل</span></div>
-<ol class="steps"><li data-b="0">العملية P0 تُنفَّذ على الـ CPU.</li><li data-b="1">تحدث مقاطعة أو system call؛ تقوم النواة بـ<b>حفظ سياق P0 في PCB0</b>. (لا عمل مفيد.)</li><li data-b="2">تقوم النواة بـ<b>تحميل السياق المحفوظ لـ P1 من PCB1</b>. (ما زال overhead.)</li><li data-b="3">تُنفَّذ العملية P1 الآن على الـ CPU.</li></ol>
-<button class="btn nx">الخطوة التالية</button><button class="btn o rs">إعادة</button></div>`,
+<div class="card" data-cs data-l="ar"><h3>تبديل السياق (Context switch)</h3>تحويل الـ CPU إلى عملية أخرى يتطلب <b>حفظ حالة</b> العملية الحالية و<b>استعادة حالة</b> عملية مختلفة. تحفظ النواة السياق القديم <b>في الـ PCB</b> وتحمّل السياق المحفوظ للعملية الجديدة. <b>زمن تبديل السياق overhead خالص</b>: لا يؤدي النظام عملاً مفيداً أثناءه، ويعتمد زمنه على دعم العتاد.
+<div class="cs-svg"></div><ol class="steps"></ol><button class="btn nx">الخطوة التالية</button><button class="btn o ap">تشغيل تلقائي</button><button class="btn o rs">إعادة</button></div>`,
 ops:`<h2>4. العمليات على الـ Processes</h2><p class="lead">إنشاء العمليات وإنهاؤها.</p>
 <div class="card"><h3>إنشاء العملية (Process creation)</h3>تعمل العمليات بالتزامن و<b>تُنشأ وتُحذف ديناميكياً</b>. العملية المنشِئة هي <b>الأب (parent)</b> والجديدة هي <b>الأبناء (children)</b>. وقد ينشئ الأبناء عمليات أخرى فتتكوّن <b>شجرة عمليات</b>. لكل عملية رقم صحيح فريد <b>pid</b>.
 <ul><li>يحتاج الابن موارد (وقت CPU وذاكرة وملفات وأجهزة I/O). قد يحصل عليها <b>مباشرة من النظام</b> أو يُحصَر في <b>جزء من موارد الأب</b>. وقد <b>يقسّم</b> الأب موارده بين أبنائه أو <b>يشاركها</b>.</li><li>تقييد الابن بجزء من موارد الأب <b>يمنع أي عملية من إغراق النظام</b> بإنشاء أبناء كثيرين.</li></ul></div>
@@ -515,7 +554,77 @@ sum:`<h2>7. ملخص الشابتر</h2><p class="lead">راجعه قبل الا
 <tr><td><b>Zero capacity</b>: المرسل ينتظر (rendezvous)</td><td><b>Unbounded capacity</b>: المرسل لا ينتظر</td></tr>
 <tr><td><b>Ready queue</b>: ينتظر الـ CPU</td><td><b>Wait queue</b>: ينتظر حدثاً (I/O)</td></tr></table></div>`};
 Object.keys(AR).forEach(function(k){var w=document.querySelector("#"+k+" .wrap"),d=document.createElement("div");d.className="arx";d.lang="ar";d.dir="rtl";d.innerHTML=AR[k];w.appendChild(d)});
-init();
+/* diagrams */
+function dg(i){var N={new:[80,50,"New"],term:[680,50,"Terminated"],ready:[240,150,"Ready"],run:[520,150,"Running"],wait:[380,285,"Waiting"]},
+E=[["new>ready","M128 68Q190 84 212 123","admitted",160,56,"start"],["ready>run","M272 176Q380 222 488 176","scheduler dispatch",380,222,"middle"],["run>ready","M492 125Q380 48 268 125","interrupt",380,64,"middle"],["run>term","M556 128Q600 80 646 70","exit",578,76,"end"],["run>wait","M546 176Q540 256 440 274","I/O or event wait",552,250,"start"],["wait>ready","M322 272Q232 262 232 178","I/O or event completion",224,262,"end"]];
+var s='<svg viewBox="0 0 760 330" role="img" aria-label="Process state diagram"><defs><marker id="dh'+i+'" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#a794c4"/></marker></defs>';
+E.forEach(function(e){s+='<g class="ed" data-t="'+e[0]+'" tabindex="0" role="button" aria-label="'+e[2]+'"><path class="l" d="'+e[1]+'" marker-end="url(#dh'+i+')"/><path class="h" d="'+e[1]+'"/><text x="'+e[3]+'" y="'+e[4]+'" text-anchor="'+e[5]+'">'+e[2]+'</text></g>'});
+for(var k in N)s+='<g class="nd" data-s="'+k+'"><ellipse cx="'+N[k][0]+'" cy="'+N[k][1]+'" rx="62" ry="27"/><text x="'+N[k][0]+'" y="'+(N[k][1]+5)+'" text-anchor="middle">'+N[k][2]+'</text></g>';
+return s+'</svg>'}
+var QY=[105,165,225,285],QR=[["I/O request","I/O wait queue","I/O"],["time slice expired"],["create child process","child termination wait queue","child terminates"],["wait for an interrupt","interrupt wait queue","interrupt occurs"]];
+var QK=["admit","disp","e0","e1","e2","e3","exit","done","reset"];
+var QT={en:{t:"Interactive: follow one process through the scheduling queues",h:"Press the buttons in order. Only the buttons that are valid for the process’s current place are enabled.",st:"Process state: ",
+s:{new:"New (in the job queue)",ready:"Ready",run:"Running",wait:"Waiting",term:"Terminated"},
+b:["1. Admit","2. Scheduler dispatch","I/O request","Time slice expired","Create child","Wait for interrupt","Exit","Event completes","Reset"],
+m:{start:"The job sits in the job queue. Press Admit.",admit:"Admitted: the process joins the ready queue (state: Ready).",disp:"The scheduler takes it from the ready queue and gives it the CPU (state: Running).",
+e0:"I/O request: it moves to the I/O wait queue (Waiting) until the device finishes.",e1:"Time slice expired: it is preempted and goes straight back to the ready queue.",e2:"It created a child: it waits in the child-termination wait queue.",e3:"It waits for an interrupt: it sits in the interrupt wait queue.",
+exit:"Exit: the process terminates and leaves the system.",done:"The event happened: back to the ready queue (Waiting → Ready, never straight to Running)."}},
+ar:{t:"تجربة تفاعلية: تابع عملية واحدة عبر طوابير الجدولة",h:"اضغط الأزرار بالترتيب. تُفعَّل فقط الأزرار الصالحة لمكان العملية الحالي.",st:"حالة العملية: ",
+s:{new:"New (في الـ job queue)",ready:"Ready",run:"Running",wait:"Waiting",term:"Terminated"},
+b:["1. Admit","2. Scheduler dispatch","طلب I/O","انتهاء الشريحة الزمنية","إنشاء ابن","انتظار interrupt","Exit","اكتمل الحدث","إعادة"],
+m:{start:"المهمة في الـ job queue. اضغط Admit.",admit:"Admitted: دخلت العملية إلى الـ ready queue (الحالة: Ready).",disp:"المجدول يأخذها من الـ ready queue ويعطيها الـ CPU (الحالة: Running).",
+e0:"طلب I/O: تنتقل إلى طابور انتظار الـ I/O (Waiting) حتى ينتهي الجهاز.",e1:"انتهت الشريحة الزمنية: تُقاطَع وتعود مباشرة إلى الـ ready queue.",e2:"أنشأت ابناً: تنتظر في طابور انتظار انتهاء الابن.",e3:"تنتظر interrupt: تبقى في طابور انتظار الـ interrupt.",
+exit:"Exit: تنتهي العملية وتغادر النظام.",done:"حدث الحدث: ترجع إلى الـ ready queue (من Waiting إلى Ready، وليس مباشرة إلى Running)."}}};
+function qh(l,i){var T=QT[l],s='<svg class="qs" viewBox="0 0 760 320" role="img" aria-label="Process scheduling queues"><defs><marker id="qh'+i+'" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#a794c4"/></marker></defs>',
+ln=function(d,m){return '<path class="ql" d="'+d+'"'+(m?' marker-end="url(#qh'+i+')"':'')+'/>'},
+bx=function(id,x,y,w,t){return '<g class="qb" id="'+id+i+'"><rect x="'+x+'" y="'+y+'" width="'+w+'" height="38" rx="5"/><text x="'+(x+w/2)+'" y="'+(y+24)+'" text-anchor="middle">'+t+'</text></g>'};
+s+=bx("job",10,23,100,"Job queue")+bx("rdy",200,23,130,"ready queue")+'<g class="qb" id="cpu'+i+'"><circle cx="480" cy="42" r="30"/><text x="480" y="47" text-anchor="middle">CPU</text></g>';
+s+=ln("M110 42H200",1)+ln("M330 42H450",1)+ln("M510 34H745",1)+'<text x="625" y="26">exit</text>'+ln("M510 52H690V295")+ln("M150 290V42");
+QR.forEach(function(r,j){var y=QY[j];s+=ln("M690 "+y+"H675",1)+bx("rq"+j,545,y-19,130,r[0]);
+if(r[1])s+=ln("M545 "+y+"H525",1)+bx("wq"+j,360,y-19,165,r[1])+ln("M360 "+y+"H340",1)+'<g class="qb" id="ev'+j+i+'"><ellipse cx="275" cy="'+y+'" rx="65" ry="20"/><text x="275" y="'+(y+4)+'" text-anchor="middle">'+r[2]+'</text></g>'+ln("M210 "+y+"H150");
+else s+=ln("M545 "+y+"H150")});
+s+='<circle class="tk" r="9" style="transform:translate(60px,42px)"/></svg>';
+var bt=QK.map(function(k,n){return '<button class="btn s'+(n>1&&n<7||n==8?' o':'')+'" data-a="'+k+'">'+T.b[n]+'</button>'}).join('');
+return '<h3>'+T.t+'</h3><p class="lead" style="margin:0 0 8px">'+T.h+'</p>'+s+'<div class="qst">'+T.st+'<b class="qn"></b></div><div>'+bt+'</div><div class="tip msg qm"></div>'}
+function qd(r){var l=r.dataset.l,T=QT[l],i=l=="en"?0:1,st="new",row=0,bz=0,tk=r.querySelector(".tk"),m=r.querySelector(".qm"),nm=r.querySelector(".qn"),bs=r.querySelectorAll("[data-a]");
+function on(){r.querySelectorAll(".qb").forEach(function(e){e.classList.remove("on")});var id=st=="new"?"job":st=="ready"?"rdy":st=="run"?"cpu":st=="wait"?"wq"+row:"",e=id&&r.querySelector("#"+id+(st=="wait"?"":"")+i);if(e)e.classList.add("on")}
+function ui(){bs.forEach(function(b){var a=b.dataset.a;b.disabled=!(a=="reset"||(!bz&&(a=="admit"?st=="new":a=="disp"?st=="ready":a=="done"?st=="wait":st=="run")))});nm.textContent=T.s[st];on()}
+function mv(p,s2){bz=1;ui();var n=0;(function g(){if(n>=p.length){bz=0;st=s2;ui();return}tk.style.transform="translate("+p[n][0]+"px,"+p[n][1]+"px)";n++;setTimeout(g,rm?0:420)})()}
+bs.forEach(function(b){b.onclick=function(){var a=b.dataset.a,j,Y;
+if(a=="reset"){bz=0;st="new";tk.style.transform="translate(60px,42px)";m.textContent=T.m.start;ui();return}
+m.textContent=T.m[a];
+if(a=="admit")mv([[150,42],[265,42]],"ready");
+else if(a=="disp")mv([[480,42]],"run");
+else if(a=="exit")mv([[725,34]],"term");
+else if(a=="done")mv([[275,QY[row]],[150,QY[row]],[150,42],[265,42]],"ready");
+else{j=+a[1];Y=QY[j];if(QR[j][1]){row=j;mv([[690,52],[690,Y],[610,Y],[442,Y]],"wait")}else mv([[690,52],[690,Y],[610,Y],[150,Y],[150,42],[265,42]],"ready")}}});
+m.textContent=T.m.start;ui()}
+function csv(){var b=function(k,c,x,y,h){return '<rect class="cs-e '+c+'" data-k="'+k+'" x="'+x+'" y="'+y+'" width="14" height="'+h+'" rx="3"/>'},
+o=function(k,y,t){return '<g class="cs-e ov" data-k="'+k+'"><rect x="270" y="'+y+'" width="180" height="34" rx="6"/><text x="360" y="'+(y+22)+'" text-anchor="middle">'+t+'</text></g>'},
+a=function(k,d,t,x,y,an){return '<g class="cs-e ar" data-k="'+k+'"><path d="'+d+'" marker-end="url(#csh)"/>'+(t?'<text x="'+x+'" y="'+y+'" text-anchor="'+an+'">'+t+'</text>':'')+'</g>'};
+return '<svg class="cs" viewBox="0 0 720 450" role="img" aria-label="Context switch timeline"><defs><marker id="csh" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#ffb454"/></marker></defs>'
++'<text class="ln" x="117" y="24" text-anchor="middle">process P0</text><text class="ln" x="360" y="24" text-anchor="middle">operating system</text><text class="ln" x="617" y="24" text-anchor="middle">process P1</text>'
++b(0,"ex",110,50,80)+b(0,"id",610,50,175)+b(2,"id",110,130,265)+b(4,"ex",610,225,75)+b(5,"id",610,300,95)+b(7,"ex",110,395,45)
++a(1,"M126 130L268 162","interrupt or system call",130,118,"start")+o(2,150,"save state into PCB0")+o(3,196,"reload state from PCB1")+a(3,"M450 213L606 228")
++a(5,"M608 300L452 334","interrupt or system call",600,292,"end")+o(5,320,"save state into PCB1")+o(6,366,"reload state from PCB0")+a(7,"M270 383L128 398")+'</svg>'}
+var CAP={en:["P0 is executing on the CPU. P1 is idle (waiting in the ready queue).","An interrupt or system call occurs and control passes to the operating system.","The kernel saves P0’s state into PCB0. P0 is idle now and no useful work is done (overhead).","The kernel reloads P1’s saved state from PCB1 (still overhead) and gives P1 the CPU.","P1 is executing. P0 stays idle.","Another interrupt or system call: the OS takes over and saves P1’s state into PCB1.","The kernel reloads P0’s saved state from PCB0 (overhead again).","P0 resumes exactly where it stopped. P1 is idle."],
+ar:["العملية P0 تُنفَّذ على الـ CPU، وP1 في حالة idle (تنتظر في الـ ready queue).","تحدث مقاطعة أو system call فينتقل التحكم إلى نظام التشغيل.","تحفظ النواة حالة P0 في PCB0. P0 الآن idle ولا يوجد عمل مفيد (overhead).","تعيد النواة تحميل حالة P1 المحفوظة من PCB1 (ما زال overhead) ثم تعطي الـ CPU لـ P1.","P1 تُنفَّذ، وP0 تبقى idle.","مقاطعة أو system call أخرى: يتولى النظام التحكم ويحفظ حالة P1 في PCB1.","تعيد النواة تحميل حالة P0 المحفوظة من PCB0 (overhead مرة أخرى).","تكمل P0 من نفس النقطة التي توقفت عندها، وP1 تصبح idle."]};
+function cs(c){var lis=c.querySelectorAll(".steps li"),es=c.querySelectorAll(".cs-e"),k=-1,tm=0;
+function sh(){lis.forEach(function(l,i){l.classList.toggle("a",i==k)});es.forEach(function(e){var n=+e.dataset.k;e.classList.toggle("v",n<=k);e.classList.toggle("cur",n==k)})}
+function stop(){clearInterval(tm);tm=0}
+function nx(){k=(k+1)%lis.length;sh()}
+c.querySelector(".nx").onclick=function(){stop();nx()};
+c.querySelector(".ap").onclick=function(){if(tm){stop();return}nx();tm=setInterval(function(){if(k>=lis.length-1)stop();else nx()},1700)};
+c.querySelector(".rs").onclick=function(){stop();k=-1;sh()};sh()}
+function fill(){document.querySelectorAll(".dg").forEach(function(e,i){e.innerHTML=dg(i)});
+document.querySelectorAll("[data-qd]").forEach(function(e,i){e.innerHTML=qh(e.dataset.l,i)});
+document.querySelectorAll("[data-cs]").forEach(function(e){e.querySelector(".cs-svg").innerHTML=csv();e.querySelector(".steps").innerHTML=CAP[e.dataset.l].map(function(t,i){return '<li>'+t+'</li>'}).join('')})}
+/* progress + scroll-spy */
+var rp=$("#rp"),nl=[].slice.call(document.querySelectorAll("nav a[href^='#']"));
+function spy(){var h=document.documentElement,y=scrollY;rp.style.width=Math.min(100,y/(h.scrollHeight-innerHeight)*100)+"%";var cu=null;nl.forEach(function(a){var s=document.querySelector(a.getAttribute("href"));if(s&&s.offsetTop<=y+160)cu=a});nl.forEach(function(a){a.classList.toggle("cur2",a===cu)})}
+addEventListener("scroll",spy,{passive:true});spy();
+
+fill();init();
 /* language toggle */
 var NA=["مفهوم العملية","الحالات وPCB","الجدولة","العمليات عليها","الذاكرة المشتركة","تمرير الرسائل","الملخص","الاختبار"];
 var NE=[].map.call(document.querySelectorAll("nav a"),function(a){return a.textContent});
