@@ -101,6 +101,44 @@ body.ar h1,body.ar h2,body.ar h3,body.ar summary,body.ar .mode,body.ar #score{fo
 .cbar .wrap{display:flex;gap:6px;align-items:center;height:42px;overflow-x:auto;scrollbar-width:none}
 .cbar a{color:var(--mut);text-decoration:none;padding:4px 14px;border-radius:6px;font:600 14px "Chakra Petch",sans-serif;white-space:nowrap;border:1px solid transparent}
 .cbar a:hover,.cbar a:focus-visible{color:var(--g);border-color:var(--gd);outline:none}.cbar a.cur{background:var(--g);color:#04110a}
+
+:root{--amb:#ffd166}
+.viz svg{width:100%;height:auto;display:block;direction:ltr}
+.viz svg text{font-family:inherit}
+.viz .sub{color:var(--mut);margin:0 0 10px;font-size:15px}
+.viz .nd{cursor:pointer}
+.viz .nd rect{fill:#0a1a0f;stroke:var(--gd);stroke-width:1.5;transition:.25s}
+.viz .nd.hw rect{fill:#123b21}.viz .nd.mem rect{fill:#0f2a35;stroke:#4aa3c7}
+.viz .nd text{fill:var(--txt);font-size:14px;font-weight:600;text-anchor:middle;pointer-events:none}
+.viz .nd:hover rect,.viz .nd:focus-visible rect{stroke:var(--g)}
+.viz .nd:focus-visible{outline:none}
+.viz .nd.sel rect{stroke:var(--g);stroke-width:3}
+.viz .nd.on rect{stroke:var(--g);stroke-width:3;fill:#1c5a31;filter:drop-shadow(0 0 8px rgba(157,255,176,.7))}
+.viz .nd rect.hit{fill:transparent!important;stroke:none!important;filter:none!important}
+.viz .ln{stroke:var(--gd);stroke-width:3}
+.viz .nd.bus .sbus{stroke:var(--gd);stroke-width:8;stroke-linecap:round}
+.viz .nd.bus.on .sbus,.viz .nd.bus.sel .sbus{stroke:var(--g);stroke-dasharray:14 10;animation:dash .6s linear infinite}
+.viz .nd.bus text{fill:var(--mut);font-size:13px;font-weight:500}
+@keyframes dash{to{stroke-dashoffset:-24}}
+.vctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px}
+.vctl .btn,.vpanel .btn{margin:0;padding:8px 14px;font-size:14px}
+.vctl input[type=range]{flex:1;min-width:150px;accent-color:#9dffb0;direction:ltr}
+.vpanel{min-height:92px;border:1px solid var(--line);border-radius:10px;background:#08130b;padding:12px 14px;margin-top:12px}
+.vpanel p{margin:6px 0 8px}
+.chipt{display:inline-block;font-size:12px;padding:2px 9px;border-radius:99px;border:1px solid var(--gd);color:var(--mut);margin-inline-start:8px}
+.st{display:inline-flex;gap:6px;align-items:center;padding:4px 10px;border-radius:8px;border:1px solid var(--line);font-size:14px;margin:4px 8px 0 0}
+.st.u b{color:var(--g)}.st.i b{color:var(--amb)}
+.tl .lane{fill:#08130b;stroke:var(--line)}
+.tl .zi{fill:rgba(255,209,102,.13)}.tl .zt{fill:rgba(91,227,125,.1)}
+.tl .base{fill:none;stroke:var(--gd);stroke-width:3;stroke-linejoin:round}
+.tl .prog{fill:none;stroke:var(--g);stroke-width:4;stroke-linejoin:round}
+.tl .mk{stroke:var(--line);stroke-dasharray:4 4}
+.tl .mc{fill:#0c1d11;stroke:var(--g2)}
+.tl .mkg{cursor:pointer}.tl .mkg:hover .mc{fill:var(--g2)}
+.tl .mn{fill:var(--g);font-size:12px;font-weight:700;text-anchor:middle;pointer-events:none}
+.tl .lb{fill:var(--mut);font-size:12px}.tl .lt{fill:var(--g);font-size:14px;font-weight:700}
+.tl .phl{stroke:#fff;stroke-width:2}
+.tl .dot{fill:#fff;stroke:var(--g);stroke-width:3}
 </style>
 </head>
 <body>
@@ -139,9 +177,9 @@ An <b>operating system (OS)</b> is software that <b>manages a computer’s hardw
 <p class="lead">How the CPU, memory and devices are connected and work together.</p>
 <div class="card"><h3>How the parts connect</h3>
 One or more <b>CPUs</b> and <b>device controllers</b> are connected through a common <b>bus</b> that gives access to <b>shared memory</b>. The CPUs and devices run <b>concurrently</b> and compete for memory cycles.
-<div class="bus"><span>CPU 1</span><span>CPU 2</span><span>Memory</span><span>Disk controller</span><span>USB controller</span><span>Graphics adapter</span></div>
-<div class="wire"></div><div style="text-align:center;color:var(--mut);font-size:14px">Common system bus</div>
+
 </div>
+<div class="bi" id="hE_map"></div>
 <div class="grid">
 <div class="card"><h3>Device controller = hardware</h3>Each controller is in charge of <b>one particular device type</b> and has a <b>local buffer</b> (temporary storage). Example: <b>USB</b> = Universal Serial Bus.</div>
 <div class="card"><h3>Device driver = software</h3>Each controller type has an OS <b>device driver</b> to manage it. It provides a <b>uniform interface</b> between the controller and the kernel.</div>
@@ -174,6 +212,7 @@ A signal emitted by <b>hardware or software</b> when a process or event needs <b
 <li>The ISR (separate code for each interrupt type) runs and handles the event.</li>
 <li>State is <b>restored</b> and the CPU <b>resumes</b> the program at i+1.</li></ol>
 <button class="btn" id="inext">Next step</button><button class="btn o" id="ireset">Reset</button></div>
+<div class="bi" id="hE_tl"></div>
 </div></section>
 
 <section id="store"><div class="wrap">
@@ -334,7 +373,11 @@ var Q=[
 ["A multi-threaded process has…",["One program counter per thread","Only one program counter","No program counter","One per CPU only"],0,"A single-threaded process has one program counter; multi-threaded has one per thread."],
 ["Which is a process-management activity of the OS?",["Suspending and resuming processes","Manufacturing RAM","Designing keyboards","Printing manuals"],0,"Also: create/delete, synchronization, communication and deadlock handling."],
 ["Which is a memory-management activity?",["Allocating and deallocating memory space as needed","Creating disk platters","Setting the monitor brightness","Charging the battery"],0,"The OS tracks used memory, decides what moves in/out, and allocates space."],
-["Spooling means…",["Overlapping the output of one job with the input of other jobs","Storing data in faster storage","Temporarily holding data during a transfer","Setting a timer"],0,"Buffering = temporary holding; caching = faster storage copy; spooling = overlapping output and input of jobs."]
+["Spooling means…",["Overlapping the output of one job with the input of other jobs","Storing data in faster storage","Temporarily holding data during a transfer","Setting a timer"],0,"Buffering = temporary holding; caching = faster storage copy; spooling = overlapping output and input of jobs."],
+["Which component connects the CPU, memory and the device controllers?",["The system bus","The monitor","The printer","The ISR"],0,"The shared system bus links the CPUs, memory and controllers, which compete for memory cycles."],
+["While a device is transferring data after an I/O request, what does the CPU do?",["Keeps running the user program","Waits idle until the transfer ends","Shuts down","Deletes the interrupt vector"],0,"CPU and I/O devices run concurrently. The CPU is interrupted only briefly (for the ISR) once the transfer is done."],
+["In the interrupt timeline, what happens right after “transfer done”?",["An interrupt is signaled and the CPU runs the ISR","The CPU reboots","The user program ends","The device starts a new transfer by itself"],0,"The interrupt is signaled, the CPU saves its state and runs the ISR, then resumes the user program at i+1."],
+["Which devices share one USB controller in the system diagram?",["Mouse, keyboard and printer","Disks and monitor","CPU and memory","Monitor and keyboard only"],0,"The USB controller serves the mouse, keyboard and printer. The disks use the disk controller and the monitor uses the graphics adapter."]
 ];
 var order=[],cur=0,ok=0,ans=0;
 function sh(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
@@ -359,15 +402,15 @@ what:`<h2>1. ماذا يفعل نظام التشغيل (What Operating Systems D
 <div class="card"><h3>أهداف نظام التشغيل</h3><ul><li>تنفيذ برامج المستخدم وتسهيل حل مشاكله</li><li>جعل الحاسوب <b>مريحاً</b> في الاستخدام</li><li>استخدام العتاد بـ<b>كفاءة</b></li></ul></div></div>
 <div class="card"><h3>أهداف الشابتر (Objectives)</h3><ul><li>وصف التنظيم العام لنظام الحاسوب ودور <b>المقاطعات (interrupts)</b></li><li>وصف مكونات النظام الحديث متعدد المعالجات (<b>multiprocessor</b>)</li><li>توضيح الانتقال من <b>user mode إلى kernel mode</b></li><li>مناقشة استخدام أنظمة التشغيل في بيئات الحوسبة المختلفة</li><li>إعطاء أمثلة على أنظمة التشغيل الحرة ومفتوحة المصدر</li></ul></div>`,
 org:`<h2>2. تنظيم نظام الحاسوب (Computer-System Organization)</h2><p class="lead">كيف ترتبط المعالجات والذاكرة والأجهزة وتعمل معاً.</p>
-<div class="card"><h3>كيف ترتبط الأجزاء</h3>يرتبط معالج واحد أو أكثر (<b>CPUs</b>) مع <b>متحكمات الأجهزة (device controllers)</b> عبر ناقل مشترك (<b>bus</b>) يتيح الوصول إلى <b>ذاكرة مشتركة</b>. تعمل المعالجات والأجهزة <b>بالتزامن (concurrently)</b> وتتنافس على دورات الذاكرة.<div class="bus"><span>معالج 1</span><span>معالج 2</span><span>الذاكرة</span><span>متحكم القرص</span><span>متحكم USB</span><span>بطاقة الرسوميات</span></div><div class="wire"></div><div style="text-align:center;color:var(--mut);font-size:14px">الناقل المشترك (Common bus)</div></div>
-<div class="grid"><div class="card"><h3>Device controller = عتاد (hardware)</h3>كل متحكم مسؤول عن <b>نوع واحد من الأجهزة</b> ولديه <b>ذاكرة مؤقتة محلية (local buffer)</b>. مثال: <b>USB</b> = Universal Serial Bus.</div>
+<div class="card"><h3>كيف ترتبط الأجزاء</h3>يرتبط معالج واحد أو أكثر (<b>CPUs</b>) مع <b>متحكمات الأجهزة (device controllers)</b> عبر ناقل مشترك (<b>bus</b>) يتيح الوصول إلى <b>ذاكرة مشتركة</b>. تعمل المعالجات والأجهزة <b>بالتزامن (concurrently)</b> وتتنافس على دورات الذاكرة.</div>
+<div id="hA_map"></div><div class="grid"><div class="card"><h3>Device controller = عتاد (hardware)</h3>كل متحكم مسؤول عن <b>نوع واحد من الأجهزة</b> ولديه <b>ذاكرة مؤقتة محلية (local buffer)</b>. مثال: <b>USB</b> = Universal Serial Bus.</div>
 <div class="card"><h3>Device driver = برمجية (software)</h3>لكل نوع متحكم <b>مشغّل (driver)</b> ضمن نظام التشغيل يديره، ويوفّر <b>واجهة موحّدة</b> بين المتحكم والنواة.</div></div>
 <div class="card"><h3>كيف تعمل عملية الإدخال والإخراج (I/O)</h3><ul><li>أجهزة I/O والـ CPU يمكنها <b>العمل بالتزامن</b>.</li><li>ينقل الـ CPU البيانات <b>بين الذاكرة الرئيسية والـ local buffer</b> للمتحكم.</li><li>عملية I/O نفسها تتم <b>من الجهاز إلى الـ local buffer</b> الخاص بالمتحكم.</li><li>عند الانتهاء يُعلِم المتحكم الـ CPU عبر <b>مقاطعة (interrupt)</b>.</li></ul></div>`,
 int:`<h2>3. المقاطعات (Interrupts)</h2><p class="lead">الآلية التي تجعل نظام التشغيل “interrupt driven”.</p>
 <div class="card"><h3>ما هي المقاطعة؟</h3>إشارة يرسلها <b>العتاد أو البرمجيات</b> عندما تحتاج عملية أو حدث إلى <b>انتباه فوري</b>. تنبّه المعالج إلى حدث عالي الأولوية يتطلب إيقاف العمل الحالي.<ul><li>تتم معالجتها بواسطة <b>Interrupt Service Routine (ISR)</b>.</li><li>يُكمل المعالج أولاً <b>تنفيذ التعليمة الحالية i</b>، ثم يضع في <b>Program Counter (PC)</b> عنوان أول تعليمة في الـ ISR.</li><li>يُحفظ عنوان التعليمة المقاطَعة في مكان مؤقت، ليتمكن المعالج بعدها من المتابعة من التعليمة <b>i+1</b>.</li></ul></div>
 <div class="grid"><div class="card"><h3>وظائف شائعة</h3><ul><li>ينتقل التحكم إلى الـ ISR عبر <b>interrupt vector</b> الذي يحتوي <b>عناوين جميع روتينات الخدمة</b></li><li>يجب أن تحفظ البنية <b>عنوان التعليمة</b> المقاطَعة</li><li><b>نظام التشغيل مُوجَّه بالمقاطعات (interrupt driven)</b></li></ul></div>
 <div class="card"><h3>Trap / exception</h3><b>مقاطعة تولّدها البرمجيات</b> بسبب <b>خطأ</b> (مثل القسمة على صفر) أو <b>طلب من المستخدم</b> (system call).</div></div>
-<div class="card"><h3>تجربة تفاعلية: معالجة المقاطعة خطوة بخطوة</h3><ol class="steps" id="aisteps"><li>الـ CPU ينفذ برنامج المستخدم (التعليمة i).</li><li>متحكم الجهاز ينهي عمله ويرسل <b>مقاطعة</b>.</li><li>يُكمل الـ CPU التعليمة i، ويقوم النظام بـ<b>حفظ الحالة</b> (المسجلات + program counter).</li><li>يحدد النظام <b>نوع المقاطعة</b> ويستخدم الـ <b>interrupt vector</b> للقفز إلى الـ ISR المناسب.</li><li>يعمل الـ ISR (كود منفصل لكل نوع مقاطعة) ويعالج الحدث.</li><li>تُستعاد الحالة و<b>يتابع</b> الـ CPU البرنامج من i+1.</li></ol><button class="btn" id="ainext">الخطوة التالية</button><button class="btn o" id="aireset">إعادة</button></div>`,
+<div class="card"><h3>تجربة تفاعلية: معالجة المقاطعة خطوة بخطوة</h3><ol class="steps" id="aisteps"><li>الـ CPU ينفذ برنامج المستخدم (التعليمة i).</li><li>متحكم الجهاز ينهي عمله ويرسل <b>مقاطعة</b>.</li><li>يُكمل الـ CPU التعليمة i، ويقوم النظام بـ<b>حفظ الحالة</b> (المسجلات + program counter).</li><li>يحدد النظام <b>نوع المقاطعة</b> ويستخدم الـ <b>interrupt vector</b> للقفز إلى الـ ISR المناسب.</li><li>يعمل الـ ISR (كود منفصل لكل نوع مقاطعة) ويعالج الحدث.</li><li>تُستعاد الحالة و<b>يتابع</b> الـ CPU البرنامج من i+1.</li></ol><button class="btn" id="ainext">الخطوة التالية</button><button class="btn o" id="aireset">إعادة</button></div><div id="hA_tl"></div>`,
 store:`<h2>4. إقلاع الحاسوب وهرمية التخزين</h2><p class="lead">كيف يستيقظ الحاسوب، ولماذا تأتي الذاكرة في طبقات.</p>
 <div class="card"><h3>برنامج الإقلاع (Bootstrap)</h3><ul><li>يُحمَّل عند <b>التشغيل أو إعادة التشغيل</b></li><li>مخزّن عادةً في <b>ROM أو EPROM</b> ويُسمى <b>firmware</b></li><li><b>يهيّئ</b> جميع أجزاء النظام</li><li><b>يحمّل نواة نظام التشغيل</b> ويبدأ تنفيذها</li></ul></div>
 <div class="card"><h3>هرمية التخزين (Storage hierarchy)</h3>يُنظَّم التخزين في هرم حسب <b>السرعة</b> و<b>التكلفة</b> و<b>التطايرية (volatility)</b>.<div class="pyr" style="margin-top:12px"><div>Registers</div><div>Cache</div><div>الذاكرة الرئيسية RAM – متطايرة</div><div>Solid-state / electronic disk</div><div>Hard disk، optical disk، magnetic tape – غير متطايرة</div></div><div class="axis"><span>▲ أسرع، أغلى لكل بت، أصغر</span><span>▼ أبطأ، أرخص، أكبر</span></div>
@@ -436,7 +479,11 @@ var AQ=[
 ["العملية multi-threaded لديها…","single-threaded لديها program counter واحد؛ و multi-threaded لكل thread واحد."],
 ["أيٌّ مما يلي نشاط من أنشطة إدارة العمليات؟","وأيضاً: الإنشاء والحذف، التزامن، الاتصال، ومعالجة الجمود."],
 ["أيٌّ مما يلي نشاط من أنشطة إدارة الذاكرة؟","يتتبع النظام الذاكرة المستخدمة، ويقرر ما يدخل ويخرج، ويحجز المساحة."],
-["الـ Spooling تعني…","Buffering = تخزين مؤقت؛ Caching = نسخة في تخزين أسرع؛ Spooling = تداخل إخراج مهمة مع إدخال مهام أخرى."]
+["الـ Spooling تعني…","Buffering = تخزين مؤقت؛ Caching = نسخة في تخزين أسرع؛ Spooling = تداخل إخراج مهمة مع إدخال مهام أخرى."],
+["ما المكوّن الذي يربط الـ CPU والذاكرة ومتحكمات الأجهزة؟","الـ system bus المشترك يربط المعالجات والذاكرة والمتحكمات، وهي تتنافس على دورات الذاكرة."],
+["أثناء نقل جهاز للبيانات بعد طلب I/O، ماذا يفعل الـ CPU؟","الـ CPU وأجهزة I/O تعمل بالتزامن. يُقاطَع الـ CPU لفترة قصيرة فقط (لتنفيذ الـ ISR) عند انتهاء النقل."],
+["في الخط الزمني للمقاطعة، ماذا يحدث مباشرة بعد “transfer done”؟","تُرسَل المقاطعة، فيحفظ الـ CPU حالته وينفذ الـ ISR، ثم يتابع برنامج المستخدم من i+1."],
+["أي الأجهزة تشترك في متحكم USB واحد في مخطط النظام؟","متحكم USB يخدم الفأرة ولوحة المفاتيح والطابعة. الأقراص لها متحكم القرص، والشاشة لها بطاقة الرسوميات."]
 ];
 Object.keys(AR).forEach(function(k){var w=document.querySelector("#"+k+" .wrap"),d=document.createElement("div");d.className="arx";d.lang="ar";d.dir="rtl";d.innerHTML=AR[k];w.appendChild(d)});
 var ais=document.querySelectorAll("#aisteps li"),aic=-1;function aish(){ais.forEach(function(l,i){l.classList.toggle("a",i==aic)})}
@@ -455,7 +502,122 @@ H1.innerHTML=ar?"نظم التشغيل<br>الشابتر 1: المقدمة":H0[0
 $("#lang").textContent=ar?"English":"العربية";
 $("#quiz h2").textContent=ar?"10. الاختبار التفاعلي":QE[0];$("#quiz .lead").textContent=ar?"اضغط على إجابة. الأخضر يعني صح، والأحمر غلط، ويظهر شرح الإجابة الصحيحة دائماً.":QE[1];
 $("#shuf").textContent=ar?"خلط وإعادة":QE[2];$("#rst").textContent=ar?"إعادة":QE[3];$("footer").textContent=ar?"مبني على سلايدات الشابتر 1: المقدمة · نظم التشغيل (501471)":QE[4];
-$("#quiz .wrap").dir=ar?"rtl":"ltr";build(false)};
+$("#quiz .wrap").dir=ar?"rtl":"ltr";build(false);mvBI()};
+
+/* ===== interactive diagrams: system map + interrupt timeline ===== */
+function T(e,a){return ar?a:e}
+function q1(el,s){return el.querySelector(s)}
+var KIND={hw:["Device controller (hardware)","متحكم جهاز (عتاد)"],dev:["I/O device","جهاز إدخال/إخراج"],mem:["Memory","ذاكرة"],cpu:["Processor","معالج"],bus:["Shared path","مسار مشترك"]};
+var ND=[
+{id:"disks",x:175,y:20,w:110,h:54,l:"disks",k:"dev",e:["Disks","Secondary, non-volatile storage. Data goes from the disk to the controller’s local buffer, then to main memory."],a:["الأقراص","تخزين ثانوي غير متطاير. تنتقل البيانات من القرص إلى الـ local buffer للمتحكم ثم إلى الذاكرة الرئيسية."]},
+{id:"mouse",x:310,y:20,w:80,h:46,l:"mouse",k:"dev",e:["Mouse","Input device. Movements and clicks become data in the USB controller’s buffer."],a:["الفأرة","جهاز إدخال. حركاتها ونقراتها تصبح بيانات في buffer متحكم USB."]},
+{id:"keyboard",x:405,y:20,w:100,h:46,l:"keyboard",k:"dev",e:["Keyboard","Input device. Each key press is sent to the USB controller, which then interrupts the CPU."],a:["لوحة المفاتيح","جهاز إدخال. كل ضغطة زر تصل إلى متحكم USB الذي يقاطع الـ CPU بعدها."]},
+{id:"printer",x:520,y:20,w:80,h:46,l:"printer",k:"dev",e:["Printer","Output device. It receives the data to print from memory through the USB controller."],a:["الطابعة","جهاز إخراج. تستقبل بيانات الطباعة من الذاكرة عبر متحكم USB."]},
+{id:"monitor",x:625,y:20,w:110,h:54,l:"monitor",k:"dev",e:["Monitor","Output device. It shows whatever the graphics adapter sends to it."],a:["الشاشة","جهاز إخراج. تعرض ما ترسله بطاقة الرسوميات."]},
+{id:"cpu",x:20,y:150,w:130,h:56,l:"CPU",k:"hw",t:"cpu",e:["CPU","Executes instructions. It moves data between main memory and each controller’s local buffer, and is told by an interrupt when a device is done."],a:["المعالج (CPU)","ينفّذ التعليمات وينقل البيانات بين الذاكرة الرئيسية والـ local buffer لكل متحكم، ويُبلَّغ بمقاطعة عندما ينتهي الجهاز."]},
+{id:"diskc",x:175,y:150,w:110,h:56,l:"disk|controller",k:"hw",e:["Disk controller","Hardware in charge of one device type: the disks. It has a local buffer and is managed by a disk device driver (software) in the OS."],a:["متحكم القرص","عتاد مسؤول عن نوع واحد من الأجهزة: الأقراص. لديه local buffer ويديره device driver (برمجية) في نظام التشغيل."]},
+{id:"usb",x:310,y:150,w:290,h:56,l:"USB controller",k:"hw",e:["USB controller","One controller serving several devices (mouse, keyboard, printer). It buffers their data and raises an interrupt. Its driver gives the kernel a uniform interface."],a:["متحكم USB","متحكم واحد يخدم عدة أجهزة (الفأرة، لوحة المفاتيح، الطابعة). يخزّن بياناتها مؤقتاً ويرسل مقاطعة، وله driver يوفّر واجهة موحّدة للنواة."]},
+{id:"gfx",x:625,y:150,w:110,h:56,l:"graphics|adapter",k:"hw",e:["Graphics adapter","The display controller. It takes the image data prepared in memory and sends it to the monitor."],a:["بطاقة الرسوميات","متحكم الشاشة. يأخذ بيانات الصورة المجهزة في الذاكرة ويرسلها إلى الشاشة."]},
+{id:"mem",x:300,y:305,w:160,h:52,l:"memory",k:"mem",e:["Main memory","Shared by the CPU and every controller. They all run concurrently, so they compete for memory cycles."],a:["الذاكرة الرئيسية","مشتركة بين الـ CPU وكل المتحكمات. الجميع يعمل بالتزامن فيتنافسون على دورات الذاكرة."]}
+];
+var BUSI={id:"bus",k:"bus",e:["System bus","The shared path that connects the CPU, memory and every controller. Components take turns using it."],a:["ناقل النظام (System bus)","المسار المشترك الذي يربط الـ CPU والذاكرة وكل المتحكمات، وتتناوب المكونات على استخدامه."]};
+var SC=[
+{e:"Press a key",a:"اضغط زراً",st:[
+{n:["keyboard"],e:"You press a key. The keyboard is an input device.",a:"تضغط زراً: لوحة المفاتيح جهاز إدخال."},
+{n:["keyboard","usb"],e:"The key code reaches the USB controller and waits in its local buffer.",a:"يصل رمز الزر إلى متحكم USB ويبقى في الـ local buffer."},
+{n:["usb","cpu"],b:1,e:"The controller causes an interrupt to tell the CPU it has data.",a:"يتسبب المتحكم بمقاطعة ليخبر الـ CPU أن لديه بيانات."},
+{n:["cpu","usb","mem"],b:1,e:"The ISR runs: the CPU moves the data from the controller’s buffer into main memory over the bus.",a:"يعمل الـ ISR: ينقل الـ CPU البيانات من buffer المتحكم إلى الذاكرة الرئيسية عبر الـ bus."},
+{n:["mem","cpu"],e:"The program resumes and can now read the key from memory.",a:"يتابع البرنامج عمله ويستطيع الآن قراءة الزر من الذاكرة."}]},
+{e:"Save a file",a:"احفظ ملفاً",st:[
+{n:["cpu"],e:"A program asks the OS to write a file. The CPU prepares the request.",a:"يطلب برنامج من النظام كتابة ملف. يجهّز الـ CPU الطلب."},
+{n:["cpu","mem","diskc"],b:1,e:"The data is moved from memory over the bus into the disk controller’s local buffer.",a:"تُنقل البيانات من الذاكرة عبر الـ bus إلى الـ local buffer في متحكم القرص."},
+{n:["diskc","disks"],e:"The controller writes from its buffer to the disks. The CPU is free to run other work meanwhile.",a:"يكتب المتحكم من الـ buffer إلى الأقراص، والـ CPU حر لتنفيذ عمل آخر خلال ذلك."},
+{n:["diskc","cpu"],b:1,e:"When finished, the controller causes an interrupt to inform the CPU.",a:"عند الانتهاء يتسبب المتحكم بمقاطعة لإعلام الـ CPU."}]},
+{e:"Show on screen",a:"اعرض على الشاشة",st:[
+{n:["mem"],e:"The image to display has been prepared in main memory.",a:"الصورة المراد عرضها جُهّزت في الذاكرة الرئيسية."},
+{n:["cpu","mem","gfx"],b:1,e:"The data travels over the bus to the graphics adapter.",a:"تنتقل البيانات عبر الـ bus إلى بطاقة الرسوميات."},
+{n:["gfx","monitor"],e:"The graphics adapter drives the monitor, and the picture appears.",a:"تقود بطاقة الرسوميات الشاشة فتظهر الصورة."}]}
+];
+var mapEl=document.createElement("div");mapEl.className="card viz";
+var msel="cpu",msc=-1,mst=0;
+function rMap(){
+mapEl.dir=ar?"rtl":"ltr";
+var s='<h3>'+T("Interactive: the computer system map","تجربة تفاعلية: خريطة نظام الحاسوب")+'</h3><p class="sub">'+T("Tap any part to see what it does, or run a scenario to watch data travel across the system bus.","اضغط على أي جزء لتعرف وظيفته، أو شغّل سيناريو لترى كيف تنتقل البيانات عبر الـ system bus.")+'</p>';
+s+='<svg viewBox="0 0 760 372" role="group" aria-label="'+T("Computer system diagram","مخطط نظام الحاسوب")+'">';
+[[230,74,230,150],[350,66,350,150],[455,66,455,150],[560,66,560,150],[680,74,680,150],[85,206,85,260],[230,206,230,260],[455,206,455,260],[680,206,680,260],[380,305,380,260]].forEach(function(l){s+='<line class="ln" x1="'+l[0]+'" y1="'+l[1]+'" x2="'+l[2]+'" y2="'+l[3]+'"/>'});
+s+='<g class="nd bus" data-n="bus" tabindex="0" role="button" aria-label="system bus"><line class="sbus" x1="85" y1="260" x2="680" y2="260"/><rect class="hit" x="85" y="244" width="595" height="32"/><text x="540" y="244">system bus</text></g>';
+ND.forEach(function(n){var cx=n.x+n.w/2,cy=n.y+n.h/2,p=n.l.split("|");
+s+='<g class="nd '+n.k+'" data-n="'+n.id+'" tabindex="0" role="button" aria-label="'+p.join(" ")+'"><rect x="'+n.x+'" y="'+n.y+'" width="'+n.w+'" height="'+n.h+'" rx="9"/>';
+s+=p.length==1?'<text x="'+cx+'" y="'+(cy+5)+'">'+p[0]+'</text>':'<text x="'+cx+'" y="'+(cy-3)+'">'+p[0]+'</text><text x="'+cx+'" y="'+(cy+14)+'">'+p[1]+'</text>';s+='</g>'});
+s+='</svg><div class="vctl"><b>'+T("Scenarios:","السيناريوهات:")+'</b>';
+SC.forEach(function(c,i){s+='<button class="btn o" data-sc="'+i+'" type="button">'+T(c.e,c.a)+'</button>'});
+s+='</div><div class="vpanel" id="mpan" aria-live="polite"></div>';
+mapEl.innerHTML=s;uMap()}
+function uMap(){
+var act=[],bus=false;if(msc>=0){var st=SC[msc].st[mst];act=st.n;bus=!!st.b}
+mapEl.querySelectorAll(".nd").forEach(function(g){var id=g.getAttribute("data-n");g.classList.toggle("on",act.indexOf(id)>-1||(id=="bus"&&bus));g.classList.toggle("sel",msc<0&&id==msel)});
+mapEl.querySelectorAll("[data-sc]").forEach(function(b){b.classList.toggle("o",+b.getAttribute("data-sc")!=msc)});
+var h;if(msc>=0){var c=SC[msc],N=c.st.length;h='<b>'+T(c.e,c.a)+'</b><span class="chipt">'+(mst+1)+' / '+N+'</span><p>'+T(c.st[mst].e,c.st[mst].a)+'</p><button class="btn" data-act="next" type="button">'+(mst<N-1?T("Next step","الخطوة التالية"):T("Replay","إعادة"))+'</button> <button class="btn o" data-act="stop" type="button">'+T("Back to the map","العودة للخريطة")+'</button>'}
+else{var d=msel=="bus"?BUSI:ND.filter(function(n){return n.id==msel})[0],kk=KIND[d.t||d.k];h='<b>'+T(d.e[0],d.a[0])+'</b><span class="chipt">'+T(kk[0],kk[1])+'</span><p>'+T(d.e[1],d.a[1])+'</p>'}
+q1(mapEl,"#mpan").innerHTML=h}
+mapEl.addEventListener("click",function(e){var t=e.target.closest("[data-n],[data-sc],[data-act]");if(!t)return;
+if(t.hasAttribute("data-sc")){msc=+t.getAttribute("data-sc");mst=0}
+else if(t.hasAttribute("data-act")){if(t.getAttribute("data-act")=="stop")msc=-1;else mst=(mst+1)%SC[msc].st.length}
+else{msel=t.getAttribute("data-n");msc=-1}
+uMap()});
+mapEl.addEventListener("keydown",function(e){if((e.key=="Enter"||e.key==" ")&&e.target.hasAttribute&&e.target.hasAttribute("data-n")){e.preventDefault();e.target.dispatchEvent(new MouseEvent("click",{bubbles:true}))}});
+
+/* interrupt timeline */
+var tlEl=document.createElement("div");tlEl.className="card viz";
+var tp=0,tmr=null,EV=[8,32,36,44,58,82,86,94];
+var EVN=[["I/O request","طلب I/O"],["Transfer done","انتهاء النقل"],["Interrupt signaled","إرسال المقاطعة"],["Interrupt handled","معالجة المقاطعة"]];
+var PH=[
+{e:["Normal execution","The CPU runs the user program. The I/O device is idle, waiting for work."],a:["تنفيذ عادي","ينفّذ الـ CPU برنامج المستخدم، وجهاز الـ I/O خامل (idle) بانتظار عمل."]},
+{e:["I/O request: the device transfers, the CPU keeps working","The program requested I/O, so the device starts transferring. The CPU does not wait: it keeps running the user program. This is concurrency."],a:["طلب I/O: الجهاز ينقل والـ CPU يواصل عمله","طلب البرنامج عملية I/O فبدأ الجهاز بالنقل. الـ CPU لا ينتظر: يواصل تنفيذ برنامج المستخدم. هذا هو التزامن (concurrency)."]},
+{e:["Transfer done, interrupt signaled","The device finished and signals an interrupt. The CPU first completes the current instruction i, then reacts."],a:["انتهى النقل وأُرسلت المقاطعة","أنهى الجهاز عمله وأرسل مقاطعة. يُكمل الـ CPU أولاً التعليمة الحالية i ثم يستجيب."]},
+{e:["I/O interrupt processing (ISR)","The OS saves the state (registers + PC), uses the interrupt vector to find the right ISR and runs it, for example moving the data from the controller’s buffer to memory."],a:["معالجة مقاطعة الـ I/O (ISR)","يحفظ النظام الحالة (المسجلات + PC)، ويستخدم الـ interrupt vector لإيجاد الـ ISR المناسب وينفذه، مثلاً ينقل البيانات من buffer المتحكم إلى الذاكرة."]},
+{e:["Interrupt handled, back to the program","The state is restored and the CPU resumes the user program at i+1. The device stays idle until the next I/O request."],a:["عولجت المقاطعة والعودة للبرنامج","تُستعاد الحالة ويتابع الـ CPU برنامج المستخدم من i+1. يبقى الجهاز خاملاً حتى طلب I/O التالي."]}
+];
+function X(p){return 130+p*6.1}
+function ph(p){var l=p>=100?50:p%50;return l<8?0:l<32?1:l<36?2:l<44?3:4}
+function rTL(){
+tlEl.dir=ar?"rtl":"ltr";
+var s='<h3>'+T("Interactive: the interrupt timeline","تجربة تفاعلية: الخط الزمني للمقاطعة (Interrupt Timeline)")+'</h3><p class="sub">'+T("Press Play, or drag the slider, to see what the CPU and the I/O device do at every moment. Tap a numbered marker to jump to it.","اضغط تشغيل أو حرّك المؤشر لترى ماذا يفعل الـ CPU وجهاز الـ I/O في كل لحظة. اضغط على علامة مرقّمة للانتقال إليها.")+'</p>';
+s+='<svg class="tl" viewBox="0 0 760 330" role="img" aria-label="'+T("Timeline of the CPU and the I/O device","الخط الزمني للـ CPU وجهاز الـ I/O")+'"><defs><clipPath id="tlc"><rect id="tlcr" x="0" y="0" width="0" height="330"/></clipPath></defs>';
+s+='<rect class="lane" x="120" y="30" width="630" height="110" rx="8"/><rect class="lane" x="120" y="165" width="630" height="120" rx="8"/>';
+[0,50].forEach(function(o){s+='<rect class="zi" x="'+X(36+o)+'" y="30" width="'+8*6.1+'" height="110"/><rect class="zt" x="'+X(8+o)+'" y="165" width="'+24*6.1+'" height="120"/>'});
+s+='<text class="lt" x="10" y="52">CPU</text><text class="lt" x="10" y="187">I/O device</text><text class="lb" x="114" y="74" text-anchor="end">user program</text><text class="lb" x="114" y="119" text-anchor="end">ISR</text><text class="lb" x="114" y="204" text-anchor="end">idle</text><text class="lb" x="114" y="254" text-anchor="end">transferring</text>';
+var cp=[[0,70]],dp=[[0,200]];[0,50].forEach(function(o){cp.push([36+o,70],[36+o,115],[44+o,115],[44+o,70]);dp.push([8+o,200],[8+o,250],[32+o,250],[32+o,200])});cp.push([100,70]);dp.push([100,200]);
+function pd(a){return a.map(function(p,i){return(i?"L":"M")+X(p[0])+","+p[1]}).join(" ")}
+s+='<path class="base" d="'+pd(cp)+'"/><path class="base" d="'+pd(dp)+'"/><g clip-path="url(#tlc)"><path class="prog" d="'+pd(cp)+'"/><path class="prog" d="'+pd(dp)+'"/></g>';
+EV.forEach(function(v,i){var x=X(v);s+='<g class="mkg" data-p="'+v+'"><line class="mk" x1="'+x+'" y1="30" x2="'+x+'" y2="298"/><circle class="mc" cx="'+x+'" cy="308" r="11"/><text class="mn" x="'+x+'" y="312">'+(i%4+1)+'</text></g>'});
+s+='<line class="phl" id="tph" y1="22" y2="296" x1="130" x2="130"/><circle class="dot" id="tdc" r="6" cx="130" cy="70"/><circle class="dot" id="tdd" r="6" cx="130" cy="200"/></svg>';
+s+='<div class="vctl"><button class="btn" id="tplay" data-t="play" type="button"></button><button class="btn o" data-t="prev" type="button">'+T("◀ Previous event","◀ الحدث السابق")+'</button><button class="btn o" data-t="next" type="button">'+T("Next event ▶","الحدث التالي ▶")+'</button><button class="btn o" data-t="reset" type="button">'+T("Reset","إعادة")+'</button><input type="range" id="tsl" min="0" max="100" step="0.5" value="0" aria-label="'+T("Timeline position","موضع الخط الزمني")+'"></div>';
+s+='<div class="vctl">';EVN.forEach(function(n,i){s+='<button class="btn o" data-j="'+i+'" type="button">'+(i+1)+' · '+T(n[0],n[1])+'</button>'});
+s+='</div><div class="vpanel" id="tpan" aria-live="polite"></div><div class="tip">'+T("Key idea: the long transfer happens in parallel with the user program. The CPU only pays the short dip (the ISR) once the device is done.","الفكرة الأساسية: النقل الطويل يحدث بالتوازي مع برنامج المستخدم، ولا يدفع الـ CPU سوى الانخفاض القصير (تنفيذ الـ ISR) عندما ينتهي الجهاز.")+'</div>';
+tlEl.innerHTML=s;uTL()}
+function uTL(){
+var x=X(tp),l=tp>=100?50:tp%50,isr=l>=36&&l<44,tr=l>=8&&l<32,i=ph(tp);
+["x1","x2"].forEach(function(a){q1(tlEl,"#tph").setAttribute(a,x)});
+q1(tlEl,"#tdc").setAttribute("cx",x);q1(tlEl,"#tdc").setAttribute("cy",isr?115:70);
+q1(tlEl,"#tdd").setAttribute("cx",x);q1(tlEl,"#tdd").setAttribute("cy",tr?250:200);
+q1(tlEl,"#tlcr").setAttribute("width",x);q1(tlEl,"#tsl").value=tp;
+q1(tlEl,"#tplay").textContent=tmr?T("⏸ Pause","⏸ إيقاف مؤقت"):(tp>=100?T("↻ Replay","↻ إعادة التشغيل"):T("▶ Play","▶ تشغيل"));
+var cyc=tp>=50?2:1;
+q1(tlEl,"#tpan").innerHTML='<b>'+T(PH[i].e[0],PH[i].a[0])+'</b><span class="chipt">'+T("Cycle ","الدورة ")+cyc+' / 2</span><p>'+T(PH[i].e[1],PH[i].a[1])+'</p><span class="st '+(isr?"i":"u")+'">CPU: <b>'+(isr?T("interrupt processing","معالجة المقاطعة"):T("user program","برنامج المستخدم"))+'</b></span><span class="st '+(tr?"u":"")+'">I/O: <b>'+(tr?T("transferring","ينقل"):T("idle","خامل"))+'</b></span>'}
+function tStop(){if(tmr){clearInterval(tmr);tmr=null}}
+tlEl.addEventListener("click",function(e){var t=e.target.closest("[data-t],[data-j],[data-p]");if(!t)return;var a=t.getAttribute("data-t");
+if(a=="play"){if(tmr){tStop()}else{if(tp>=100)tp=0;tmr=setInterval(function(){tp=Math.min(100,tp+.4);if(tp>=100)tStop();uTL()},50)}}
+else{tStop();
+if(a=="reset")tp=0;
+else if(a=="next"){var n=EV.filter(function(v){return v>tp+.001})[0];tp=n===undefined?100:n}
+else if(a=="prev"){var p=EV.filter(function(v){return v<tp-.001});tp=p.length?p[p.length-1]:0}
+else if(t.hasAttribute("data-j"))tp=EV[+t.getAttribute("data-j")]+(tp>=50?50:0);
+else tp=+t.getAttribute("data-p")}
+uTL()});
+tlEl.addEventListener("input",function(e){if(e.target.id=="tsl"){tStop();tp=+e.target.value;uTL()}});
+function mvBI(){document.getElementById(ar?"hA_map":"hE_map").appendChild(mapEl);document.getElementById(ar?"hA_tl":"hE_tl").appendChild(tlEl);rMap();rTL()}
+mvBI();
 build(false);
 })();
 </script>
