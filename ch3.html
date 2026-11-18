@@ -131,6 +131,49 @@ nav a.cur2{color:var(--g);border-color:var(--gd);background:var(--panel2)}
 .cs-e.ov rect{fill:#2a1552;stroke:var(--am);stroke-width:1.5}
 .cs-e.ar path{stroke:var(--am);stroke-width:2;fill:none}.cs-e.ar text{fill:var(--am);font-size:12px}
 .cs-e.cur{filter:drop-shadow(0 0 8px var(--am))}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 18px;padding:6px;background:#0a0414;border:1px solid var(--line);border-radius:12px}
+.tbn{flex:1;min-width:130px;padding:10px 14px;border-radius:9px;border:1px solid transparent;background:transparent;color:var(--mut);font:600 15px "Space Grotesk",sans-serif;cursor:pointer;transition:.25s}
+.tbn:hover{color:var(--g)}.tbn.on{background:var(--g);color:#14052b;box-shadow:0 0 18px rgba(155,92,255,.45)}
+.tbn:focus-visible{outline:2px solid var(--g);outline-offset:2px}
+.tp{display:none}.tp.on{display:block;animation:fi .35s ease}
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.sec-t{font:700 13px "JetBrains Mono",monospace;color:var(--am);margin:22px 0 6px;letter-spacing:.5px}
+.cs-intro{margin:6px 0 12px}
+.cs-lay{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:18px;align-items:start;direction:ltr}
+.cs-side{direction:ltr;min-width:0}
+[data-l=ar] .cs-side,[data-l=ar] .cs-intro{direction:rtl}
+.cs-stat{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 10px}
+.cs-stat div{flex:1;min-width:84px;text-align:center;padding:7px 6px;border-radius:9px;border:1px solid var(--line);background:#0f0720;font-size:13px;transition:.3s}
+.cs-stat b{display:block;font-size:12px;color:var(--mut);font-weight:600}
+.cs-stat .s-e{border-color:var(--g);background:rgba(201,162,255,.2);box-shadow:0 0 14px rgba(155,92,255,.35)}
+.cs-stat .s-i{opacity:.7}.cs-stat .s-n,.cs-stat .s-x{opacity:.4}
+.cs-stat .s-o{border-color:var(--am);background:rgba(255,180,84,.14)}
+.cs-side .steps li{font-size:14.5px;padding-top:7px;padding-bottom:7px;margin:5px 0}
+.steps li strong{display:block;color:var(--txt);font:700 14.5px "Space Grotesk",sans-serif}.steps li.a strong{color:var(--g)}
+.cs-btns{margin-top:6px}
+.cs-e.ex2{fill:var(--am)}
+.opts{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.opts span{padding:6px 12px;border:1px solid var(--g2);border-radius:99px;font-size:14px;background:#0f0720}
+.cas{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:10px 0;direction:ltr}
+.cas span{padding:6px 12px;border:1px solid var(--bad);border-radius:8px;background:rgba(255,93,138,.1);font:600 13px "JetBrains Mono",monospace}
+.pt-svg{width:100%;height:auto;display:block;background:#07030f;border:1px solid var(--line);border-radius:10px;direction:ltr}
+.pe{stroke:var(--gd);stroke-width:2}
+.pn{cursor:pointer;outline:none}.pn circle{fill:#0f0720;stroke:var(--g);stroke-width:2.5;transition:.3s}
+.pn text{fill:var(--txt);text-anchor:middle;font:700 12.5px "JetBrains Mono",monospace;pointer-events:none}
+.pn text.sub{font:500 11px "IBM Plex Sans",sans-serif;fill:var(--mut)}
+.pn.wait circle{stroke:var(--am);fill:rgba(255,180,84,.14)}
+.pn.zom circle{stroke:#8a8aa0;stroke-dasharray:4 3;fill:#1a1a24}.pn.zom text{fill:#9a9ab0}
+.pn.dead circle{stroke:var(--bad);fill:#3a0f1a}
+.pn.sel circle{filter:drop-shadow(0 0 10px var(--g));stroke-width:4}
+.pn:focus-visible circle{stroke-width:4;stroke:#fff}
+.leg{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0;font-size:12.5px}
+.leg span{padding:3px 10px;border-radius:99px;border:1px solid var(--g)}.leg .w{border-color:var(--am)}.leg .z{border-color:#8a8aa0;border-style:dashed}.leg .d{border-color:var(--bad)}
+.pbts{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.pbts .btn{font-family:"JetBrains Mono",monospace;margin:0}
+.chal{font-size:14px;color:var(--mut);margin:8px 0}.chal b{color:var(--am)}
+.plog{font:12.5px/1.6 "IBM Plex Sans",sans-serif;color:var(--mut);border-top:1px dashed var(--line);margin-top:8px;padding-top:6px}
+.plog div{padding:3px 0;border-bottom:1px dotted #2a1f40}.plog div:first-child{color:var(--txt)}
+@media(max-width:820px){.cs-lay{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -203,24 +246,68 @@ nav a.cur2{color:var(--g);border-color:var(--gd);background:var(--panel2)}
 <div class="card" data-calc><h3>Interactive: calculate the times</h3>Change the numbers (formulas assume the CPU time is the only work, no I/O).
 <div class="calc"><label>Arrival<input class="a" type="number" value="0"></label><label>First gets CPU<input class="f" type="number" value="2"></label><label>Burst<input class="b" type="number" value="5"></label><label>Completion<input class="c" type="number" value="9"></label></div>
 <div class="res"><div>Turnaround<b class="tat">9</b></div><div>Waiting<b class="wt">4</b></div><div>Response<b class="rt">2</b></div></div></div>
-<div class="card" data-cs data-l="en"><h3>Context switch</h3>Switching the CPU to another process requires a <b>state save</b> of the current process and a <b>state restore</b> of a different one. The kernel saves the old context <b>in its PCB</b> and loads the saved context of the new process. <b>Context-switch time is pure overhead</b>: the system does no useful work while switching, and the time depends on hardware support.
-<div class="cs-svg"></div><ol class="steps"></ol><button class="btn nx">Next step</button><button class="btn o ap">Auto-play</button><button class="btn o rs">Reset</button></div>
+<div class="card" data-cs data-l="en"><h3>Context switch</h3>
+<div class="cs-intro">Switching the CPU to another process requires a <b>state save</b> of the current process and a <b>state restore</b> of a different one. The kernel saves the old context <b>in its PCB</b> and loads the saved context of the new process. <b>Context-switch time is pure overhead</b>: the system does no useful work while switching, and the time depends on hardware support.</div>
+<div class="cs-lay"><div class="cs-svg"></div><div class="cs-side"><div class="cs-stat"></div><ol class="steps"></ol><div class="cs-btns"><button class="btn s nx">Next step</button><button class="btn s o ap">Auto-play</button><button class="btn s o rs">Reset</button></div></div></div></div>
 </div></section>
 
 <section id="ops"><div class="wrap">
 <h2>4. Operations on Processes</h2>
-<p class="lead">Creating and terminating processes.</p>
-<div class="card"><h3>Process creation</h3>Processes can execute concurrently and are <b>created and deleted dynamically</b>. A creating process is the <b>parent</b>; the new ones are its <b>children</b>. Children can create more processes, forming a <b>tree of processes</b>. Each process has a unique integer <b>pid</b>.
-<ul><li>A child needs resources (CPU time, memory, files, I/O devices). It may get them <b>directly from the OS</b> or be <b>limited to a subset of the parent’s</b> resources. The parent may <b>partition</b> or <b>share</b> some resources among children.</li><li>Restricting children to a subset of the parent’s resources <b>prevents any process from overloading the system</b> by creating too many children.</li></ul></div>
-<div class="grid">
-<div class="card"><h3>Two execution possibilities</h3><ol style="padding-left:20px"><li>The parent <b>continues concurrently</b> with its children.</li><li>The parent <b>waits</b> until some or all children terminate.</li></ol></div>
-<div class="card"><h3>Two address-space possibilities</h3><ol style="padding-left:20px"><li>The child is a <b>duplicate</b> of the parent (same program and data).</li><li>The child has a <b>new program loaded</b> into it.</li></ol></div>
+<p class="lead">Processes execute concurrently and are <b>created and deleted dynamically</b>, so the OS must provide mechanisms for two operations: <b>process creation</b> and <b>process termination</b>.</p>
+<div data-tabs>
+<div class="tabs" role="tablist"><button class="tbn on" data-t="c" role="tab">1 · Creation</button><button class="tbn" data-t="t" role="tab">2 · Termination</button><button class="tbn" data-t="l" role="tab">3 · Process Lab</button></div>
+
+<div class="tp on" data-t="c">
+<div class="grid s">
+<div class="card"><h3 data-n="1">Parent and children</h3>The creating process is the <b>parent</b>; the new processes are its <b>children</b>. Each child may in turn create more processes, forming a <b>tree of processes</b>.</div>
+<div class="card"><h3 data-n="2">Process identifier</h3>Most operating systems identify each process by a unique integer <b>pid</b>. In UNIX the identity of the newly created process is passed to the parent.</div>
+<div class="card"><h3 data-n="3">Resources</h3>A child needs <b>CPU time, memory, files and I/O devices</b> to do its job. Where do they come from? See the two options below.</div>
 </div>
-<div class="card" data-st><h3>UNIX: <code>fork()</code>, <code>exec()</code>, <code>wait()</code></h3>A new process is created by <code>fork()</code>. After it, one of the two processes typically calls <code>exec()</code> to <b>replace its memory space with a new program</b> (it loads a binary file and starts executing it). The parent can create more children or call <code>wait()</code> to <b>move itself off the ready queue</b> until the child terminates.
-<div class="flow"><span>Parent running</span><i>→</i><span>Child = copy</span><i>→</i><span>Child runs new program</span><i>→</i><span>Parent resumes</span></div>
-<ol class="steps"><li data-b="0">The parent process is running.</li><li data-b="1">The parent calls <code>fork()</code>: a <b>child is created as a duplicate</b> (same program and data) with a new PID.</li><li data-b="2">The child calls <code>exec()</code>: its memory is replaced by a <b>new program</b>.</li><li data-b="0">The parent calls <code>wait()</code> and leaves the ready queue until the child ends.</li><li data-b="2">The child finishes and calls <code>exit()</code>; its resources are deallocated.</li><li data-b="3">The parent wakes up and <b>continues</b>.</li></ol>
-<button class="btn nx">Next step</button><button class="btn o rs">Reset</button></div>
-<div class="card"><h3>Process termination</h3><ul><li>A process terminates when it finishes its last statement and calls <code>exit()</code>. The OS <b>deallocates and reclaims all resources</b>: physical and virtual memory, open files, I/O buffers.</li><li>A process can terminate another via a system call (e.g. <code>TerminateProcess()</code> in Windows). The parent must know its children’s identities, so the <b>new process’s identity is passed to the parent</b>.</li><li>A parent may terminate a child if the child <b>exceeded its resource usage</b>, or if the <b>parent is exiting</b> and the OS does not allow children to continue.</li><li><b>Cascading termination</b>: if a process terminates (normally or abnormally), <b>all its children must also be terminated</b>. Normally initiated by the OS.</li><li>A parent waits for a child using <code>wait()</code>.</li><li>A <b>zombie process</b> has terminated, but its <b>parent has not yet called <code>wait()</code></b>.</li></ul></div>
+<div class="sec-t">WHERE DO THE CHILD’S RESOURCES COME FROM?</div>
+<div class="grid">
+<div class="card"><h3>Option A: directly from the OS</h3>The child obtains its resources <b>directly from the operating system</b>.</div>
+<div class="card"><h3>Option B: a subset of the parent’s</h3>The child is <b>constrained to a subset</b> of the parent’s resources. The parent may <b>partition</b> its resources among its children or <b>share</b> some (such as memory or files) among several children.</div>
+</div>
+<div class="tip">Why restrict a child? Limiting it to a subset of the parent’s resources <b>prevents any process from overloading the system</b> by creating too many child processes.</div>
+<div class="sec-t">TWO CHOICES EVERY NEW PROCESS MUST SETTLE</div>
+<div class="grid">
+<div class="card"><h3>Execution</h3>How do parent and child run?<div class="opts"><span>1 · Parent continues <b>concurrently</b> with its children</span><span>2 · Parent <b>waits</b> until some or all children terminate</span></div></div>
+<div class="card"><h3>Address space</h3>What does the child contain?<div class="opts"><span>1 · A <b>duplicate</b> of the parent (same program and data)</span><span>2 · A <b>new program</b> loaded into it</span></div></div>
+</div>
+<div class="sec-t">UNIX IN ACTION: fork() → exec() → wait()</div>
+<div class="card" data-cs="fk" data-l="en"><h3>The UNIX way to create a process</h3>
+<div class="cs-intro">A new process is created by the <code>fork()</code> system call. After it, one of the two processes typically calls <code>exec()</code> to <b>replace its memory space with a new program</b> (it loads a binary file and starts executing it). In this way the two processes can communicate and then go their separate ways. The parent can create more children, or, if it has nothing else to do, call <code>wait()</code> to <b>move itself off the ready queue</b> until the child terminates.</div>
+<div class="cs-lay"><div class="cs-svg"></div><div class="cs-side"><div class="cs-stat"></div><ol class="steps"></ol><div class="cs-btns"><button class="btn s nx">Next step</button><button class="btn s o ap">Auto-play</button><button class="btn s o rs">Reset</button></div></div></div></div>
+<div style="margin-top:10px"><button class="btn s" data-go="t">Next: Termination →</button></div>
+</div>
+
+<div class="tp" data-t="t">
+<div class="grid">
+<div class="card"><h3>exit(): the normal end</h3>A process terminates when it finishes its final statement and asks the OS to delete it with the <code>exit()</code> system call. All its resources are <b>deallocated and reclaimed</b> by the OS:
+<div class="opts"><span>physical memory</span><span>virtual memory</span><span>open files</span><span>I/O buffers</span></div></div>
+<div class="card"><h3>Terminating another process</h3>A process can cause the termination of another via a system call (for example <code>TerminateProcess()</code> in Windows). A parent must <b>know its children’s identities</b> to terminate them, which is why the identity of a newly created process is <b>passed to the parent</b>.</div>
+</div>
+<div class="sec-t">WHY WOULD A PARENT TERMINATE ITS CHILD?</div>
+<div class="grid">
+<div class="card"><h3 data-n="1">Resource overuse</h3>The child has <b>exceeded its usage</b> of some of the resources it was allocated.</div>
+<div class="card"><h3 data-n="2">Parent is exiting</h3>The parent is exiting and the OS <b>does not allow a child to continue</b> if its parent terminates.</div>
+</div>
+<div class="sec-t">CASCADING TERMINATION</div>
+<div class="card"><div class="cas" aria-hidden="true"><span>Parent ✕</span><span>→ Child 1 ✕</span><span>→ Child 2 ✕</span><span>→ Grandchild ✕</span></div>If a process terminates (<b>normally or abnormally</b>), then <b>all its children must also be terminated</b>. This phenomenon is called <b>cascading termination</b> and is normally initiated by the operating system.</div>
+<div class="sec-t">wait() AND ZOMBIE PROCESSES</div>
+<div class="card"><div class="flow" aria-hidden="true"><span>Running</span><i>→</i><span>exit()</span><i>→</i><span>Zombie</span><i>→</i><span>parent calls wait()</span><i>→</i><span>Removed</span></div>
+A parent may wait for a child to terminate by using <code>wait()</code>. When a process terminates, its resources are deallocated by the OS. A process that <b>has terminated but whose parent has not yet called <code>wait()</code></b> is known as a <b>zombie process</b>.</div>
+<div style="margin-top:10px"><button class="btn s" data-go="l">Try it yourself: Process Lab →</button></div>
+</div>
+
+<div class="tp" data-t="l">
+<div class="card"><h3>Interactive Process Lab</h3>Build a process tree and watch creation and termination happen. <b>Tap a process</b> to select it, then call <code>fork()</code>, <code>exec()</code>, <code>wait()</code> or <code>exit()</code> on it. The explanation below updates after every action.
+<div class="cs-lay" data-pl data-l="en"><div><svg class="pt-svg" viewBox="0 0 700 320" role="group" aria-label="Process tree"></svg><div class="leg"><span>running</span><span class="w">waiting (off the ready queue)</span><span class="z">zombie</span><span class="d">terminated</span></div></div>
+<div class="cs-side"><div class="tip msg pm"></div><div class="pbts"><button class="btn s" data-a="fork">fork()</button><button class="btn s" data-a="exec">exec()</button><button class="btn s" data-a="wait">wait()</button><button class="btn s" data-a="exit">exit()</button><button class="btn s o" data-a="reset">Reset</button></div>
+<div class="chal"><b>Challenges</b><ol><li>Make a <b>zombie</b>: fork a child, then exit the child before its parent calls wait().</li><li>Trigger <b>cascading termination</b>: build 2 levels, then exit the top child.</li><li>Make a parent <b>wait</b> and then wake it up by exiting its child.</li></ol></div>
+<div class="plog"></div></div></div></div>
+</div>
+</div>
 </div></section>
 
 <section id="shm"><div class="wrap">
@@ -329,7 +416,7 @@ r.querySelector(".hr").onclick=function(){if(h>1)h--;m.textContent=m.dataset.ok;
 function calc(r){var g=function(c){return +r.querySelector(c).value||0};
 function up(){var a=g(".a"),f=g(".f"),b=g(".b"),c=g(".c"),t=c-a;r.querySelector(".tat").textContent=t;r.querySelector(".wt").textContent=t-b;r.querySelector(".rt").textContent=f-a}
 r.querySelectorAll("input").forEach(function(i){i.oninput=up});up()}
-function init(){document.querySelectorAll("[data-st]").forEach(st);document.querySelectorAll("[data-sm]").forEach(sm);document.querySelectorAll("[data-pc]").forEach(pc);document.querySelectorAll("[data-ml]").forEach(ml);document.querySelectorAll("[data-calc]").forEach(calc);document.querySelectorAll("[data-qd]").forEach(qd);document.querySelectorAll("[data-cs]").forEach(cs)}
+function init(){document.querySelectorAll("[data-st]").forEach(st);document.querySelectorAll("[data-sm]").forEach(sm);document.querySelectorAll("[data-pc]").forEach(pc);document.querySelectorAll("[data-ml]").forEach(ml);document.querySelectorAll("[data-calc]").forEach(calc);document.querySelectorAll("[data-qd]").forEach(qd);document.querySelectorAll("[data-cs]").forEach(cs);document.querySelectorAll("[data-tabs]").forEach(tabs);document.querySelectorAll("[data-pl]").forEach(pl)}
 /* quiz data */
 var TF=["True","False"];
 var Q=[
@@ -500,20 +587,61 @@ sch:`<h2>3. جدولة العمليات (Process Scheduling)</h2><p class="lead"
 <div class="card" data-calc><h3>تجربة تفاعلية: احسب الأوقات</h3>غيّر الأرقام (المعادلات تفترض أن عمل العملية هو وقت الـ CPU فقط بدون I/O).
 <div class="calc"><label>Arrival<input class="a" type="number" value="0"></label><label>أول وصول للـ CPU<input class="f" type="number" value="2"></label><label>Burst<input class="b" type="number" value="5"></label><label>Completion<input class="c" type="number" value="9"></label></div>
 <div class="res"><div>Turnaround<b class="tat">9</b></div><div>Waiting<b class="wt">4</b></div><div>Response<b class="rt">2</b></div></div></div>
-<div class="card" data-cs data-l="ar"><h3>تبديل السياق (Context switch)</h3>تحويل الـ CPU إلى عملية أخرى يتطلب <b>حفظ حالة</b> العملية الحالية و<b>استعادة حالة</b> عملية مختلفة. تحفظ النواة السياق القديم <b>في الـ PCB</b> وتحمّل السياق المحفوظ للعملية الجديدة. <b>زمن تبديل السياق overhead خالص</b>: لا يؤدي النظام عملاً مفيداً أثناءه، ويعتمد زمنه على دعم العتاد.
-<div class="cs-svg"></div><ol class="steps"></ol><button class="btn nx">الخطوة التالية</button><button class="btn o ap">تشغيل تلقائي</button><button class="btn o rs">إعادة</button></div>`,
-ops:`<h2>4. العمليات على الـ Processes</h2><p class="lead">إنشاء العمليات وإنهاؤها.</p>
-<div class="card"><h3>إنشاء العملية (Process creation)</h3>تعمل العمليات بالتزامن و<b>تُنشأ وتُحذف ديناميكياً</b>. العملية المنشِئة هي <b>الأب (parent)</b> والجديدة هي <b>الأبناء (children)</b>. وقد ينشئ الأبناء عمليات أخرى فتتكوّن <b>شجرة عمليات</b>. لكل عملية رقم صحيح فريد <b>pid</b>.
-<ul><li>يحتاج الابن موارد (وقت CPU وذاكرة وملفات وأجهزة I/O). قد يحصل عليها <b>مباشرة من النظام</b> أو يُحصَر في <b>جزء من موارد الأب</b>. وقد <b>يقسّم</b> الأب موارده بين أبنائه أو <b>يشاركها</b>.</li><li>تقييد الابن بجزء من موارد الأب <b>يمنع أي عملية من إغراق النظام</b> بإنشاء أبناء كثيرين.</li></ul></div>
-<div class="grid">
-<div class="card"><h3>احتمالان للتنفيذ</h3><ol style="padding:0 20px 0 0"><li>يستمر الأب <b>بالتزامن</b> مع أبنائه.</li><li>ينتظر الأب حتى ينتهي <b>بعض أو كل</b> أبنائه.</li></ol></div>
-<div class="card"><h3>احتمالان لمساحة العنوان</h3><ol style="padding:0 20px 0 0"><li>الابن <b>نسخة</b> من الأب (نفس البرنامج والبيانات).</li><li>الابن يُحمَّل فيه <b>برنامج جديد</b>.</li></ol></div>
+<div class="card" data-cs data-l="ar"><h3>تبديل السياق (Context switch)</h3>
+<div class="cs-intro">تحويل الـ CPU إلى عملية أخرى يتطلب <b>حفظ حالة</b> العملية الحالية و<b>استعادة حالة</b> عملية مختلفة. تحفظ النواة السياق القديم <b>في الـ PCB</b> وتحمّل السياق المحفوظ للعملية الجديدة. <b>زمن تبديل السياق overhead خالص</b>: لا يؤدي النظام عملاً مفيداً أثناءه، ويعتمد زمنه على دعم العتاد.</div>
+<div class="cs-lay"><div class="cs-svg"></div><div class="cs-side"><div class="cs-stat"></div><ol class="steps"></ol><div class="cs-btns"><button class="btn s nx">الخطوة التالية</button><button class="btn s o ap">تشغيل تلقائي</button><button class="btn s o rs">إعادة</button></div></div></div></div>`,
+ops:`<h2>4. العمليات على الـ Processes</h2><p class="lead">تعمل العمليات بالتزامن و<b>تُنشأ وتُحذف ديناميكياً</b>، لذلك يجب أن يوفر النظام آليتين: <b>إنشاء العملية</b> و<b>إنهاء العملية</b>.</p>
+<div data-tabs>
+<div class="tabs" role="tablist"><button class="tbn on" data-t="c" role="tab">1 · الإنشاء</button><button class="tbn" data-t="t" role="tab">2 · الإنهاء</button><button class="tbn" data-t="l" role="tab">3 · مختبر العمليات</button></div>
+<div class="tp on" data-t="c">
+<div class="grid s">
+<div class="card"><h3 data-n="1">الأب والأبناء</h3>العملية المنشِئة هي <b>الأب (parent)</b> والعمليات الجديدة هي <b>أبناؤها (children)</b>. وقد ينشئ كل ابن عمليات أخرى فتتكوّن <b>شجرة عمليات</b>.</div>
+<div class="card"><h3 data-n="2">معرّف العملية</h3>تعرّف معظم الأنظمة كل عملية برقم صحيح فريد <b>pid</b>. وفي UNIX تُمرَّر هوية العملية الجديدة إلى الأب.</div>
+<div class="card"><h3 data-n="3">الموارد</h3>يحتاج الابن إلى <b>وقت CPU وذاكرة وملفات وأجهزة I/O</b> لإنجاز عمله. من أين تأتي؟ انظر الخيارين بالأسفل.</div>
 </div>
-<div class="card" data-st><h3>UNIX: <code>fork()</code> و<code>exec()</code> و<code>wait()</code></h3>تُنشأ العملية الجديدة بواسطة <code>fork()</code>. بعدها تستدعي إحدى العمليتين عادةً <code>exec()</code> <b>لاستبدال مساحة ذاكرتها ببرنامج جديد</b> (تحمّل ملفاً ثنائياً وتبدأ تنفيذه). ويستطيع الأب إنشاء أبناء آخرين أو استدعاء <code>wait()</code> <b>ليخرج من الـ ready queue</b> حتى ينتهي الابن.
-<div class="flow"><span>الأب يعمل</span><i>←</i><span>الابن = نسخة</span><i>←</i><span>الابن يشغّل برنامجاً جديداً</span><i>←</i><span>الأب يستأنف</span></div>
-<ol class="steps"><li data-b="0">عملية الأب تعمل.</li><li data-b="1">يستدعي الأب <code>fork()</code>: يُنشأ <b>ابن كنسخة</b> (نفس البرنامج والبيانات) مع PID جديد.</li><li data-b="2">يستدعي الابن <code>exec()</code>: تُستبدل ذاكرته <b>ببرنامج جديد</b>.</li><li data-b="0">يستدعي الأب <code>wait()</code> ويخرج من الـ ready queue حتى ينتهي الابن.</li><li data-b="2">ينتهي الابن ويستدعي <code>exit()</code>؛ تُحرَّر موارده.</li><li data-b="3">يستيقظ الأب و<b>يتابع</b>.</li></ol>
-<button class="btn nx">الخطوة التالية</button><button class="btn o rs">إعادة</button></div>
-<div class="card"><h3>إنهاء العملية (Process termination)</h3><ul><li>تنتهي العملية عند إنهاء آخر تعليمة وتستدعي <code>exit()</code>. يقوم النظام <b>بتحرير واسترجاع كل مواردها</b>: الذاكرة الفيزيائية والافتراضية والملفات المفتوحة ومخازن I/O.</li><li>يمكن لعملية إنهاء أخرى عبر system call (مثل <code>TerminateProcess()</code> في ويندوز). ويجب أن يعرف الأب هوية أبنائه، لذلك <b>تُمرَّر هوية العملية الجديدة إلى الأب</b>.</li><li>قد ينهي الأب ابنه إذا <b>تجاوز استخدامه للموارد</b>، أو إذا كان <b>الأب ينتهي</b> والنظام لا يسمح باستمرار الأبناء.</li><li><b>الإنهاء المتسلسل (Cascading termination)</b>: إذا انتهت عملية (بشكل طبيعي أو غير طبيعي) <b>يجب إنهاء كل أبنائها</b>. يبدؤه النظام عادةً.</li><li>ينتظر الأب انتهاء الابن باستخدام <code>wait()</code>.</li><li><b>العملية الزومبي (zombie)</b> انتهت لكن <b>أباها لم يستدعِ <code>wait()</code> بعد</b>.</li></ul></div>`,
+<div class="sec-t">من أين يحصل الابن على موارده؟</div>
+<div class="grid">
+<div class="card"><h3>الخيار أ: مباشرة من النظام</h3>يحصل الابن على موارده <b>مباشرة من نظام التشغيل</b>.</div>
+<div class="card"><h3>الخيار ب: جزء من موارد الأب</h3>يُحصَر الابن في <b>جزء</b> من موارد الأب. وقد <b>يقسّم</b> الأب موارده بين أبنائه أو <b>يشارك</b> بعضها (مثل الذاكرة أو الملفات) بين عدة أبناء.</div>
+</div>
+<div class="tip">لماذا نقيّد الابن؟ لأن حصره في جزء من موارد الأب <b>يمنع أي عملية من إغراق النظام</b> بإنشاء أبناء كثيرين.</div>
+<div class="sec-t">اختياران يجب حسمهما لكل عملية جديدة</div>
+<div class="grid">
+<div class="card"><h3>التنفيذ</h3>كيف يعمل الأب والابن؟<div class="opts"><span>1 · يستمر الأب <b>بالتزامن</b> مع أبنائه</span><span>2 · <b>ينتظر</b> الأب حتى ينتهي بعض أو كل أبنائه</span></div></div>
+<div class="card"><h3>مساحة العنوان</h3>ماذا يحتوي الابن؟<div class="opts"><span>1 · <b>نسخة</b> من الأب (نفس البرنامج والبيانات)</span><span>2 · <b>برنامج جديد</b> يُحمَّل فيه</span></div></div>
+</div>
+<div class="sec-t">UNIX عملياً: fork() ← exec() ← wait()</div>
+<div class="card" data-cs="fk" data-l="ar"><h3>الطريقة في UNIX لإنشاء عملية</h3>
+<div class="cs-intro">تُنشأ العملية الجديدة بواسطة <code>fork()</code>. بعدها تستدعي إحدى العمليتين عادةً <code>exec()</code> <b>لاستبدال مساحة ذاكرتها ببرنامج جديد</b> (تحمّل ملفاً ثنائياً وتبدأ تنفيذه). وبهذا تستطيع العمليتان التواصل ثم تذهب كل منهما في طريقها. ويستطيع الأب إنشاء أبناء آخرين، أو إذا لم يكن لديه ما يفعله استدعاء <code>wait()</code> <b>ليخرج من الـ ready queue</b> حتى ينتهي الابن.</div>
+<div class="cs-lay"><div class="cs-svg"></div><div class="cs-side"><div class="cs-stat"></div><ol class="steps"></ol><div class="cs-btns"><button class="btn s nx">الخطوة التالية</button><button class="btn s o ap">تشغيل تلقائي</button><button class="btn s o rs">إعادة</button></div></div></div></div>
+<div style="margin-top:10px"><button class="btn s" data-go="t">التالي: الإنهاء ←</button></div>
+</div>
+<div class="tp" data-t="t">
+<div class="grid">
+<div class="card"><h3>exit(): النهاية الطبيعية</h3>تنتهي العملية عندما تنهي آخر تعليمة وتطلب من النظام حذفها بالاستدعاء <code>exit()</code>. وتُحرَّر <b>كل مواردها وتُسترجَع</b> بواسطة النظام:
+<div class="opts"><span>الذاكرة الفيزيائية</span><span>الذاكرة الافتراضية</span><span>الملفات المفتوحة</span><span>مخازن I/O</span></div></div>
+<div class="card"><h3>إنهاء عملية أخرى</h3>تستطيع عملية التسبب بإنهاء أخرى عبر system call (مثل <code>TerminateProcess()</code> في ويندوز). ويجب أن <b>يعرف الأب هوية أبنائه</b> لكي ينهيهم، ولذلك <b>تُمرَّر هوية العملية الجديدة إلى الأب</b>.</div>
+</div>
+<div class="sec-t">لماذا قد ينهي الأب ابنه؟</div>
+<div class="grid">
+<div class="card"><h3 data-n="1">إفراط في استخدام الموارد</h3>الابن <b>تجاوز استخدامه</b> لبعض الموارد المخصصة له.</div>
+<div class="card"><h3 data-n="2">الأب ينتهي</h3>الأب ينتهي والنظام <b>لا يسمح للابن بالاستمرار</b> إذا انتهى أبوه.</div>
+</div>
+<div class="sec-t">الإنهاء المتسلسل (Cascading termination)</div>
+<div class="card"><div class="cas" aria-hidden="true"><span>Parent ✕</span><span>→ Child 1 ✕</span><span>→ Child 2 ✕</span><span>→ Grandchild ✕</span></div>إذا انتهت عملية (<b>بشكل طبيعي أو غير طبيعي</b>) فإنه <b>يجب إنهاء كل أبنائها أيضاً</b>. وتسمى هذه الظاهرة <b>cascading termination</b> ويبدؤها نظام التشغيل عادةً.</div>
+<div class="sec-t">الـ wait() والعمليات الزومبي</div>
+<div class="card"><div class="flow" aria-hidden="true" style="direction:ltr"><span>Running</span><i>→</i><span>exit()</span><i>→</i><span>Zombie</span><i>→</i><span>parent calls wait()</span><i>→</i><span>Removed</span></div>
+يستطيع الأب انتظار انتهاء الابن باستخدام <code>wait()</code>. وعند انتهاء العملية يحرر النظام مواردها. والعملية التي <b>انتهت لكن أباها لم يستدعِ <code>wait()</code> بعد</b> تسمى <b>عملية زومبي (zombie)</b>.</div>
+<div style="margin-top:10px"><button class="btn s" data-go="l">جرّب بنفسك: مختبر العمليات ←</button></div>
+</div>
+<div class="tp" data-t="l">
+<div class="card"><h3>مختبر العمليات التفاعلي</h3>ابنِ شجرة عمليات وشاهد الإنشاء والإنهاء يحدثان. <b>اضغط على عملية</b> لاختيارها ثم استدعِ <code>fork()</code> أو <code>exec()</code> أو <code>wait()</code> أو <code>exit()</code> عليها. ويتحدث الشرح بعد كل إجراء.
+<div class="cs-lay" data-pl data-l="ar"><div><svg class="pt-svg" viewBox="0 0 700 320" role="group" aria-label="Process tree"></svg><div class="leg"><span>running</span><span class="w">waiting (خارج الـ ready queue)</span><span class="z">zombie</span><span class="d">terminated</span></div></div>
+<div class="cs-side"><div class="tip msg pm"></div><div class="pbts"><button class="btn s" data-a="fork">fork()</button><button class="btn s" data-a="exec">exec()</button><button class="btn s" data-a="wait">wait()</button><button class="btn s" data-a="exit">exit()</button><button class="btn s o" data-a="reset">إعادة</button></div>
+<div class="chal"><b>تحديات</b><ol><li>اصنع <b>زومبي</b>: أنشئ ابناً ثم أنهِه (exit) قبل أن يستدعي أبوه wait().</li><li>أطلق <b>الإنهاء المتسلسل</b>: ابنِ مستويين ثم أنهِ الابن الأعلى.</li><li>اجعل أباً ينتظر (<b>wait</b>) ثم أيقظه بإنهاء ابنه.</li></ol></div>
+<div class="plog"></div></div></div></div>
+</div>
+</div>`,
 shm:`<h2>5. الاتصال بين العمليات: الذاكرة المشتركة</h2><p class="lead">الـ IPC ومسألة المنتج والمستهلك.</p>
 <div class="card"><h3>عمليات مستقلة ومتعاونة</h3>قد تكون العمليات <b>مستقلة</b> أو <b>متعاونة</b>. العملية المتعاونة <b>تؤثر أو تتأثر</b> بالعمليات الأخرى ومنها بمشاركة البيانات (سبب: <b>مشاركة المعلومات</b>). تحتاج العمليات المتعاونة إلى <b>IPC</b>. نموذجان: <b>الذاكرة المشتركة</b> و<b>تمرير الرسائل</b>.</div>
 <div class="card"><h3>نموذج الذاكرة المشتركة</h3><ul><li><b>منطقة ذاكرة مشتركة</b> بين العمليات المتصلة.</li><li>الاتصال تحت سيطرة <b>عمليات المستخدم وليس النظام</b>.</li><li>المشكلة الرئيسية: آلية تتيح لعمليات المستخدم <b>مزامنة أفعالها</b> عند الوصول للذاكرة المشتركة.</li></ul></div>
@@ -609,16 +737,77 @@ return '<svg class="cs" viewBox="0 0 720 450" role="img" aria-label="Context swi
 +a(5,"M608 300L452 334","interrupt or system call",600,292,"end")+o(5,320,"save state into PCB1")+o(6,366,"reload state from PCB0")+a(7,"M270 383L128 398")+'</svg>'}
 var CAP={en:["P0 is executing on the CPU. P1 is idle (waiting in the ready queue).","An interrupt or system call occurs and control passes to the operating system.","The kernel saves P0’s state into PCB0. P0 is idle now and no useful work is done (overhead).","The kernel reloads P1’s saved state from PCB1 (still overhead) and gives P1 the CPU.","P1 is executing. P0 stays idle.","Another interrupt or system call: the OS takes over and saves P1’s state into PCB1.","The kernel reloads P0’s saved state from PCB0 (overhead again).","P0 resumes exactly where it stopped. P1 is idle."],
 ar:["العملية P0 تُنفَّذ على الـ CPU، وP1 في حالة idle (تنتظر في الـ ready queue).","تحدث مقاطعة أو system call فينتقل التحكم إلى نظام التشغيل.","تحفظ النواة حالة P0 في PCB0. P0 الآن idle ولا يوجد عمل مفيد (overhead).","تعيد النواة تحميل حالة P1 المحفوظة من PCB1 (ما زال overhead) ثم تعطي الـ CPU لـ P1.","P1 تُنفَّذ، وP0 تبقى idle.","مقاطعة أو system call أخرى: يتولى النظام التحكم ويحفظ حالة P1 في PCB1.","تعيد النواة تحميل حالة P0 المحفوظة من PCB0 (overhead مرة أخرى).","تكمل P0 من نفس النقطة التي توقفت عندها، وP1 تصبح idle."]};
-function cs(c){var lis=c.querySelectorAll(".steps li"),es=c.querySelectorAll(".cs-e"),k=-1,tm=0;
-function sh(){lis.forEach(function(l,i){l.classList.toggle("a",i==k)});es.forEach(function(e){var n=+e.dataset.k;e.classList.toggle("v",n<=k);e.classList.toggle("cur",n==k)})}
+var CT={en:["P0 executing","Interrupt or system call","Save state into PCB0","Reload state from PCB1","P1 executing","Second switch: save PCB1","Reload state from PCB0","P0 resumes"],ar:["P0 تُنفَّذ","مقاطعة أو system call","حفظ الحالة في PCB0","استعادة الحالة من PCB1","P1 تُنفَّذ","التبديل الثاني: حفظ PCB1","استعادة الحالة من PCB0","P0 تستأنف"]};
+var CAPF={en:["The parent process is running.","The parent calls fork(): a child is created as a duplicate (same program and data) with a new pid. Parent and child now run concurrently.","The child calls exec(): its memory space is replaced by a new program loaded from a binary file.","The parent calls wait(): it moves itself off the ready queue until the child terminates.","The child finishes and calls exit(): the OS deallocates its memory, open files and I/O buffers.","The OS wakes the parent (its wait() returns) and the parent continues."],
+ar:["عملية الأب تعمل.","يستدعي الأب fork(): يُنشأ ابن كنسخة (نفس البرنامج والبيانات) مع pid جديد. ويعمل الأب والابن الآن بالتزامن.","يستدعي الابن exec(): تُستبدل ذاكرته ببرنامج جديد يُحمَّل من ملف ثنائي.","يستدعي الأب wait(): يخرج من الـ ready queue حتى ينتهي الابن.","ينتهي الابن ويستدعي exit(): يحرر النظام ذاكرته وملفاته المفتوحة ومخازن الـ I/O.","يوقظ النظام الأب (يعود wait()) فيتابع الأب عمله."]};
+var CTF={en:["Parent running","fork()","exec()","wait()","exit()","Parent resumes"],ar:["الأب يعمل","fork()","exec()","wait()","exit()","الأب يستأنف"]};
+var SW={en:{e:"executing",i:"idle",o:"overhead",n:"standing by",x:"not running"},ar:{e:"تُنفَّذ",i:"idle (تنتظر)",o:"overhead (عمل النظام)",n:"في الانتظار",x:"غير موجودة"}};
+var SC={cs:{lab:{en:["Process P0","Operating system","Process P1"],ar:["العملية P0","نظام التشغيل","العملية P1"]},st:["eni","ioi","ioi","ioi","ine","ioi","ioi","eni"],ini:"nnn"},
+fk:{lab:{en:["Parent","Child"],ar:["الأب","الابن"]},st:["ex","ee","ee","ie","ix","ex"],ini:"xx"}};
+var FKL={en:{p:"Parent process",c:"Child process",f:"fork()",e:"exec(): new program",w:"wait(): off ready queue",x:"exit(): reclaim resources",b:"child terminated"},ar:{p:"العملية الأب",c:"العملية الابن",f:"fork()",e:"exec(): برنامج جديد",w:"wait(): خارج الـ ready",x:"exit(): تحرير الموارد",b:"انتهى الابن"}};
+function fkv(l){var F=FKL[l],b=function(k,c,x,y,h){return '<rect class="cs-e '+c+'" data-k="'+k+'" x="'+x+'" y="'+y+'" width="14" height="'+h+'" rx="3"/>'},
+o=function(k,x,y,w,t){return '<g class="cs-e ov" data-k="'+k+'"><rect x="'+x+'" y="'+y+'" width="'+w+'" height="30" rx="6"/><text x="'+(x+w/2)+'" y="'+(y+20)+'" text-anchor="middle">'+t+'</text></g>'},
+a=function(k,d,t,x,y){return '<g class="cs-e ar" data-k="'+k+'"><path d="'+d+'" marker-end="url(#csh)"/><text x="'+x+'" y="'+y+'" text-anchor="middle">'+t+'</text></g>'};
+return '<svg class="cs" viewBox="0 0 720 340" role="img" aria-label="fork exec wait timeline"><defs><marker id="csh" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#ffb454"/></marker></defs>'
++'<text class="ln" x="150" y="24" text-anchor="middle">'+F.p+'</text><text class="ln" x="560" y="24" text-anchor="middle">'+F.c+'</text>'
++b(0,"ex",143,50,100)+b(3,"id",143,150,125)+b(5,"ex",143,275,45)
++a(1,"M160 100L548 126",F.f,350,102)+b(1,"ex",553,126,58)+b(2,"ex2",553,184,76)
++o(2,345,166,185,F.e)+o(3,168,146,165,F.w)+o(4,345,242,185,F.x)
++a(5,"M546 262L160 284",F.b,350,306)+'</svg>'}
+function cs(c){var l=c.dataset.l,ty=c.dataset.cs||"cs",S=SC[ty],lis=c.querySelectorAll(".steps li"),es=c.querySelectorAll(".cs-e"),ch=c.querySelectorAll(".cs-stat div"),k=-1,tm=0;
+function sh(){lis.forEach(function(x,i){x.classList.toggle("a",i==k)});es.forEach(function(e){var n=+e.dataset.k;e.classList.toggle("v",n<=k);e.classList.toggle("cur",n==k)});
+var code=k<0?S.ini:S.st[k];ch.forEach(function(d,i){d.className="s-"+code[i];d.querySelector("span").textContent=SW[l][code[i]]})}
 function stop(){clearInterval(tm);tm=0}
 function nx(){k=(k+1)%lis.length;sh()}
 c.querySelector(".nx").onclick=function(){stop();nx()};
-c.querySelector(".ap").onclick=function(){if(tm){stop();return}nx();tm=setInterval(function(){if(k>=lis.length-1)stop();else nx()},1700)};
-c.querySelector(".rs").onclick=function(){stop();k=-1;sh()};sh()}
+c.querySelector(".ap").onclick=function(){if(tm){stop();return}nx();tm=setInterval(function(){if(k>=lis.length-1)stop();else nx()},1900)};
+c.querySelector(".rs").onclick=function(){stop();k=-1;sh()};
+lis.forEach(function(x,i){x.style.cursor="pointer";x.onclick=function(){stop();k=i;sh()}});sh()}
 function fill(){document.querySelectorAll(".dg").forEach(function(e,i){e.innerHTML=dg(i)});
 document.querySelectorAll("[data-qd]").forEach(function(e,i){e.innerHTML=qh(e.dataset.l,i)});
-document.querySelectorAll("[data-cs]").forEach(function(e){e.querySelector(".cs-svg").innerHTML=csv();e.querySelector(".steps").innerHTML=CAP[e.dataset.l].map(function(t,i){return '<li>'+t+'</li>'}).join('')})}
+document.querySelectorAll("[data-cs]").forEach(function(e){var l=e.dataset.l,ty=e.dataset.cs||"cs",S=SC[ty],cap=ty=="fk"?CAPF[l]:CAP[l],ti=ty=="fk"?CTF[l]:CT[l];
+e.querySelector(".cs-svg").innerHTML=ty=="fk"?fkv(l):csv();
+e.querySelector(".cs-stat").innerHTML=S.lab[l].map(function(t){return '<div class="s-n"><b>'+t+'</b><span></span></div>'}).join('');
+e.querySelector(".steps").innerHTML=cap.map(function(t,i){return '<li><strong>'+ti[i]+'</strong>'+t+'</li>'}).join('')})}
+var PL={en:{ph:"Tap a process circle to select it, then choose a system call. Every action is explained here.",off:"The selected process is not running, so it cannot make that call. Select a running process.",limit:"This lab allows at most 9 processes. Terminate something first.",reset:"Lab reset: only the root process P100 exists.",
+fork:function(p,c){return "P"+p+" calls fork(): child P"+c+" is created as a duplicate (same program and data) with a new pid."},exec:function(p){return "P"+p+" calls exec(): its memory space is replaced by a new program (the pid stays the same)."},
+w0:function(p){return "P"+p+" has no children, so wait() has nothing to wait for."},w1:function(p,k){return "P"+p+" calls wait(): the zombie child P"+k+" is reaped and its process-table entry is removed."},w2:function(p){return "P"+p+" calls wait(): it moves off the ready queue until a child terminates (state: waiting)."},
+x1:function(p,q){return "P"+p+" calls exit(): its memory, open files and I/O buffers are reclaimed. Parent P"+q+" was waiting, so it wakes up and continues, and P"+p+" is removed."},x2:function(p,q){return "P"+p+" calls exit(): its resources are reclaimed, but parent P"+q+" has not called wait(), so P"+p+" is now a ZOMBIE."},
+x3:function(p){return "Root process P"+p+" exits, which ends the whole tree."},cas:function(a){return "Cascading termination: the OS also terminates all its descendants ("+a+")."},s:{run:"running",wait:"waiting",zom:"zombie",dead:"terminated"},pg:["copy","new program"],root:"shell"},
+ar:{ph:"اضغط على دائرة عملية لاختيارها ثم اختر system call. كل إجراء يُشرح هنا.",off:"العملية المختارة لا تعمل حالياً فلا تستطيع هذا الاستدعاء. اختر عملية في حالة running.",limit:"يسمح المختبر بـ 9 عمليات كحد أقصى. أنهِ عملية أولاً.",reset:"أُعيد ضبط المختبر: توجد فقط العملية الجذر P100.",
+fork:function(p,c){return "P"+p+" تستدعي fork(): يُنشأ الابن P"+c+" كنسخة (نفس البرنامج والبيانات) مع pid جديد."},exec:function(p){return "P"+p+" تستدعي exec(): تُستبدل ذاكرتها ببرنامج جديد (ويبقى الـ pid نفسه)."},
+w0:function(p){return "P"+p+" ليس لها أبناء، فلا يوجد ما تنتظره في wait()."},w1:function(p,k){return "P"+p+" تستدعي wait(): يُستلَم الابن الزومبي P"+k+" ويُحذف مدخله من جدول العمليات."},w2:function(p){return "P"+p+" تستدعي wait(): تخرج من الـ ready queue حتى ينتهي أحد أبنائها (الحالة: waiting)."},
+x1:function(p,q){return "P"+p+" تستدعي exit(): تُحرَّر ذاكرتها وملفاتها المفتوحة ومخازن I/O. كان الأب P"+q+" ينتظر فيستيقظ ويتابع، وتُحذف P"+p+"."},x2:function(p,q){return "P"+p+" تستدعي exit(): تُحرَّر مواردها، لكن الأب P"+q+" لم يستدعِ wait()، فتصبح P"+p+" الآن ZOMBIE."},
+x3:function(p){return "العملية الجذر P"+p+" تنتهي، فتنتهي الشجرة كلها."},cas:function(a){return "إنهاء متسلسل: يُنهي النظام أيضاً كل أحفادها ("+a+")."},s:{run:"running",wait:"waiting",zom:"zombie",dead:"terminated"},pg:["نسخة","برنامج جديد"],root:"shell"}};
+function pl(r){var l=r.dataset.l,T=PL[l],svg=r.querySelector(".pt-svg"),msg=r.querySelector(".pm"),lg=r.querySelector(".plog"),bs=r.querySelectorAll("[data-a]"),N,nx,sel,L;
+function get(id){for(var i=0;i<N.length;i++)if(N[i].id==id)return N[i]}
+function kids(id){return N.filter(function(n){return n.p==id&&n.s!="gone"})}
+function desc(id,o){kids(id).forEach(function(k){o.push(k);desc(k.id,o)});return o}
+function live(){return N.filter(function(n){return n.s!="gone"})}
+function draw(){var pos={},leaf=0,h="";
+function lay(n,d){var ks=kids(n.id);if(!ks.length)pos[n.id]=[leaf++,d];else{ks.forEach(function(k){lay(k,d+1)});pos[n.id]=[(pos[ks[0].id][0]+pos[ks[ks.length-1].id][0])/2,d]}}
+lay(N[0],0);var X=function(p){return(p[0]+.5)*700/Math.max(leaf,1)},Y=function(p){return 48+p[1]*80};
+live().forEach(function(n){if(n.p&&pos[n.id]&&pos[n.p])h+='<line class="pe" x1="'+X(pos[n.p])+'" y1="'+Y(pos[n.p])+'" x2="'+X(pos[n.id])+'" y2="'+Y(pos[n.id])+'"/>'});
+live().forEach(function(n){var p=pos[n.id];if(!p)return;var x=X(p),y=Y(p);
+h+='<g class="pn '+n.s+(n.id==sel?' sel':'')+'" data-id="'+n.id+'" tabindex="0" role="button" aria-label="P'+n.id+' '+T.s[n.s]+'"><circle cx="'+x+'" cy="'+y+'" r="23"/><text x="'+x+'" y="'+(y+4)+'">P'+n.id+'</text><text class="sub" x="'+x+'" y="'+(y+40)+'">'+T.s[n.s]+' · '+(n.p?T.pg[n.pg]:T.root)+'</text></g>'});
+svg.innerHTML=h;var s=get(sel),ok=s&&s.s=="run";bs.forEach(function(b){b.disabled=b.dataset.a!="reset"&&!ok});
+lg.innerHTML=L.map(function(t){return"<div>"+t+"</div>"}).join("")}
+function say(t){L.unshift(t);if(L.length>6)L.pop();msg.textContent=t;draw()}
+function reset(){N=[{id:100,p:0,s:"run",pg:0}];nx=101;sel=100;L=[];say(T.reset);msg.textContent=T.ph}
+function act(a){if(a=="reset"){reset();return}var n=get(sel);if(!n||n.s!="run"){say(T.off);return}
+if(a=="fork"){if(live().length>=9){say(T.limit);return}var c={id:nx++,p:n.id,s:"run",pg:0};N.push(c);say(T.fork(n.id,c.id))}
+else if(a=="exec"){n.pg=1;say(T.exec(n.id))}
+else if(a=="wait"){var ks=kids(n.id),z=ks.filter(function(k){return k.s=="zom"})[0];if(z){z.s="gone";say(T.w1(n.id,z.id))}else if(ks.some(function(k){return k.s=="run"||k.s=="wait"})){n.s="wait";say(T.w2(n.id))}else say(T.w0(n.id))}
+else if(a=="exit"){var ds=desc(n.id,[]),gone=ds.slice(),t;ds.forEach(function(d){d.s="dead"});
+if(!n.p){n.s="dead";t=T.x3(n.id)}else{var p=get(n.p);if(p.s=="wait"){p.s="run";if(ds.length){n.s="dead";gone.push(n)}else n.s="gone";t=T.x1(n.id,p.id)}else{n.s="zom";t=T.x2(n.id,p.id)}}
+if(ds.length)t+=" "+T.cas(ds.map(function(d){return"P"+d.id}).join(", "));
+sel=n.p||n.id;say(t);if(gone.length)setTimeout(function(){gone.forEach(function(d){d.s="gone"});draw()},rm?0:1700)}}
+bs.forEach(function(b){b.onclick=function(){act(b.dataset.a)}});
+svg.onclick=function(e){var g=e.target.closest?e.target.closest("g.pn"):null;if(g){sel=+g.dataset.id;draw()}};
+svg.onkeydown=function(e){if(e.key=="Enter"||e.key==" "){var g=e.target.closest?e.target.closest("g.pn"):null;if(g){e.preventDefault();sel=+g.dataset.id;draw();var q=svg.querySelector('g[data-id="'+sel+'"]');if(q)q.focus()}}};
+reset()}
+function tabs(r){var bs=r.querySelectorAll(".tbn"),ps=r.querySelectorAll(".tp");function go(t){bs.forEach(function(b){b.classList.toggle("on",b.dataset.t==t)});ps.forEach(function(p){p.classList.toggle("on",p.dataset.t==t)})}
+bs.forEach(function(b){b.onclick=function(){go(b.dataset.t)}});r.querySelectorAll("[data-go]").forEach(function(b){b.onclick=function(){go(b.dataset.go);var t=r.closest("section");if(t)t.scrollIntoView({behavior:rm?"auto":"smooth",block:"start"})}})}
 /* progress + scroll-spy */
 var rp=$("#rp"),nl=[].slice.call(document.querySelectorAll("nav a[href^='#']"));
 function spy(){var h=document.documentElement,y=scrollY;rp.style.width=Math.min(100,y/(h.scrollHeight-innerHeight)*100)+"%";var cu=null;nl.forEach(function(a){var s=document.querySelector(a.getAttribute("href"));if(s&&s.offsetTop<=y+160)cu=a});nl.forEach(function(a){a.classList.toggle("cur2",a===cu)})}
