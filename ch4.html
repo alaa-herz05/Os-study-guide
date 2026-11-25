@@ -104,6 +104,20 @@ body.ar h1,body.ar h2,body.ar h3,body.ar h4,body.ar summary,body.ar #score{font-
 .arx .tip{border-left:0;border-right:3px solid var(--am);border-radius:8px 0 0 8px}
 .arx th,.arx td{text-align:start}
 #lang{flex:none;padding:6px 16px;margin:0 8px 0 0;font-size:14px}
+.rctl{display:flex;flex-wrap:wrap;align-items:center;margin:10px 0 4px}
+.rtime{margin-inline-start:auto;font:700 14px "JetBrains Mono",monospace;color:var(--am);direction:ltr}
+svg.tl{width:100%;max-width:720px;display:block;margin:8px auto;background:#0a0603;border:1px solid var(--line);border-radius:12px;direction:ltr}
+svg.tl text{font:600 11.5px "JetBrains Mono",monospace;fill:var(--mut)}
+svg.tl text.tg{fill:#1a0a00;text-anchor:middle;font-size:10px;font-weight:700}
+body.ar svg.tl text{font-family:"Tajawal","JetBrains Mono",monospace}
+.scr{width:100%;max-width:720px;display:block;margin:2px auto 6px;accent-color:var(--g)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0}
+.stat{border:1px solid var(--line);border-radius:10px;background:#0f0804;padding:10px 8px;text-align:center;transition:.3s}
+.stat b{display:block;font:700 22px "Sora",sans-serif}
+.stat span{font-size:12.5px;color:var(--mut)}
+.stat.hit{border-color:var(--g);box-shadow:0 0 16px rgba(255,122,26,.3)}
+.stat b{direction:ltr}.stat.bad{border-color:var(--bad);box-shadow:0 0 16px rgba(255,93,93,.3)}.stat.bad b{color:var(--bad)}
+.btn:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
 @media(max-width:760px){.hero{grid-template-columns:1fr;padding-top:34px}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
 </style>
@@ -147,9 +161,13 @@ A traditional (<b>heavyweight</b>) process has a <b>single thread of control</b>
 <div class="card"><h3>Components of a thread</h3><ul><li>A <b>thread ID</b> that uniquely identifies it</li><li>A <b>register set</b> representing the processor status</li><li>A <b>user stack</b> (when running in user mode) and a <b>kernel stack</b> (when running in kernel mode)</li><li>A <b>private storage area</b> used by run-time libraries and dynamic link libraries (DLLs)</li></ul></div>
 <div class="card"><h3>Multithreading</h3>Allows <b>multiple parts of a program to execute at the same time</b>. These parts are the threads: <b>lightweight processes</b> inside the process. Multithreading leads to <b>maximum utilization of the CPU</b> by multitasking.</div>
 </div>
-<div class="card" data-run data-srun="Single-threaded: the 3 parts run one after another…" data-sdone="Done: 3 time units (sequential)." data-mrun="Multithreaded: the 3 parts run at the same time…" data-mdone="Done: 1 time unit (parallel on 3 CPU cores)."><h3>Interactive: single-threaded vs multithreaded</h3>A task with 3 equal parts (1 time unit each).
-<div class="rb"><i></i></div><div class="rb"><i></i></div><div class="rb"><i></i></div>
-<button class="btn s r1">Run single-threaded</button><button class="btn s o rm">Run multithreaded</button><div class="rl rt">Press a button.</div></div>
+<div class="card" data-run data-lane="Part" data-time="Time" data-idle="Press a run button to start." data-srun="Single-threaded: ONE thread runs part 1, then part 2, then part 3…" data-sdone="Done: 3 time units (sequential)." data-mrun="Multithreaded: 3 threads run the 3 parts at the same time…" data-mdone="Done: 1 time unit (parallel on 3 CPU cores)." data-pause="⏸ Pause" data-play="▶ Resume"><h3>Interactive: single-threaded vs multithreaded</h3>A task with 3 equal parts (1 time unit each). Each wavy line is a thread of execution and the glowing dot marks where it is now. Drag the slider to scrub time.
+<div class="rctl"><button class="btn s o r1" type="button">▶ Run single-threaded</button><button class="btn s o rm" type="button">▶ Run multithreaded</button><button class="btn s o rp" type="button" disabled>⏸ Pause</button><button class="btn s o rr" type="button">↺ Reset</button><span class="rtime">t = <span class="tv">0.00</span></span></div>
+<svg class="tl" viewBox="0 0 600 240" role="img" aria-label="Timeline of a single-threaded and a multithreaded run"></svg>
+<input class="scr" type="range" min="0" max="1000" value="0" aria-label="Scrub time">
+<div class="rctl"><span style="color:var(--mut);margin-inline-end:8px;font-size:14px">Speed</span><button class="btn s o sp" type="button" data-s=".5">0.5×</button><button class="btn s o sp on" type="button" data-s="1">1×</button><button class="btn s o sp" type="button" data-s="2">2×</button></div>
+<div class="stats"><div class="stat"><b class="t1">—</b><span>Single-threaded (time units)</span></div><div class="stat"><b class="t2">—</b><span>Multithreaded (time units)</span></div><div class="stat"><b class="t3">—</b><span>Speedup</span></div></div>
+<div class="rl rt" aria-live="polite"></div></div>
 </div></section>
 
 <section id="adv"><div class="wrap">
@@ -191,10 +209,12 @@ A traditional (<b>heavyweight</b>) process has a <b>single thread of control</b>
 <div class="card"><h3>Many-to-Many</h3><b>Multiplexes</b> many user threads onto an <b>equal or smaller number</b> of kernel threads.<ul><li><b>+</b> <b>No restriction</b> on the number of user threads</li><li><b>+</b> Blocking kernel calls <b>don’t block the entire process</b></li><li><b>+</b> Processes can be <b>split across multiple processors</b></li><li><b>+</b> A process can get a <b>variable number of kernel threads</b> depending on CPUs and other factors</li></ul>It has none of the disadvantages of the other two.</div>
 </div>
 <div class="card"><h3>Two-tier model</h3>A popular variation of many-to-many that allows <b>either many-to-many or one-to-one</b> operation. Used by <b>IRIX, HP-UX, Tru64 UNIX</b>, and <b>Solaris before Solaris 9</b>.</div>
-<div class="card" data-mdl data-i1="Many-to-one: all 4 user threads share ONE kernel thread. Click a user thread (U) to make a blocking system call." data-b1="Blocking system call → the ENTIRE process is blocked (only one kernel thread, and only one thread can access the kernel at a time)." data-i2="One-to-one: each user thread has its own kernel thread. Click a user thread to make it block." data-b2="Only the blocked thread waits. The other threads keep running, and can run in parallel on multiple CPUs." data-i3="Many-to-many: 4 user threads are multiplexed onto 3 kernel threads. Click a user thread to make it block." data-b3="The blocking call does NOT block the whole process: the other user threads are scheduled on the remaining kernel threads." data-u="User threads" data-k="Kernel threads"><h3>Interactive: block a thread in each model</h3>
-<div><button class="btn s o on" data-m="1">Many-to-One</button><button class="btn s o" data-m="2">One-to-One</button><button class="btn s o" data-m="3">Many-to-Many</button><button class="btn s o rs">Unblock all</button></div>
-<svg class="m" viewBox="0 0 400 150" role="img" aria-label="Thread model diagram"></svg>
-<div class="tip msg mm"></div></div>
+<div class="card" data-mdl data-us="User space" data-ks="Kernel space" data-cpu="CPU" data-stall="stalled" data-sys="read()" data-pr="Running" data-pb="BLOCKED" data-i1="Many-to-one: all 4 user threads share ONE kernel thread. Tap a user thread (U) to make it call a blocking system call." data-i2="One-to-one: each user thread has its own kernel thread. Tap a user thread (U) to make it call a blocking system call." data-i3="Many-to-many: 4 user threads are multiplexed onto 3 kernel threads. Tap a user thread (U) to make it call a blocking system call." data-b1="{u} made a blocking system call → the only kernel thread {k} is blocked → ALL user threads stall: the entire process is blocked." data-b2="{u} made a blocking system call → only its own kernel thread {k} waits. The other threads keep running, in parallel on other CPUs." data-b3m="{u} blocked {k}, so the thread library moved {m} to another kernel thread. The process keeps running." data-b3n="{u} blocked {k}. The other user threads still have free kernel threads, so the process keeps running." data-b3a="All kernel threads are blocked now, so the remaining user threads must wait." data-done="The system call of {u} finished: it is running again."><h3>Interactive: blocking system calls in each model</h3>Pick a model, then tap a user thread (U) to make it call a blocking system call such as <code>read()</code>. The wavy lines show the flow from each user thread to its kernel thread; the kernel thread stays blocked until the I/O finishes. Try blocking several threads.
+<div class="rctl"><button class="btn s o on" type="button" data-m="1">Many-to-One</button><button class="btn s o" type="button" data-m="2">One-to-One</button><button class="btn s o" type="button" data-m="3">Many-to-Many</button></div>
+<div class="rctl"><button class="btn s au" type="button">▶ Auto demo</button><button class="btn s o rs" type="button">Unblock all</button></div>
+<svg class="tl" viewBox="0 0 600 300" role="group" aria-label="User threads mapped to kernel threads; tap a user thread to block it"></svg>
+<div class="stats"><div class="stat"><b class="m1">4 / 4</b><span>User threads running</span></div><div class="stat"><b class="m2">0 / 1</b><span>Kernel threads blocked</span></div><div class="stat"><b class="m3">—</b><span>Process state</span></div></div>
+<div class="tip msg mm" aria-live="polite"></div></div>
 </div></section>
 
 <section id="sum"><div class="wrap">
@@ -249,22 +269,98 @@ fr();
 function sh(r){var m=r.querySelector(".shm"),m0=m.textContent,cs=r.querySelectorAll(".ch");
 cs.forEach(function(c){c.onclick=function(){c.classList.remove("s","p");c.classList.add(c.dataset.k);m.textContent=c.textContent+": "+(c.dataset.k=="s"?m.dataset.s:m.dataset.p)}});
 r.querySelector(".shr").onclick=function(){cs.forEach(function(c){c.classList.remove("s","p")});m.textContent=m0}}
-function run(r){var bars=r.querySelectorAll(".rb i"),t=r.querySelector(".rt"),tm;
-function go(mu){clearTimeout(tm);bars.forEach(function(b){b.style.transition="none";b.style.width="0"});void r.offsetWidth;
-bars.forEach(function(b,i){b.style.transition="width 1s linear "+(mu?0:i)+"s";b.style.width="100%"});
-t.textContent=r.dataset[mu?"mrun":"srun"];tm=setTimeout(function(){t.textContent=r.dataset[mu?"mdone":"sdone"]},mu?1000:3000)}
-r.querySelector(".r1").onclick=function(){go(false)};r.querySelector(".rm").onclick=function(){go(true)}}
-function mdl(r){var mode=1,bl=[],sv=r.querySelector("svg"),ms=r.querySelector(".mm"),ux=[50,150,250,350];
-function draw(){var K=mode==1?[200]:mode==2?[50,150,250,350]:[100,200,300],map=mode==1?[0,0,0,0]:mode==2?[0,1,2,3]:[0,0,1,2],h="";
-var kb={};bl.forEach(function(i){kb[map[i]]=1});if(mode==1&&bl.length)kb[0]=1;
-h+='<text class="c" x="6" y="14">'+r.dataset.u+'</text><text class="c" x="6" y="146">'+r.dataset.k+'</text>';
-for(var i=0;i<4;i++)h+='<line x1="'+ux[i]+'" y1="48" x2="'+K[map[i]]+'" y2="98" stroke="#a64e0f" stroke-width="2"/>';
-K.forEach(function(x,j){h+='<rect x="'+(x-22)+'" y="98" width="44" height="30" rx="6" fill="'+(kb[j]?"#ff5d5d":"#6fe0c3")+'"/><text x="'+x+'" y="118">K'+(j+1)+'</text>'});
-for(i=0;i<4;i++){var b=mode==1?bl.length>0:bl.indexOf(i)>-1;h+='<g data-i="'+i+'" tabindex="0" role="button"><circle cx="'+ux[i]+'" cy="30" r="18" fill="'+(b?"#ff5d5d":"#ffa94d")+'" stroke="#fff" stroke-width="'+(bl.indexOf(i)>-1?3:0)+'"/><text x="'+ux[i]+'" y="35">U'+(i+1)+'</text></g>'}
-sv.innerHTML=h;sv.querySelectorAll("g").forEach(function(g){var f=function(){var i=+g.dataset.i,p=bl.indexOf(i);if(p>-1)bl.splice(p,1);else bl.push(i);draw()};g.onclick=f;g.onkeydown=function(e){if(e.key=="Enter"||e.key==" "){e.preventDefault();f()}}});
-ms.textContent=bl.length?r.dataset["b"+mode]:r.dataset["i"+mode]}
-r.querySelectorAll("[data-m]").forEach(function(b){b.onclick=function(){mode=+b.dataset.m;bl=[];r.querySelectorAll("[data-m]").forEach(function(x){x.classList.toggle("on",x==b)});draw()}});
-r.querySelector(".rs").onclick=function(){bl=[];draw()};draw()}
+var uid=0;
+function run(r){var D=r.dataset,NS="http://www.w3.org/2000/svg",sv=r.querySelector("svg"),X0=96,UW=150,A=9,LAM=25,CY=[56,112,168],AY=210,COL=["#ffa94d","#6fe0c3","#b69cff"],
+mode=1,T=3,t=0,playing=false,started=false,sp=1,last=0,raf=0,res={1:null,2:null},S=[],ph,eb,gid="rg"+(++uid),
+st=r.querySelector(".rt"),tv=r.querySelector(".tv"),sc=r.querySelector(".scr"),pb=r.querySelector(".rp"),b1=r.querySelector(".r1"),b2=r.querySelector(".rm");
+function E(n,a,p){var e=document.createElementNS(NS,n);for(var k in a)e.setAttribute(k,a[k]);(p||sv).appendChild(e);return e}
+function wd(x0,cy,len){var n=Math.max(1,Math.round(len/2)),d="";for(var i=0;i<=n;i++){var x=len*i/n;d+=(i?"L":"M")+(x0+x).toFixed(1)+" "+(cy+A*Math.sin(x/LAM*6.2832)).toFixed(1)}return d}
+function segs(){return mode==1?[{l:0,a:0,b:1,th:0},{l:1,a:1,b:2,th:0},{l:2,a:2,b:3,th:0}]:[{l:0,a:0,b:1,th:0},{l:1,a:0,b:1,th:1},{l:2,a:0,b:1,th:2}]}
+function build(){sv.innerHTML="";S=[];var s=segs(),i,df=E("defs"),fl=E("filter",{id:gid,filterUnits:"userSpaceOnUse",x:0,y:0,width:600,height:240},df);
+E("feGaussianBlur",{stdDeviation:2.6,result:"b"},fl);var mg=E("feMerge",{},fl);E("feMergeNode",{"in":"b"},mg);E("feMergeNode",{"in":"SourceGraphic"},mg);
+for(i=0;i<3;i++){E("rect",{x:4,y:CY[i]-24,width:592,height:48,rx:10,fill:"#0f0804",stroke:"#3a1f0d"});E("text",{x:14,y:CY[i]+4}).textContent=D.lane+" "+(i+1)}
+E("line",{x1:X0,y1:AY,x2:X0+3*UW,y2:AY,stroke:"#3a1f0d","stroke-width":4,"stroke-linecap":"round"});
+for(i=0;i<4;i++){E("line",{x1:X0+i*UW,y1:AY-6,x2:X0+i*UW,y2:AY+6,stroke:"#a64e0f","stroke-width":1.5});E("text",{x:X0+i*UW,y:AY+23,"text-anchor":"middle"}).textContent=i}
+E("text",{x:14,y:AY+4}).textContent=D.time;
+var gh={fill:"none",stroke:"#6b3a1a","stroke-width":2,"stroke-dasharray":"2 5","stroke-linecap":"round"};
+s.forEach(function(g,i){var a=Object.assign({d:wd(X0+g.a*UW,CY[g.l],(g.b-g.a)*UW)},gh);E("path",a);
+if(mode==1&&i<2){var x=X0+g.b*UW,a2=Object.assign({d:"M"+x+" "+CY[i]+" C"+(x+16)+" "+(CY[i]+22)+" "+(x-16)+" "+(CY[i+1]-22)+" "+x+" "+CY[i+1]},gh);E("path",a2)}});
+eb=E("line",{x1:X0,y1:AY,x2:X0,y2:AY,stroke:"#6fe0c3","stroke-width":4,"stroke-linecap":"round"});
+ph=E("line",{x1:X0,y1:24,x2:X0,y2:AY,stroke:"#6fe0c3","stroke-width":1.2,"stroke-dasharray":"4 4",opacity:.8});
+s.forEach(function(g){var c=COL[g.th];S.push({p:E("path",{fill:"none",stroke:c,"stroke-width":3,"stroke-linecap":"round","stroke-linejoin":"round",filter:"url(#"+gid+")"})})});
+s.forEach(function(g,i){var c=COL[g.th],h=E("g",{style:"display:none"});E("circle",{r:5,fill:"#fff3d6",stroke:c,"stroke-width":2.5,filter:"url(#"+gid+")"},h);
+E("rect",{x:-12,y:-28,width:24,height:15,rx:4,fill:c},h);E("text",{x:0,y:-17,"class":"tg"},h).textContent="T"+(g.th+1);
+var b=E("g",{transform:"translate("+(X0+g.b*UW+15)+" "+CY[g.l]+")",style:"display:none"});E("circle",{r:8,fill:"#6fe0c3"},b);E("path",{d:"M-4 0L-1 3L4-3",fill:"none",stroke:"#1a0a00","stroke-width":2,"stroke-linecap":"round","stroke-linejoin":"round"},b);
+S[i].h=h;S[i].b=b})}
+function draw(){segs().forEach(function(g,i){var o=S[i],p=Math.max(0,Math.min(1,(t-g.a)/(g.b-g.a))),len=p*UW*(g.b-g.a),act=p>0&&p<1;
+o.p.setAttribute("d",p>0?wd(X0+g.a*UW,CY[g.l],len):"");o.h.style.display=act?"":"none";
+if(act)o.h.setAttribute("transform","translate("+(X0+g.a*UW+len).toFixed(1)+" "+(CY[g.l]+A*Math.sin(len/LAM*6.2832)).toFixed(1)+")");
+o.b.style.display=p>=1?"":"none"});
+var x=X0+t*UW;ph.setAttribute("x1",x);ph.setAttribute("x2",x);eb.setAttribute("x2",x);tv.textContent=t.toFixed(2);sc.value=Math.round(t/T*1000)}
+function tiles(){var both=res[1]&&res[2];r.querySelector(".t1").textContent=res[1]||"—";r.querySelector(".t2").textContent=res[2]||"—";r.querySelector(".t3").textContent=both?(res[1]/res[2])+"×":"—";
+[].forEach.call(r.querySelectorAll(".stat"),function(x,i){x.classList.toggle("hit",!!(i==0?res[1]:i==1?res[2]:both))})}
+function setOn(){b1.classList.toggle("on",started&&mode==1);b2.classList.toggle("on",started&&mode==2)}
+function finish(){playing=false;cancelAnimationFrame(raf);res[mode]=T;tiles();pb.disabled=true;pb.textContent=D.pause;st.textContent=D[mode==1?"sdone":"mdone"]}
+function tick(ts){if(!playing)return;var dt=Math.min(.05,Math.max(0,(ts-last)/1000));last=ts;t=Math.min(T,t+dt*sp*.8);draw();if(t>=T)finish();else raf=requestAnimationFrame(tick)}
+function start(m){cancelAnimationFrame(raf);mode=m;T=m==1?3:1;t=0;started=true;build();draw();setOn();st.textContent=D[m==1?"srun":"mrun"];
+if(matchMedia("(prefers-reduced-motion:reduce)").matches){t=T;draw();finish();return}
+playing=true;last=performance.now();pb.disabled=false;pb.textContent=D.pause;raf=requestAnimationFrame(tick)}
+function reset(){playing=false;cancelAnimationFrame(raf);mode=1;T=3;t=0;started=false;res={1:null,2:null};build();draw();tiles();setOn();pb.disabled=true;pb.textContent=D.pause;st.textContent=D.idle}
+b1.onclick=function(){start(1)};b2.onclick=function(){start(2)};r.querySelector(".rr").onclick=reset;
+pb.onclick=function(){if(t>=T)return;if(playing){playing=false;cancelAnimationFrame(raf);pb.textContent=D.play}else{playing=true;last=performance.now();pb.textContent=D.pause;raf=requestAnimationFrame(tick)}};
+sc.oninput=function(){playing=false;cancelAnimationFrame(raf);t=sc.value/1000*T;draw();if(t>=T){if(started)finish();return}pb.disabled=!started;pb.textContent=D.play;if(t>0)st.textContent=D[mode==1?"srun":"mrun"]};
+[].forEach.call(r.querySelectorAll(".sp"),function(b){b.onclick=function(){sp=+b.dataset.s;[].forEach.call(r.querySelectorAll(".sp"),function(x){x.classList.toggle("on",x==b)})}});
+reset()}
+var muid=0;
+function mdl(r){var D=r.dataset,NS="http://www.w3.org/2000/svg",sv=r.querySelector("svg"),ms=r.querySelector(".mm"),UX=[105,235,365,495],KX={1:[300],2:[105,235,365,495],3:[140,300,460]},Y1=92,Y2=222,AMP=7,LAM=26,DUR=4,gid="mg"+(++muid),
+mode=1,U=[],K=[],time=0,msg="",tm=[],raf=0,last=0,vis=true,R={},cache="",rmo=matchMedia("(prefers-reduced-motion:reduce)").matches;
+function E(n,a,p){var e=document.createElementNS(NS,n);for(var k in a)e.setAttribute(k,a[k]);(p||sv).appendChild(e);return e}
+function T(x,y,txt,fill,sz,an,p){var e=E("text",{x:x,y:y,style:"fill:"+fill+";font-size:"+sz+"px"+(an?";text-anchor:"+an:"")},p);e.textContent=txt;return e}
+function kb(k){return U.some(function(u){return u.k==k&&u.s=="sys"})}
+function ds(u){return u.s=="sys"?"sys":kb(u.k)?"stall":"run"}
+function nm(i){return "U"+(i+1)}
+function sched(){var mv=[];if(mode!=3)return mv;U.forEach(function(u,j){if(u.s=="run"&&kb(u.k)){var best=-1,bl=9;K.forEach(function(_,k){if(!kb(k)){var n=U.filter(function(x){return x.k==k}).length;if(n<bl){bl=n;best=k}}});if(best>-1){u.k=best;mv.push(j)}}});return mv}
+function pt(i,u,s,ph){var y=Y1+(Y2-Y1)*s,env=Math.min(1,6*s,6*(1-s));return[UX[i]+(u.cx-UX[i])*s+AMP*env*Math.sin((y-Y1)/LAM*6.2832-ph),y]}
+function wp(i,u){var d="",n=34;for(var q=0;q<=n;q++){var p=pt(i,u,q/n,u.ph);d+=(q?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)}return d}
+function build(){sv.innerHTML="";R={l:[],p:[],u:[],k:[]};var df=E("defs"),fl=E("filter",{id:gid,filterUnits:"userSpaceOnUse",x:0,y:0,width:600,height:300},df);
+E("feGaussianBlur",{stdDeviation:2.4,result:"b"},fl);var mg=E("feMerge",{},fl);E("feMergeNode",{"in":"b"},mg);E("feMergeNode",{"in":"SourceGraphic"},mg);
+E("rect",{x:4,y:4,width:592,height:136,rx:12,fill:"#0f0804",stroke:"#3a1f0d"});E("rect",{x:4,y:150,width:592,height:146,rx:12,fill:"#0c0603",stroke:"#3a1f0d"});
+T(14,20,D.us,"#c4a68c",11);T(14,166,D.ks,"#c4a68c",11);
+U.forEach(function(u,i){R.l[i]=E("path",{fill:"none","stroke-width":2.6,"stroke-linecap":"round","stroke-linejoin":"round"})});
+U.forEach(function(u,i){R.p[i]=E("circle",{r:4,fill:"#fff3d6"})});
+K.forEach(function(x,j){var o={};o.r=E("rect",{x:x-28,y:Y2,width:56,height:34,rx:8,"stroke-width":1.5});o.t=T(x,Y2+22,"K"+(j+1),"#1a0a00",13,"middle");
+o.c=T(x,Y2+52,D.cpu+" "+(mode==1?1:j+1),"#6b4b36",10.5,"middle");o.io=T(x,Y2+66,"","#ff5d5d",10.5,"middle");o.b=E("rect",{x:x-28,y:Y2+37,width:0,height:3,rx:1.5,fill:"#ff5d5d"});R.k[j]=o});
+U.forEach(function(u,i){var g=E("g",{tabindex:0,role:"button","aria-label":nm(i),style:"cursor:pointer"}),c=E("circle",{cx:UX[i],cy:70,r:20,"stroke-width":2},g);
+var t=T(UX[i],75,nm(i),"#1a0a00",13,"middle",g),s=T(UX[i],40,"","#ff5d5d",10.5,"middle",g);g.onclick=function(){block(i)};
+g.onkeydown=function(e){if(e.key=="Enter"||e.key==" "){e.preventDefault();block(i)}};R.u[i]={c:c,t:t,s:s}})}
+function draw(){var run=0,bk=0;
+U.forEach(function(u,i){var d=ds(u),col=d=="run"?"#ffa94d":d=="sys"?"#ff5d5d":"#7a5a45",l=R.l[i];
+l.setAttribute("d",wp(i,u));l.setAttribute("stroke",col);l.setAttribute("stroke-dasharray",d=="stall"?"3 5":"none");
+if(d=="run")l.setAttribute("filter","url(#"+gid+")");else l.removeAttribute("filter");
+var s=d=="run"?((time*.7+i*.23)%1):1,p=pt(i,u,s,u.ph),pc=R.p[i];pc.setAttribute("cx",p[0]);pc.setAttribute("cy",p[1]);
+pc.setAttribute("r",d=="sys"?4+1.6*Math.sin(time*9):4);pc.style.display=d=="stall"?"none":"";pc.setAttribute("fill",d=="sys"?"#ff9d9d":"#fff3d6");
+var o=R.u[i];o.c.setAttribute("fill",d=="run"?"#ffa94d":d=="sys"?"#ff5d5d":"#2a1a10");o.c.setAttribute("stroke",d=="stall"?"#ff5d5d":"#fff3d6");o.c.setAttribute("stroke-dasharray",d=="stall"?"3 3":"none");
+o.t.style.fill=d=="stall"?"#c4a68c":"#1a0a00";o.s.textContent=d=="sys"?D.sys:d=="stall"?D.stall:"";o.s.style.fill=d=="sys"?"#ff5d5d":"#c4a68c";if(d=="run")run++});
+K.forEach(function(x,j){var o=R.k[j],b=kb(j),act=U.some(function(u){return u.k==j&&ds(u)=="run"}),bl=U.filter(function(u){return u.k==j&&u.s=="sys"})[0];
+o.r.setAttribute("fill",b?"#ff5d5d":act?"#6fe0c3":"#1a100a");o.r.setAttribute("stroke",b||act?"none":"#4a2a14");o.r.setAttribute("opacity",act&&!rmo?(.85+.15*Math.sin(time*5)):1);
+o.t.style.fill=b||act?"#1a0a00":"#c4a68c";o.c.style.fill=act?"#6fe0c3":"#6b4b36";o.io.textContent=bl?"I/O "+bl.t.toFixed(1)+"s":"";o.b.setAttribute("width",bl?56*bl.t/DUR:0);if(b)bk++});
+var key=run+"|"+bk+"|"+msg;if(key!==cache){cache=key;r.querySelector(".m1").textContent=run+" / 4";r.querySelector(".m2").textContent=bk+" / "+K.length;r.querySelector(".m3").textContent=run?D.pr:D.pb;
+var st=r.querySelectorAll(".stat");st[1].classList.toggle("bad",bk>0);st[2].classList.toggle("bad",run==0);ms.textContent=msg}}
+function step(dt){time+=dt;U.forEach(function(u,i){if(u.s=="sys"){u.t-=dt;if(u.t<=0){u.s="run";u.t=0;msg=D.done.replace("{u}",nm(i))}}});sched();
+U.forEach(function(u){if(ds(u)=="run"&&!rmo)u.ph+=dt*7;u.cx+=(K[u.k]-u.cx)*Math.min(1,dt*7)})}
+function loop(ts){raf=0;if(!vis)return;var dt=Math.min(.05,Math.max(0,(ts-last)/1000));last=ts;step(dt);draw();raf=requestAnimationFrame(loop)}
+function kick(){if(vis&&!raf){last=performance.now();raf=requestAnimationFrame(loop)}}
+function block(i){var u=U[i];if(ds(u)!="run")return;u.s="sys";u.t=DUR;var mv=sched(),mm;
+if(mode==1)mm=D.b1;else if(mode==2)mm=D.b2;else{var sl=U.filter(function(x){return ds(x)=="stall"}).length;mm=sl?D.b3a:mv.length?D.b3m:D.b3n}
+msg=mm.replace("{u}",nm(i)).replace("{k}","K"+(u.k+1)).replace("{m}",mv.map(nm).join(", "));draw();kick()}
+function clr(){tm.forEach(clearTimeout);tm=[]}
+function setMode(m){clr();mode=m;K=KX[m];var map=m==1?[0,0,0,0]:m==2?[0,1,2,3]:[0,0,1,2];U=UX.map(function(x,i){return{k:map[i],s:"run",t:0,cx:K[map[i]],ph:i*2}});msg=D["i"+m];cache="";build();
+[].forEach.call(r.querySelectorAll("[data-m]"),function(b){b.classList.toggle("on",+b.dataset.m==m)});draw();kick()}
+[].forEach.call(r.querySelectorAll("[data-m]"),function(b){b.onclick=function(){setMode(+b.dataset.m)}});
+r.querySelector(".au").onclick=function(){setMode(mode);tm.push(setTimeout(function(){block(0)},500));tm.push(setTimeout(function(){block(2)},1800))};
+r.querySelector(".rs").onclick=function(){clr();U.forEach(function(u){u.s="run";u.t=0});msg=D["i"+mode];draw();kick()};
+if(window.IntersectionObserver){vis=false;new IntersectionObserver(function(es){vis=es[es.length-1].isIntersecting;if(vis)kick()}).observe(r)}
+setMode(1)}
 function init(){document.querySelectorAll("[data-sh]").forEach(sh);document.querySelectorAll("[data-run]").forEach(run);document.querySelectorAll("[data-mdl]").forEach(mdl)}
 /* quiz data */
 var TF=["True","False"];
@@ -384,9 +480,13 @@ def:`<h2>1. ما هو الـ Thread؟</h2><p class="lead">الوحدة الأس�
 <div class="card"><h3>مكونات الـ thread</h3><ul><li><b>thread ID</b> يعرّفه بشكل فريد</li><li><b>مجموعة مسجلات</b> تمثل حالة المعالج</li><li><b>user stack</b> (في user mode) و<b>kernel stack</b> (في kernel mode)</li><li><b>مساحة تخزين خاصة</b> تستخدمها مكتبات وقت التشغيل ومكتبات الربط الديناميكي (DLLs)</li></ul></div>
 <div class="card"><h3>تعدد الـ Threads (Multithreading)</h3>يسمح <b>بتنفيذ عدة أجزاء من البرنامج في نفس الوقت</b>. هذه الأجزاء هي الـ threads: <b>عمليات خفيفة (lightweight)</b> داخل العملية. ويؤدي إلى <b>أقصى استخدام للـ CPU</b> عبر تعدد المهام.</div>
 </div>
-<div class="card" data-run data-srun="أحادي الـ thread: الأجزاء الثلاثة تعمل واحداً بعد الآخر…" data-sdone="انتهى: 3 وحدات زمن (تسلسلي)." data-mrun="متعدد الـ threads: الأجزاء الثلاثة تعمل في نفس الوقت…" data-mdone="انتهى: وحدة زمن واحدة (بالتوازي على 3 أنوية)."><h3>تجربة تفاعلية: أحادي مقابل متعدد الـ threads</h3>مهمة من 3 أجزاء متساوية (وحدة زمن لكل جزء).
-<div class="rb"><i></i></div><div class="rb"><i></i></div><div class="rb"><i></i></div>
-<button class="btn s r1">تشغيل أحادي الـ thread</button><button class="btn s o rm">تشغيل متعدد الـ threads</button><div class="rl rt">اضغط زراً.</div></div>`,
+<div class="card" data-run data-lane="الجزء" data-time="الزمن" data-idle="اضغط على زر التشغيل للبدء." data-srun="أحادي الـ thread: thread واحد ينفذ الجزء 1 ثم الجزء 2 ثم الجزء 3…" data-sdone="انتهى: 3 وحدات زمن (تسلسلي)." data-mrun="متعدد الـ threads: 3 threads تنفذ الأجزاء الثلاثة في نفس الوقت…" data-mdone="انتهى: وحدة زمن واحدة (بالتوازي على 3 أنوية)." data-pause="⏸ إيقاف مؤقت" data-play="▶ متابعة"><h3>تجربة تفاعلية: أحادي مقابل متعدد الـ threads</h3>مهمة من 3 أجزاء متساوية (وحدة زمن لكل جزء). كل خط متعرج هو thread تنفيذ، والنقطة المتوهجة تُظهر مكان وصوله الآن. اسحب الشريط لتحريك الزمن يدوياً.
+<div class="rctl"><button class="btn s o r1" type="button">▶ تشغيل أحادي الـ thread</button><button class="btn s o rm" type="button">▶ تشغيل متعدد الـ threads</button><button class="btn s o rp" type="button" disabled>⏸ إيقاف مؤقت</button><button class="btn s o rr" type="button">↺ إعادة</button><span class="rtime">t = <span class="tv">0.00</span></span></div>
+<svg class="tl" viewBox="0 0 600 240" role="img" aria-label="المخطط الزمني لتشغيل أحادي ومتعدد الـ threads"></svg>
+<input class="scr" type="range" min="0" max="1000" value="0" aria-label="تحريك الزمن">
+<div class="rctl"><span style="color:var(--mut);margin-inline-end:8px;font-size:14px">السرعة</span><button class="btn s o sp" type="button" data-s=".5">0.5×</button><button class="btn s o sp on" type="button" data-s="1">1×</button><button class="btn s o sp" type="button" data-s="2">2×</button></div>
+<div class="stats"><div class="stat"><b class="t1">—</b><span>أحادي الـ thread (وحدات زمن)</span></div><div class="stat"><b class="t2">—</b><span>متعدد الـ threads (وحدات زمن)</span></div><div class="stat"><b class="t3">—</b><span>التسريع (Speedup)</span></div></div>
+<div class="rl rt" aria-live="polite"></div></div>`,
 adv:`<h2>2. مزايا الـ Threads على العمليات</h2><p class="lead">ست أسباب لاستخدام الـ threads.</p>
 <div class="grid s">
 <div class="card"><h3 data-n="1">الاستجابية (Responsiveness)</h3>إذا قُسّمت العملية إلى threads وأنهى أحدها عمله، <b>يمكن إرجاع ناتجه فوراً</b>.</div>
@@ -416,10 +516,12 @@ mod:`<h2>4. نماذج تعدد الـ Threads</h2><p class="lead">كيف ترت
 <div class="card"><h3>Many-to-Many</h3><b>يوزّع (multiplex)</b> عدة user threads على عدد <b>مساوٍ أو أقل</b> من الـ kernel threads.<ul><li><b>+</b> <b>لا قيد</b> على عدد الـ user threads</li><li><b>+</b> الاستدعاءات الحاجزة <b>لا تحجب العملية كلها</b></li><li><b>+</b> يمكن <b>تقسيم العمليات على عدة معالجات</b></li><li><b>+</b> قد تحصل العملية على <b>عدد متغير من kernel threads</b> حسب عدد الـ CPUs وعوامل أخرى</li></ul>وليس فيه أي من عيوب النموذجين الآخرين.</div>
 </div>
 <div class="card"><h3>نموذج Two-tier</h3>تنويع شائع لـ many-to-many يسمح <b>بعمل many-to-many أو one-to-one</b>. استخدمته أنظمة <b>IRIX وHP-UX وTru64 UNIX</b> و<b>Solaris قبل الإصدار 9</b>.</div>
-<div class="card" data-mdl data-i1="Many-to-one: كل الـ 4 user threads تتشارك kernel thread واحداً. اضغط على user thread (U) لاستدعاء نظام حاجز." data-b1="استدعاء حاجز ← تُحجَب العملية كلها (kernel thread واحد فقط، وthread واحد فقط يصل للنواة في الوقت)." data-i2="One-to-one: لكل user thread kernel thread خاص به. اضغط على thread لحجبه." data-b2="ينتظر الـ thread المحجوب فقط. بقية الـ threads تستمر وقد تعمل بالتوازي على عدة CPUs." data-i3="Many-to-many: 4 user threads موزّعة على 3 kernel threads. اضغط على thread لحجبه." data-b3="الاستدعاء الحاجز لا يحجب العملية كلها: تُجدوَل بقية الـ user threads على الـ kernel threads المتبقية." data-u="User threads" data-k="Kernel threads"><h3>تجربة تفاعلية: احجب thread في كل نموذج</h3>
-<div><button class="btn s o on" data-m="1">Many-to-One</button><button class="btn s o" data-m="2">One-to-One</button><button class="btn s o" data-m="3">Many-to-Many</button><button class="btn s o rs">إلغاء الحجب</button></div>
-<svg class="m" viewBox="0 0 400 150" role="img" aria-label="Thread model diagram"></svg>
-<div class="tip msg mm"></div></div>`,
+<div class="card" data-mdl data-us="فضاء المستخدم" data-ks="فضاء النواة" data-cpu="CPU" data-stall="متوقف" data-sys="read()" data-pr="تعمل" data-pb="محجوبة" data-i1="Many-to-one: كل الـ 4 user threads تتشارك kernel thread واحداً. اضغط على user thread (U) ليستدعي استدعاء نظام حاجزاً." data-i2="One-to-one: لكل user thread kernel thread خاص به. اضغط على user thread (U) ليستدعي استدعاء نظام حاجزاً." data-i3="Many-to-many: 4 user threads موزّعة على 3 kernel threads. اضغط على user thread (U) ليستدعي استدعاء نظام حاجزاً." data-b1="{u} استدعى استدعاء نظام حاجزاً ← الـ kernel thread الوحيد {k} صار محجوباً ← كل الـ user threads تتوقف: العملية كلها محجوبة." data-b2="{u} استدعى استدعاء نظام حاجزاً ← فقط الـ kernel thread الخاص به {k} ينتظر. بقية الـ threads تستمر بالعمل بالتوازي على معالجات أخرى." data-b3m="{u} حجب {k}، فنقلت مكتبة الـ threads {m} إلى kernel thread آخر. العملية تستمر بالعمل." data-b3n="{u} حجب {k}. بقية الـ user threads ما زال لديها kernel threads حرة، فالعملية تستمر بالعمل." data-b3a="كل الـ kernel threads محجوبة الآن، فالـ user threads المتبقية تنتظر." data-done="انتهى استدعاء النظام الخاص بـ {u}: عاد للعمل."><h3>تجربة تفاعلية: الاستدعاءات الحاجزة في كل نموذج</h3>اختر نموذجاً ثم اضغط على user thread (U) ليستدعي استدعاء نظام حاجزاً مثل <code>read()</code>. الخطوط المتعرجة تُظهر تدفق التنفيذ من كل user thread إلى الـ kernel thread الخاص به؛ ويبقى الـ kernel thread محجوباً حتى ينتهي الـ I/O. جرّب حجب عدة threads.
+<div class="rctl"><button class="btn s o on" type="button" data-m="1">Many-to-One</button><button class="btn s o" type="button" data-m="2">One-to-One</button><button class="btn s o" type="button" data-m="3">Many-to-Many</button></div>
+<div class="rctl"><button class="btn s au" type="button">▶ عرض تلقائي</button><button class="btn s o rs" type="button">إلغاء حجب الكل</button></div>
+<svg class="tl" viewBox="0 0 600 300" role="group" aria-label="ربط الـ user threads بالـ kernel threads؛ اضغط على thread لحجبه"></svg>
+<div class="stats"><div class="stat"><b class="m1">4 / 4</b><span>user threads تعمل</span></div><div class="stat"><b class="m2">0 / 1</b><span>kernel threads محجوبة</span></div><div class="stat"><b class="m3">—</b><span>حالة العملية</span></div></div>
+<div class="tip msg mm" aria-live="polite"></div></div>`,
 sum:`<h2>5. ملخص الشابتر</h2><p class="lead">راجعه قبل الامتحان مباشرة.</p>
 <div class="card"><ul>
 <li><b>Thread</b> = وحدة أساسية لاستخدام الـ CPU: <b>thread ID وprogram counter ومجموعة مسجلات وstack</b>.</li>
